@@ -17,9 +17,9 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: lofi-lions_development
+  database: lofi_lions_development
   pool: 5
-  username: lofi-lions
+  username: lofi_lions
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -46,15 +46,15 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: lofi-lions_test
+  database: lofi_lions_test
   pool: 5
-  username: lofi-lions
+  username: lofi_lions
   password:
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: lofi-lions_production
+  database: lofi_lions_production
   pool: 5
-  username: lofi-lions
+  username: lofi_lions
   password:
