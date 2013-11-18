@@ -57,6 +57,9 @@ runs on http://localhost:3007
 bundle exec rake db:test:prepare
 ```
 ### run tests
+```
+rspec
+```
 
 ## Services (job queues, cache servers, search engines, etc.)
 
