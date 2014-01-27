@@ -47,6 +47,10 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'quiet_assets', group: [:development]
+gem 'guard', group: [:development]
+gem 'guard-livereload', group: [:development]
+gem 'rack-livereload', group: [:development]
 gem 'rspec-rails', group: [:development, :test]
 gem 'capybara', group: [:development, :test]
 gem 'factory_girl_rails', group: [:test]
