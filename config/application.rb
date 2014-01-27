@@ -22,7 +22,7 @@ module LofiLions
 
     config.generators do |g|
       g.helper nil
-      g.test_framework = :rspec
+      g.test_framework :rspec
       g.view_specs false
       g.helper_specs false
       #g.fixture_replacement :factory_girl
