@@ -68,3 +68,7 @@ rspec
 
 ## Deployment
 
+
+# License
+
+This project is open-sourced under the Apache 2.0 license. See LICENSE.TXT
