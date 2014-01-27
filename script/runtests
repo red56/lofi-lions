@@ -1,0 +1,87 @@
+#! /bin/bash -e
+SUCCESS=0
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+FAILFAST=
+ZEUS=
+while getopts ":fz" opt; do
+  case $opt in
+    f)
+      echo "using --fail-fast" >&2
+      FAILFAST=--fail-fast
+      ;;
+    z)
+      echo "using zeus" >&2
+      ZEUS=1
+      ;;
+  esac
+done
+
+echo ZEUS=$ZEUS
+echo FAILFAST=$FAILFAST
+if [ $ZEUS ];
+then
+  RAKE="zeus rake"
+  RSPEC="zeus rspec --tag focus:non-existant-to-force-all"
+  CUCUMBER="zeus cucumber features"
+else
+  RAKE="bundle exec rake"
+  RSPEC="bundle exec rspec --tag focus:non-existant-to-force-all"
+  CUCUMBER="cucumber features"
+fi
+
+## JSHint
+#echo "jshint:"
+#echo
+#command="$RAKE jshint"
+#echo $command
+#$command
+#echo
+#echo
+
+## Jasmine
+#echo "jasmine:"
+#echo
+## can't use RAKE because zeus doesn't read RAILS_ENV from env
+#export RAILS_ENV=test
+#command=" bundle exec rake spec:javascript"
+#echo $command
+#$command
+#export RAILS_ENV=
+#echo
+#echo
+
+# Models and mailers
+echo "rspec models and mailers"
+echo
+command="$RSPEC spec/models $FAILFAST"
+echo $command
+$command
+#actually will exclude ~snapshot by default see .rspec
+echo
+echo
+
+# Rspec integrations
+echo "rspec integration/features (but not snapshots)"
+echo
+command="$RSPEC spec/routing spec/controllers spec/features $FAILFAST"
+echo $command
+$command
+echo
+echo
+#
+## Cucumber working features
+#echo "cucumber working features:"
+#echo
+#command="$CUCUMBER"
+#echo $command
+#$command
+#echo
+#echo
+#
+## Cucumber work in progress should fail
+#echo "cucumber failing work in progress"
+#echo "(anything that is working counts as an error! - remove @wip from these features/scenarios before committing):"
+#echo
+#command="$CUCUMBER --tags @wip -P --wip"
+#echo $command
+#$command

@@ -6,4 +6,5 @@ describe 'Home page' do
   it "works" do
     visit '/'
   end
+
 end

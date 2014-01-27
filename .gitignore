@@ -12,3 +12,5 @@
 # Ignore local-only files
 /config/database.yml
 /bin
+/spec/support/local_only*.rb
+

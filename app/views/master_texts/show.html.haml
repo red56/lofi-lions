@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Key:
+  = @master_text.key
+%p
+  %strong Text:
+  = @master_text.text
+%p
+  %strong Comment:
+  = @master_text.comment
+= link_to 'Edit', edit_master_text_path(@master_text)
+|
+\#{link_to 'Back', master_texts_path}

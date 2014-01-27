@@ -48,3 +48,5 @@ end
 
 gem 'rspec-rails', group: [:development, :test]
 gem 'capybara', group: [:development, :test]
+gem 'factory_girl_rails', group: [:test]
+gem 'faker', group: [:test]

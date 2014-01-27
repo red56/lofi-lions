@@ -55,7 +55,10 @@ runs on http://localhost:3007
 ### setup for testing
 ```
 bundle exec rake db:test:prepare
+
+cp spec/support/focus.rb.disabled spec/support/local_only_focus.rb
 ```
+
 ### run tests
 ```
 rspec

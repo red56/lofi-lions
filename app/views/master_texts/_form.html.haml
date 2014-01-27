@@ -1,0 +1,23 @@
+= form_for(@master_text) do |f|
+  - if @master_text.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@master_text.errors.count, "error")
+        prohibited this master_text from being saved:
+      %ul
+        - @master_text.errors.full_messages.each do |msg|
+          %li= msg
+  .field
+    = f.label :key
+    %br/
+    = f.text_field :key
+  .field
+    = f.label :text
+    %br/
+    = f.text_area :text
+  .field
+    = f.label :comment
+    %br/
+    = f.text_area :comment
+  .actions
+    = f.submit
