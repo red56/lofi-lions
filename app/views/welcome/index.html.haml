@@ -1,3 +1,41 @@
-%h1 Low-fi Localization Server
+%h1 Localization Server
 
-= link_to "Master texts", master_texts_path
+%p.lead Quick intro to the concepts
+
+%p.lead= link_to "Master Texts", master_texts_path
+= render :partial => 'master_texts'
+
+%p.lead Locales / Languages
+%p
+  You can define as many locales/languages as you like
+
+%p.lead Localized texts
+%p
+  For each Master Text, there is a localalized text in each of the languages you have defined.
+  These can be edited by Language Editors
+%ul
+  %li View all empty Localized texts
+  %li View all "needing review" Localized texts
+  %li View all Localized texts (paginated, perhaps)
+
+
+%p.lead
+  Supporting materials
+
+%p
+  It would be nice to add screenshots so you can see the texts in context, or the graphics in which the text will be embedded. This would be by adding arbitrary groupings to some of the Master Texts, and adding the image / comments to the grouping.
+
+%p.lead
+  Import/Output
+
+%p You can import existing locale files for android / iOS and output the current set of texts as local files (per language). Maybe easiest to produce a zip of all the languages.
+
+%p.lead Users / User roles
+%p
+  There are small number of user roles, giving the most efficient UI (interface).
+  You can have more than one role, giving you access to more than one UI (interface):
+%ul
+  %li Language Editor (for a specific language)
+  %li Master text editor
+  %li Developer (perhaps same as master text editor)
+

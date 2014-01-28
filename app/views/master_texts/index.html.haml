@@ -1,9 +1,12 @@
-%h1 Listing master_texts
-%table
+%h1 Master texts
+.alert.alert-info
+  = render :partial => 'welcome/master_texts'
+
+%table.table.table-striped
   %thead
     %tr
-      %th Key
-      %th Text
+      %th Key (unique reference in the code)
+      %th Master Text (English)
       %th Comment
       %th
       %th
@@ -11,10 +14,10 @@
   %tbody
     - @master_texts.each do |master_text|
       %tr
-        %td= master_text.key
+        %td.text-muted= master_text.key
         %td= master_text.text
         %td= master_text.comment
-        %td= link_to 'Edit', edit_master_text_path(master_text)
-        %td= link_to 'Delete', master_text, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= link_to 'Edit', edit_master_text_path(master_text), class: 'btn'
+        %td= link_to 'Delete', master_text, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn'
 %br/
-= link_to 'New Master text', new_master_text_path
+= link_to 'New Master text', new_master_text_path, class: 'btn btn-primary'
