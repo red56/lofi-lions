@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140130104315) do
+ActiveRecord::Schema.define(version: 20140130105033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,20 @@ ActiveRecord::Schema.define(version: 20140130104315) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "localized_texts", force: true do |t|
+    t.integer  "master_text_id"
+    t.integer  "language_id"
+    t.text     "text",           default: ""
+    t.text     "comment",        default: ""
+    t.boolean  "needs_review",   default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "localized_texts", ["language_id", "master_text_id"], name: "index_language_id_master_text_id_unqiue", unique: true, using: :btree
+  add_index "localized_texts", ["language_id"], name: "index_language_id", using: :btree
+  add_index "localized_texts", ["master_text_id"], name: "index_master_text_id", using: :btree
 
   create_table "master_texts", force: true do |t|
     t.string   "key"
