@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe MasterText do
   describe "validations" do
-    let(:master_text) { create(:master_text) }
+    let(:master_text) { build(:master_text) }
     it "basically works" do
         master_text.should be_valid
       end

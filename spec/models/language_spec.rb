@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Language do
   describe "validations" do
-    let(:language) { create(:language) }
+    let(:language) { build(:language) }
     it "basically works" do
       language.should be_valid
     end
