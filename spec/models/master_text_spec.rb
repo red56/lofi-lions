@@ -19,5 +19,13 @@ describe MasterText do
       new_master_text = MasterText.new(key: master_text.key)
       new_master_text.should_not be_valid
     end
+    it "requires text" do
+      master_text.text = nil
+      master_text.should_not be_valid
+    end
+    it "requires text" do
+      master_text.text = ''
+      master_text.should_not be_valid
+    end
   end
 end
