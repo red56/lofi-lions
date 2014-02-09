@@ -54,6 +54,7 @@ gem 'guard-livereload', group: [:development]
 gem 'rack-livereload', group: [:development]
 gem 'rspec-rails', group: [:development, :test]
 gem 'capybara', group: [:development, :test]
+gem 'launchy', group: [:test]
 gem 'factory_girl_rails', group: [:test]
 gem 'faker', group: [:test]
 gem "spring", group: :development
