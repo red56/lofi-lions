@@ -55,7 +55,7 @@ describe MasterTextsController do
         # specifies that the MasterText created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        MasterText.any_instance.should_receive(:update).with({"key" => "MyString"})
+        MasterText.any_instance.should_receive(:assign_attributes).with({"key" => "MyString"})
         put :update, {:id => master_text.to_param, :master_text => {"key" => "MyString"}}, valid_session
       end
 

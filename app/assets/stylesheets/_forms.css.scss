@@ -1,0 +1,15 @@
+
+
+form {
+  @extend .well;
+
+  .errors {
+    @extend .alert;
+    @extend .alert-danger;
+    width: inherit;
+  }
+
+  .field_with_errors {
+    @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg);
+  }
+}

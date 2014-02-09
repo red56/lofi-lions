@@ -27,7 +27,7 @@ class MasterTextsController < ApplicationController
     @master_text = MasterText.new(master_text_params)
 
     respond_to do |format|
-      if @master_text.save
+      if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).save
         format.html { redirect_to @master_text, notice: 'Master text was successfully created.' }
         format.json { render action: 'show', status: :created, location: @master_text }
       else
@@ -41,7 +41,7 @@ class MasterTextsController < ApplicationController
   # PATCH/PUT /master_texts/1.json
   def update
     respond_to do |format|
-      if @master_text.update(master_text_params)
+      if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).update(master_text_params)
         format.html { redirect_to @master_text, notice: 'Master text was successfully updated.' }
         format.json { head :no_content }
       else

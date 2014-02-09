@@ -1,23 +1,21 @@
-= form_for(@master_text) do |f|
+= form_for(@master_text, html: {class: 'master_text', role: 'form'}) do |f|
   - if @master_text.errors.any?
-    #error_explanation
-      %h2
+    .errors
+      %strong
         = pluralize(@master_text.errors.count, "error")
-        prohibited this master_text from being saved:
+      prohibited this master_text from being saved:
       %ul
         - @master_text.errors.full_messages.each do |msg|
           %li= msg
-  .field
+  .form-group
     = f.label :key
-    %br/
-    = f.text_field :key
-  .field
+    = f.text_field :key, class: 'form-control'
+  .form-group
     = f.label :text
-    %br/
-    = f.text_area :text
-  .field
+    = f.text_area :text, class: 'form-control'
+  .form-group
     = f.label :comment
-    %br/
-    = f.text_area :comment
-  .actions
-    = f.submit
+    = f.text_area :comment, class: 'form-control'
+
+  = f.submit "Save", class: 'btn btn-default btn-primary'
+  = link_to 'Cancel', master_texts_path, class: 'btn btn-link'
