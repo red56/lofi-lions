@@ -27,9 +27,8 @@ install postgres
 *get the git repo, ensure right ruby, bundler... then: *
 
 ```
-bundle install --binstubs
-
 ```
+
 
 #### setup db
 ```
@@ -46,7 +45,7 @@ bundle exec rake db:test:prepare
 ```
 bundle exec guard -i
 #for live reload
-script/serve
+script/serve -s
 ```
 runs on http://localhost:3007
 

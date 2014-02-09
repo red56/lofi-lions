@@ -3,32 +3,36 @@ SUCCESS=0
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 FAILFAST=
 ZEUS=
-while getopts ":fz" opt; do
+while getopts ":fzs" opt; do
   case $opt in
     f)
       echo "using --fail-fast" >&2
       FAILFAST=--fail-fast
       ;;
     z)
-      echo "using zeus" >&2
-      ZEUS=1
+      # to catch me if I use it unintentionally
+      echo "using spring" >&2
+      SPRING=1
+      ;;
+    s) echo "using spring" >&2
+      SPRING=1
       ;;
   esac
 done
 
-echo ZEUS=$ZEUS
+echo SPRING=$SPRING
 echo FAILFAST=$FAILFAST
-if [ $ZEUS ];
+if [ $SPRING ];
 then
-  RAKE="zeus rake"
-  RSPEC="zeus rspec --tag focus:non-existant-to-force-all"
-  CUCUMBER="zeus cucumber features"
+  RAKE="spring rake"
+  RSPEC="spring rspec --tag focus:non-existant-to-force-all"
+  CUCUMBER="spring cucumber features"
 else
+  export DISABLE_SPRING=true
   RAKE="bundle exec rake"
   RSPEC="bundle exec rspec --tag focus:non-existant-to-force-all"
   CUCUMBER="cucumber features"
 fi
-
 ## JSHint
 #echo "jshint:"
 #echo
