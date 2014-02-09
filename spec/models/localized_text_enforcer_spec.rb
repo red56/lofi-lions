@@ -123,6 +123,14 @@ describe LocalizedTextEnforcer do
           l_crudder.save
         }.to change { LocalizedText.count }.by(1)
       end
+      it "returns true when saving" do
+        l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language))
+        l_crudder.save.should be_true
+      end
+      it "returns false when not saving" do
+        l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ''))
+        l_crudder.save.should be_false
+      end
     end
 
   end

@@ -50,9 +50,11 @@ class LocalizedTextEnforcer
     end
 
     def save
-      if @language.new_record? && @language.save
+      return nil unless @language.new_record?
+      if result=@language.save
         LocalizedTextEnforcer.new.language_created(@language)
       end
+      result
     end
   end
 end

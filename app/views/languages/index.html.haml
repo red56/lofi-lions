@@ -1,0 +1,24 @@
+%h1 Listing languages
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Code
+      %th
+  %tbody
+    - @languages.each do |language|
+      %tr
+        %td= language.name
+        %td= language.code
+        %td
+          = link_to 'Translations to enter', '#', class: 'btn btn-default'
+          = link_to 'Translations to review', '#', class: 'btn btn-default'
+          = link_to 'All translations', '#', class: 'btn btn-default'
+          = link_to 'Edit language', edit_language_path(language), class: 'btn btn-default'
+          = link_to 'Delete language', language, :method => :delete, :data => { :confirm => 'Are you sure?' },
+          class: 'btn btn-warning'
+
+%br
+
+= link_to 'New Language', new_language_path, class: 'btn btn-primary'

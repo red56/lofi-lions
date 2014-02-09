@@ -9,15 +9,15 @@
       %th Master Text (English)
       %th Comment
       %th
-      %th
-      %th
   %tbody
     - @master_texts.each do |master_text|
       %tr
         %td.text-muted= master_text.key
         %td= master_text.text
         %td= master_text.comment
-        %td= link_to 'Edit', edit_master_text_path(master_text), class: 'btn'
-        %td= link_to 'Delete', master_text, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn'
+        %td
+          = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'
+          = link_to 'Delete', master_text, method: :delete, data: { confirm: 'Are you sure?' },
+        class: 'btn btn-warning'
 %br/
 = link_to 'New Master text', new_master_text_path, class: 'btn btn-primary'

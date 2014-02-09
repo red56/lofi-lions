@@ -1,0 +1,22 @@
+= form_for(@language, html: {class: 'language', role: 'form'})do |f|
+  - if @language.errors.any?
+    .errors
+      %strong
+        = pluralize(@language.errors.count, "error")
+      prohibited this language from being saved:"
+      %ul
+        - @language.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+
+  .form-group.row
+    .col-xs-2
+      = f.label :code
+      = f.text_field :code, class: 'form-control'
+
+  = f.submit 'Save', class: 'btn btn-primary'
+  = link_to 'Cancel', :back, class: 'btn btn-link'
+

@@ -26,7 +26,7 @@ describe MasterTextsController do
 
       it "redirects to the created master_text" do
         post :create, {:master_text => attributes_for(:master_text)}, valid_session
-        response.should redirect_to(MasterText.last)
+        response.should redirect_to(master_texts_path)
       end
     end
 
@@ -51,10 +51,6 @@ describe MasterTextsController do
     before { master_text }
     describe "with valid params" do
       it "updates the requested master_text" do
-        # Assuming there are no other master_texts in the database, this
-        # specifies that the MasterText created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
         MasterText.any_instance.should_receive(:assign_attributes).with({"key" => "MyString"})
         put :update, {:id => master_text.to_param, :master_text => {"key" => "MyString"}}, valid_session
       end
@@ -66,7 +62,7 @@ describe MasterTextsController do
 
       it "redirects to the master_text" do
         put :update, {:id => master_text.to_param, :master_text => attributes_for(:master_text)}, valid_session
-        response.should redirect_to(master_text)
+        response.should redirect_to(master_texts_path)
       end
     end
 
