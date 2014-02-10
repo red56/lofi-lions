@@ -19,8 +19,12 @@
   %body
     #wrap
       = render partial: 'layouts/navbar'
+      - flash.each do |f|
+        .alert.alert-info
+          = f
       .container
         = yield
+
 
     #footer
       .container

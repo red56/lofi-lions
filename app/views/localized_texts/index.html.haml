@@ -1,0 +1,30 @@
+
+%ul.nav.nav-tabs
+  %li.title
+    %a Translations for #{@language}
+  %li= link_to "Translations to enter", "#"
+  %li= link_to "Translations to review", "#"
+  %li.active= link_to "All translations", "#"
+
+= form_for(@language, html:{class: 'localized-texts', role: 'form'}) do |f|
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Master Text (English)  / key / comment
+        %th Localized Text (#{@language})
+        %th Needs review
+    %tbody
+      = f.fields_for :localized_texts, @language.localized_texts do |ltext_fields|
+        %tr
+          %td
+            %p= ltext_fields.object.original_text
+            %p.comment= ltext_fields.object.comment
+            %p.key= ltext_fields.object.key
+          %td= ltext_fields.text_area :text, cols: 100
+          %td
+            .checkbox
+              %label
+                = ltext_fields.check_box :needs_review
+
+  = f.submit 'Save', class: 'btn btn-primary'
+  = link_to 'Cancel', :back, class: 'btn btn-link'

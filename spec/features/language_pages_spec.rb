@@ -61,4 +61,31 @@ describe 'Language Pages' do
       page.should have_css("form.language .errors")
     end
   end
+
+
+  describe "all translations" do
+    let(:language){create(:language)}
+    let(:master_text){create(:master_text)}
+    let(:localized_text){create(:localized_text, master_text: master_text, language: language, text: "zongy-bo!")}
+    it "linked from index" do
+      language
+      visit languages_path
+      page.should have_link_to(language_texts_path(language))
+    end
+    it "displays one" do
+      localized_text
+      visit language_texts_path(language)
+      page.should have_content(master_text.text)
+      page.should have_content("zongy-bo!")
+    end
+    it "updates one" do
+      localized_text
+      visit language_texts_path(language)
+      fill_in :language_localized_texts_attributes_0_text, with: "flounce"
+      click_on "Save"
+      visit language_texts_path(language)
+      page.should have_content("flounce")
+    end
+  end
+
 end

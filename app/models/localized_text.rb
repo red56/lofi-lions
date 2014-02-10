@@ -5,4 +5,6 @@ class LocalizedText < ActiveRecord::Base
   validates :master_text_id, presence: true
   validates :language_id, presence: true
 
+  delegate :key, :comment, to: :master_text
+  delegate :text, to: :master_text, prefix: 'original'
 end

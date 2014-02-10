@@ -34,14 +34,14 @@ describe LanguagesController do
       it "assigns a newly created but unsaved language as @language" do
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        post :create, {:language => {  }}, valid_session
+        post :create, {:language => { name: ''  }}, valid_session
         assigns(:language).should be_a_new(Language)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        post :create, {:language => {  }}, valid_session
+        post :create, {:language => { name: ''  }}, valid_session
         response.should render_template("new")
       end
     end
@@ -71,12 +71,12 @@ describe LanguagesController do
         Language.any_instance.stub(:save).and_return(false)
       end
       it "assigns the language as @language" do
-        put :update, {:id => language.to_param, :language => {  }}, valid_session
+        put :update, {:id => language.to_param, :language => { name: ''  }}, valid_session
         assigns(:language).should eq(language)
       end
 
       it "re-renders the 'edit' template" do
-        put :update, {:id => language.to_param, :language => {  }}, valid_session
+        put :update, {:id => language.to_param, :language => { name: '' }}, valid_session
         response.should render_template("edit")
       end
     end
