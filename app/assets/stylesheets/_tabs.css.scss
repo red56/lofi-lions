@@ -1,0 +1,27 @@
+ul.nav.nav-tabs {
+  > li > a{
+    background-color: #eeeeee;
+    border-color: #fff;
+    border-bottom-color: $nav-tabs-border-color;
+  }
+  > li > a:hover{
+    background-color: #ddd;
+    border-color: #fff;
+    border-bottom-color: $nav-tabs-border-color;
+  }
+  > li.active > a {
+    background-color: #fff;
+    border-color: $nav-tabs-border-color;
+    border-bottom-color: #fff;
+  }
+  > li.title {
+    > a {
+      background-color: #fff;
+      color: #888888;
+      font-weight: bold;
+    }
+    > a:hover {
+      border-color: #fff;
+      border-bottom-color: $nav-tabs-border-color;
+    }
+  }}

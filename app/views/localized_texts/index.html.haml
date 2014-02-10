@@ -1,10 +1,10 @@
 
-%ul.nav.nav-tabs
+%ul.nav.nav-tabs.localized-texts
   %li.title
-    %a Translations for #{@language}
-  %li= link_to "Translations to enter", "#"
-  %li= link_to "Translations to review", "#"
-  %li.active= link_to "All translations", "#"
+    %a= @language
+  %li{class: @active_tab == :entry ? 'active':''}= link_to "To enter", entry_language_texts_path(@language)
+  %li{class: @active_tab == :review ? 'active':''}= link_to "For review", review_language_texts_path(@language)
+  %li{class: @active_tab == :all ? 'active':''}= link_to "All", language_texts_path(@language)
 
 = form_for(@language, html:{class: 'localized-texts', role: 'form'}) do |f|
   %table.table.table-striped
@@ -14,7 +14,7 @@
         %th Localized Text (#{@language})
         %th Needs review
     %tbody
-      = f.fields_for :localized_texts, @language.localized_texts do |ltext_fields|
+      = f.fields_for :localized_texts, @localized_texts do |ltext_fields|
         %tr[ltext_fields.object]
           %td
             %p= ltext_fields.object.original_text
