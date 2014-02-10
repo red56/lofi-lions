@@ -65,8 +65,10 @@ describe 'Language Pages' do
 
   describe "all translations" do
     let(:language){create(:language)}
-    let(:master_text){create(:master_text)}
-    let(:localized_text){create(:localized_text, master_text: master_text, language: language, text: "zongy-bo!")}
+    let(:localized_text){create(:localized_text, language: language, text: "zongy-bo!")}
+    let(:empty_localized_text){create(:localized_text, language: language, text: "")}
+    let(:needs_review_localized_text){create(:localized_text, language: language, needs_review: true)}
+    let(:localized_texts){ [localized_text, empty_localized_text, needs_review_localized_text]}
     it "linked from index" do
       language
       visit languages_path
@@ -75,8 +77,9 @@ describe 'Language Pages' do
     it "displays one" do
       localized_text
       visit language_texts_path(language)
-      page.should have_content(master_text.text)
+      page.should have_content(localized_text.master_text.text)
       page.should have_content("zongy-bo!")
+      page.should have_css("#localized_text_#{localized_text.id}")
     end
     it "updates one" do
       localized_text
@@ -85,6 +88,13 @@ describe 'Language Pages' do
       click_on "Save"
       visit language_texts_path(language)
       page.should have_content("flounce")
+    end
+    it "displays all" do
+      localized_texts
+      visit language_texts_path(language)
+      localized_texts.each do | localized_text|
+        page.should have_css("#localized_text_#{localized_text.id}")
+      end
     end
   end
 

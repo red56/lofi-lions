@@ -15,7 +15,7 @@
         %th Needs review
     %tbody
       = f.fields_for :localized_texts, @language.localized_texts do |ltext_fields|
-        %tr
+        %tr[ltext_fields.object]
           %td
             %p= ltext_fields.object.original_text
             %p.comment= ltext_fields.object.comment
