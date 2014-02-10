@@ -19,10 +19,10 @@
   %body
     #wrap
       = render partial: 'layouts/navbar'
-      - flash.each do |f|
-        .alert.alert-info
-          = f
       .container
+        - flash.each do |style, f|
+          .alert{class: "alert-#{style == :notice ? 'info' :style}"}
+            = f
         = yield
 
 
