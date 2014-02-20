@@ -28,18 +28,23 @@ describe 'Strings file parser' do
       strings.keys.first.encoding.should == Encoding::UTF_8
     end
 
-    it "can return an array form" do
-      strings.to_a.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
-    end
-
     it "can return a hash form" do
-      strings.to_hash.should == Hash[[["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]]
+      expected = [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
+      hash = strings.to_hash
+      hash.keys.each_with_index do |key, i|
+        l = hash[key]
+        l.should be_instance_of Localization
+        key.should == expected[i].first
+        l.key.should == expected[i].first
+        l.value.should == expected[i].last
+      end
     end
 
     it "allows for iteration over the key, value pairs" do
       result = []
-      strings.each do |k, v|
-        result << [k, v]
+      strings.each do |string|
+        string.should be_instance_of Localization
+        result << [string.key, string.value]
       end
       result.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
     end

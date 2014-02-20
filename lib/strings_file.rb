@@ -1,3 +1,4 @@
+require 'localization'
 
 class StringsFile
   def self.parse(file)
@@ -25,19 +26,19 @@ class StringsFile
     end
 
     def keys
-      strings.keys
+      strings.map(&:key)
     end
 
     def values
-      strings.values
+      strings.map(&:value)
     end
 
     def to_a
-      strings.to_a
+      strings.dup
     end
 
     def to_hash
-      strings.dup
+      Hash[strings.map { |l| [l.key, l] }]
     end
 
     def each(&block)
@@ -49,10 +50,10 @@ class StringsFile
     end
 
     def parse_file
-      strings = {}
+      strings = []
       lines.each do |line|
         key, value = parse_line(line)
-        strings[key] = value unless key.nil?
+        strings << Localization.new(key, value) unless key.nil?
       end
       strings
     end
@@ -64,7 +65,7 @@ class StringsFile
       key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
       scanner.skip(/\s*=\s*"/)
       value = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
-      [key, value].map { |s| s.encode(Encoding::UTF_8)}
+      [key, value]
     end
 
     def lines
