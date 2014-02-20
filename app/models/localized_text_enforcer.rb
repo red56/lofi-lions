@@ -19,14 +19,34 @@ class LocalizedTextEnforcer
   end
 
   class MasterTextCrudder
+    def self.create_or_update(key, text, raise_exception = false)
+      MasterText.find_or_initialize_by(key: key).tap do |master_text|
+        master_text.text = text
+        new(master_text).save_with_exception(raise_exception)
+      end
+    end
+
+    def self.create_or_update!(key, text)
+      create_or_update(key, text, true)
+    end
+
     def initialize(master_text)
       @master_text = master_text
     end
 
+    def save!
+      save_with_exception(true)
+    end
+
     def save
+      save_with_exception(false)
+    end
+
+    def save_with_exception(raise_exception)
       was_new_record = @master_text.new_record?
       text_changed = @master_text.text_changed?
-      if result=@master_text.save
+      save_method = raise_exception ? :save! : :save
+      if (result = @master_text.send(save_method))
         if was_new_record
           LocalizedTextEnforcer.new.master_text_created(@master_text)
         elsif text_changed

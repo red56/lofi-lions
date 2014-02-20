@@ -5,6 +5,11 @@ describe LocalizedTextEnforcer do
   let(:other_master_text) { create(:master_text) }
   let(:language) { create(:language) }
   let(:other_language) { create(:language) }
+
+  after do
+    MasterText.delete_all
+  end
+
   describe "Enforcer" do
     before { master_text; language }
     describe "master text created" do
@@ -108,9 +113,55 @@ describe LocalizedTextEnforcer do
         master_text.reload.text.should == "flong"
 
       end
+
     end
 
+    describe "master text create or update" do
+      let(:key) { "MyKey" }
+      let(:text) { "This is my key" }
 
+      it "creates a new master text for key if none exists" do
+        mt = nil
+        expect {
+          mt = LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text)
+        }.to change { MasterText.count }.by(1)
+        mt.should be_instance_of MasterText
+        mt.key.should == key
+        mt.text.should == text
+      end
+
+      it "doesn't touch an existing master text with same value" do
+        original = create(:master_text, key: key, text: text)
+        expect {
+          LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text)
+        }.not_to change { original.reload.updated_at }
+      end
+
+      it "raises an exception if master text fails validation" do
+        expect {
+          LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(key, nil)
+        }.to raise_error ActiveRecord::RecordInvalid
+      end
+
+      describe "with changed value" do
+        let(:new_text) { "This is not my key" }
+        let!(:mt)  { create(:master_text, key: key, text: text) }
+        it "updates the master text with the new value" do
+          expect {
+            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
+          }.to change { [mt.reload.updated_at, mt.reload.text] }
+        end
+
+        it "marks filled localized text as needing review" do
+          localized_text= create(:localized_text, master_text: mt, language: language, text: "Quelque chose d'ancien")
+          expect {
+            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
+          }.not_to change { [LocalizedText.count, localized_text.reload.text] }
+          localized_text.reload.needs_review.should be_true
+          mt.reload.text.should == new_text
+        end
+      end
+    end
   end
 
   describe LocalizedTextEnforcer::LanguageCreator do

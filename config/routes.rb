@@ -10,6 +10,8 @@ LofiLions::Application.routes.draw do
 
   resources :master_texts
 
+  post 'import/:action', controller: 'import', defaults: { format: 'html' }
+
   root 'welcome#index'
 
 end
