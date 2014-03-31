@@ -84,6 +84,13 @@ Note the `@`, this is important.
 
 ## Deployment
 
+to deploy on heroku:
+
+```
+heroku config:set DEVISE_KEY=some-very-long-random-string
+heroku config:set DEVISE_EMAIL_FROM=someone@example.com
+heroku config:set CANONICAL_HOST=lofi.example.com
+```
 
 # License
 

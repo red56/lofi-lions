@@ -1,4 +1,6 @@
 LofiLions::Application.routes.draw do
+  devise_for :users
+
   resources :languages do |language|
     resources :texts, controller: 'localized_texts' do
       collection do

@@ -3,6 +3,17 @@ require "spec_helper"
 
 describe 'Master Text Pages' do
 
+  before { login }
+  let(:login) { stubbed_login_as_user }
+
+  context "when not logged in" do
+    let(:login) { nil }
+    it "redirects to login page" do
+      visit master_texts_path
+      current_path.should == new_user_session_path
+    end
+  end
+
   describe "index" do
     it "can list several" do
       texts = build_stubbed_list(:master_text, 3)

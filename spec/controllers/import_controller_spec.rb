@@ -3,6 +3,14 @@ require 'spec_helper'
 describe ImportController do
   let(:valid_session) { {} }
 
+  pending "needs test" do
+    context "without auth token" do
+      it "should fail with 401?"
+    end
+    context "with invalid auth token" do
+      it "should fail with 401?"
+    end
+  end
 
   describe "iOS" do
     let(:strings_file_path) { "with_leading_comment.strings" }

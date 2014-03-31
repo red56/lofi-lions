@@ -18,7 +18,11 @@
     = csrf_meta_tags
   %body
     #wrap
-      = render partial: 'layouts/navbar'
+      - if user_signed_in?
+        = render partial: 'layouts/navbar'
+      - else
+        = render partial: 'layouts/navbar_signed_out'
+
       .container
         - flash.each do |style, f|
           .alert{class: "alert-#{style == :notice ? 'info' :style}"}

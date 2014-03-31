@@ -30,8 +30,5 @@
       -#      %li
       -#        %a{:href => "#"} One more separated link
       %ul.nav.navbar-nav.navbar-right
-        %li
-          = link_to("Logout", destroy_user_session_path, method: :delete)
-        %li
-          = link_to "Logged in as #{current_user.email}", '/'
+        %li= link_to 'Login', new_user_session_path
     / /.nav-collapse

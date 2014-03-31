@@ -1,5 +1,6 @@
 require 'strings_file'
 class ImportController < ApplicationController
+  # FIXME: needs some auth...
   # FIXME: this should only be for the API version
   skip_before_action :verify_authenticity_token
 

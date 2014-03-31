@@ -33,4 +33,7 @@ LofiLions::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  ENV['DEVISE_KEY'] = 'not-so-random'
+  config.action_mailer.default_url_options = { host: 'www.example.com' }
 end
