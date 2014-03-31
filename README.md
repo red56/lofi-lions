@@ -25,9 +25,11 @@ The rest of this doc is about how to develop and install it locally. The softwar
 ### install / system dependencies
 install postgres
 *get the git repo, ensure right ruby, bundler... then: *
-
 ```
+bundle install
+bundle exec spring binstub --all
 ```
+see https://github.com/rails/spring#setup
 
 
 #### setup db
