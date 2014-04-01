@@ -12,8 +12,21 @@
   %tbody
     - @master_texts.each do |master_text|
       %tr
-        %td.text-muted= master_text.key
-        %td= master_text.text
+        %td.text-muted
+          = master_text.key
+          - if master_text.pluralizable
+            (+ plural forms)
+        %td
+          - if master_text.pluralizable
+            %p
+              %small.text-muted S
+              = master_text.one
+            %p
+              %small.text-muted PL
+              = master_text.many
+          - else
+            = master_text.text
+
         %td= master_text.comment
         %td
           = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'

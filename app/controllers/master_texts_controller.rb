@@ -69,6 +69,6 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :many, :text, :comment)
+      params.require(:master_text).permit(:key, :many, :text, :comment, :pluralizable)
     end
 end

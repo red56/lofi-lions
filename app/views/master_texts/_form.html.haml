@@ -10,9 +10,24 @@
   .form-group
     = f.label :key
     = f.text_field :key, class: 'form-control'
-  .form-group
-    = f.label :text
-    = f.text_area :text, class: 'form-control'
+    .checkbox
+      %label
+        = f.check_box :pluralizable
+        Has plural forms
+
+  - if @master_text.pluralizable
+    .form-group
+      = f.label :one
+      = f.text_area :one, class: 'form-control'
+    .form-group
+      = f.label :many
+      = f.text_area :many, class: 'form-control'
+
+  - else
+    .form-group
+      = f.label :text
+      = f.text_area :text, class: 'form-control'
+
   .form-group
     = f.label :comment
     = f.text_area :comment, class: 'form-control'
