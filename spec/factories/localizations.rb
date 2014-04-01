@@ -3,7 +3,7 @@ FactoryGirl.define do
     skip_create
 
     initialize_with do
-      new(attributes[:key], attributes[:value], attributes[:plurals])
+      new(attributes[:key], attributes[:value])
     end
 
     key { Faker::Lorem.words(3).join('.')}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="login_to_get_started">Log in to get started</string>
+  <string name="email">Email</string>
+  <plurals name="remaining_days">
+    <item quantity="one">%d day</item>
+    <item quantity="other">%d days</item>
+  </plurals>
+</resources>

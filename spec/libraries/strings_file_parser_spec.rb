@@ -18,11 +18,7 @@ describe 'Strings file parser' do
       parsed.keys.should == ["Adding", "Almost done", "Done"]
     end
 
-    it "can give a list of values" do
-      parsed.values.should == ["Adding...", "Almost done...", "Done!"]
-    end
-
-    it "should return values in UTF-8 encoding" do
+    it "should return keys in UTF-8 encoding" do
       parsed.keys.first.encoding.should == Encoding::UTF_8
     end
 
@@ -79,8 +75,8 @@ describe 'Strings file parser' do
       parsed.keys.should == ["Almost done"]
     end
 
-    it "can give a list of values" do
-      parsed.values.should == ['Almost \"done\"\nanother line']
+    it "can give values" do
+      parsed.localizations.first.value.should == 'Almost \"done\"\nanother line'
     end
   end
 end
