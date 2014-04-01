@@ -84,12 +84,24 @@ Note the `@`, this is important.
 
 ## Deployment
 
-to deploy on heroku:
+Notes for heroku deployment:
+
+### setup:
 
 ```
 heroku config:set DEVISE_KEY=some-very-long-random-string
 heroku config:set DEVISE_EMAIL_FROM=someone@example.com
 heroku config:set CANONICAL_HOST=lofi.example.com
+
+heroku addons:add sendgrid:starter
+```
+
+### Routine deployment
+
+```
+git push heroku master
+heroku run rake db:migrate
+
 ```
 
 # License
