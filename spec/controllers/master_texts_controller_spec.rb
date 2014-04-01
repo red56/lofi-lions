@@ -20,7 +20,6 @@ describe MasterTextsController do
 
     describe "with valid params" do
       it "creates a new MasterText" do
-        puts attributes_for(:master_text)
         expect {
           post :create, {:master_text => attributes_for(:master_text)}
         }.to change(MasterText, :count).by(1)
