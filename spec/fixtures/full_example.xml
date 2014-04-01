@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Field Notes</string>
+    
+    <string name="login_to_get_started">Log in to get started</string>
+    <string name="email">Email</string>
+    <string name="invitation_code">Invitation code</string>
+    <string name="please_wait">Please Wait</string>
+   	<string name="logging_in">Logging you in</string>
+    <string name="login_unable">We were unable to log you in.</string>
+    <string name="login_please_check">Please check your email and invitation code are correct.</string>
+	
+    <string name="tasks">Tasks</string>
+	<string name="the_brief">The Brief</string>
+	<string name="View_video_brief">View video brief</string>
+	<string name="Cannot_play_video">Cannot play video on this device</string>
+    <string name="open">Current</string>
+    <string name="closed">Finished</string>
+    <string name="time_remaining">Time Remaining:</string>
+    <string name="deadline">Deadline:</string>
+    <string name="reward">Reward:</string>
+    <string name="start_task">Start Task</string>
+    <string name="not_now">Not Now</string>
+    <plurals name="remaining_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>    
+    <plurals name="remaining_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>    
+    <plurals name="remaining_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="x">%d minutes</item>
+    </plurals>
+    <string name="remaining_expired">Expired</string>
+    
+    <string name="deadline_dateformat">MMM dd \'at\' HH:mm</string>
+    <string name="submitted_dateformat">dd/MM/yy</string>
+    
+    <string name="my_report">My Report</string>
+    <string name="publish">Finish</string>
+    <string name="start_adding_content">Start by adding content</string>
+    <string name="cont">Continue</string>    
+
+    <string name="add_title_hint">Tap here to add a title.</string>
+    <string name="add_description_hint">...and here for a description.</string>
+    <string name="title_required">You must enter a title</string>
+    <string name="ok">OK</string>
+    <string name="add_text_entry">Add text entry</string>
+    <string name="done">Add</string>
+
+    <string name="photo_entry">Photo entry</string>
+    <string name="take_a_picture">Take a picture</string>
+    <string name="image_capture_failed">Image capture failed, please try again</string>
+    <string name="select_existing_picture">Select an existing picture</string>
+    <string name="video_entry">Video entry</string>
+    <string name="record_video">Record a video</string>
+    <string name="select_existing_video">Select an existing video</string>
+
+    <string name="delete_confirm_title">Confirm Delete</string>
+    <string name="delete_confirm_message">Are you sure you want to delete this content from your report?</string>
+    <string name="deleting_entry">Deleting the entry</string>
+    <string name="delete_failure_title">Deletion Failed!</string>
+    <string name="delete_failure">Sorry, we couldn\'t delete this entry. Please ensure you have a good internet connection and try again.</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	
+	<string name="not_enough_content_title">Hold your horses!</string>
+    <string name="not_enough_content">You haven\'t given us enough content yet. Please check the brief and make sure you\'ve added everything.</string>
+    <string name="ready_to_publish_title">Ready to Finish?</string>
+    <string name="ready_to_publish">Are you sure you\'re ready to finish this report? If you still have time, why not add something more?</string>
+    <string name="report_upload_error_title">Finish Failed!</string>
+
+    <string name="continue_task">Continue Task</string>
+    <string name="published">Finished:</string>
+    <string name="sending_report">Sending your report</string>
+    <string name="no_feedback_title">Awaiting feedback</string>
+    <string name="no_feedback">You haven\'t received any feedback for this report yet.</string>
+    <string name="back_to_report">Back to report</string>
+    <string name="feedback">Feedback</string>
+	
+    <string name="pull_to_refresh_label">Pull to refresh</string>
+    <string name="pull_to_refresh_release_label">Release to refresh</string>
+    <string name="pull_to_refresh_refreshing_label">Loading...</string>
+    <string name="tap_to_refresh_label">Tap to refresh</string>
+    <string name="download_tasks_error">Sorry, we couldn\'t download any new tasks.</string>
+    <string name="report_upload_error">Sorry, we couldn\'t finish your report. Please ensure you have a good internet connection and try again.</string>
+    
+    <string name="upload_incomplete">Failed</string>
+    
+	<!-- NEEDS TRANSLATION -->
+    <string name="uploading_media_">Uploading media…</string>
+     <string name="Server">Server</string>
+         <string-array
+        	name="server_choice">
+        	<item>Production</item>
+			<item>Staging</item>
+			</string-array>
+
+     <string name="Settings">Settings</string>
+     <string name="Logged_in_as">Logged in as:</string>
+     <string name="Log_out">Log out</string>
+     <string name="some_version">some version:</string>
+     <string name="Android">Android </string>
+     <string name="Using">Using</string>
+    
+     <string name="cannot_logout">You cannot logout because you have unfinished uploads.</string>
+    
+     <string name="video_capture_failed">Video capture failed, please try again</string>
+
+     <string name="text_entry">Text entry</string>
+     
+     <string name="import_failed_title">Import Failed.</string>
+     <string name="import_failed_message">There was a problem with the file you chose. Please try again.</string>
+
+     <string name="upload_paused">Upload paused</string>
+     
+</resources>

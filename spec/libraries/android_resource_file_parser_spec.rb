@@ -48,7 +48,7 @@ describe 'Android resource file parser' do
     let(:file_name) { "simple_strings" }
     include_examples "Resource file parsing"
   end
-  context "simple file (no plurals or fancypants)" do
+  context "file with plurals" do
     let(:file_name) { "strings_with_plurals" }
     it "should return keys in UTF-8" do
       parsed.keys.first.encoding.should == Encoding::UTF_8
@@ -67,4 +67,27 @@ describe 'Android resource file parser' do
     end
 
   end
+  context "file with string arrays" do
+    let(:file_name) { "strings_with_array" }
+    it "should return keys in UTF-8" do
+      parsed.keys.first.encoding.should == Encoding::UTF_8
+    end
+
+    it "can give a list of the keys" do
+      parsed.keys.should == ["login_to_get_started", "email", "server_choice[0]", 'server_choice[1]']
+    end
+
+    it "can give a the array items" do
+      parsed.to_hash['server_choice[0]'].should == Localization.new('server_choice[0]', 'Production')
+      parsed.to_hash['server_choice[1]'].should == Localization.new('server_choice[1]', 'Staging')
+    end
+
+  end
+  context "real world example" do
+    let(:file_name) { "full_example" }
+    it "works" do
+      parsed
+    end
+  end
+
 end

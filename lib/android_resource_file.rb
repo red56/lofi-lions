@@ -16,13 +16,23 @@ class AndroidResourceFile
 
     def parse_file
       localizations = []
-      doc = Nokogiri::XML(@file)
-      doc.css("string").each do |node|
+      @doc = Nokogiri::XML(@file)
+      parse_and_append_simple_strings(localizations)
+      parse_and_append_plurals(localizations)
+      parse_and_append_arrays(localizations)
+      localizations
+    end
+
+    def parse_and_append_simple_strings(localizations)
+      @doc.css("string").each do |node|
         key = node['name']
         value = node.text
         localizations << Localization.new(key, value)
       end
-      doc.css("plurals").each do |node|
+    end
+
+    def parse_and_append_plurals(localizations)
+      @doc.css("plurals").each do |node|
         key = node['name']
         values = Hash[node.css('item').collect do |item_node|
           plural_form = item_node['quantity'].to_sym
@@ -31,7 +41,16 @@ class AndroidResourceFile
         end]
         localizations<< Localization.new(key, values)
       end
-      localizations
+    end
+
+    def parse_and_append_arrays(localizations)
+      @doc.css("string-array").each do |node|
+        base_key = node['name']
+        node.css("item").each_with_index do |item_node, index|
+          value = item_node.text
+          localizations << Localization.new("#{base_key}[#{index}]", value)
+        end
+      end
     end
   end
 end
