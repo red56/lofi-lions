@@ -38,7 +38,7 @@ describe Language do
     context "with some specific labels" do
       let(:language) { build(:language, :type_1_english) }
       it "should be a hash" do
-        language.plurals.should == {one: 'is 1', many: 'everything else'}
+        language.plurals.should == {one: 'is 1', other: 'everything else'}
       end
     end
   end

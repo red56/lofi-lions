@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20140401221414) do
 
   create_table "master_texts", force: true do |t|
     t.string   "key"
-    t.text     "many"
+    t.text     "other"
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"

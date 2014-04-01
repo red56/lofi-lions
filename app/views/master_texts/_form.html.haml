@@ -17,11 +17,11 @@
 
   - if @master_text.pluralizable
     .form-group
-      = f.label :one
+      = f.label :one, 'Singular'
       = f.text_area :one, class: 'form-control'
     .form-group
-      = f.label :many
-      = f.text_area :many, class: 'form-control'
+      = f.label :other, 'Plural'
+      = f.text_area :other, class: 'form-control'
 
   - else
     .form-group

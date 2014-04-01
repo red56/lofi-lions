@@ -2,7 +2,7 @@ class MakeTextsPluralizable < ActiveRecord::Migration
   def change
     add_column :master_texts, :pluralizable, :boolean, default: false
     add_column :master_texts, :one, :text, default: ''
-    rename_column :master_texts, :text, :many
+    rename_column :master_texts, :text, :other
 
     add_column :localized_texts, :zero, :text, default: ''
     add_column :localized_texts, :one, :text, default: ''

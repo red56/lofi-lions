@@ -88,12 +88,12 @@ describe LocalizedText do
           localized_text.one = ''
           localized_text.calculate_needs_entry.should be_true
         end
-        it "is true if many is empty" do
-          localized_text.many = ''
+        it "is true if other is empty" do
+          localized_text.other = ''
           localized_text.calculate_needs_entry.should be_true
         end
         it 'is false if everything important is filled' do
-          localized_text.other = ''
+          localized_text.few = ''
           localized_text.calculate_needs_entry.should be_false
         end
       end

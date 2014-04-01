@@ -22,10 +22,10 @@ describe 'Master Text Pages' do
     end
     context "with plural forms" do
       it "can list one" do
-        texts = build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', many: 'many-many-many')
+        texts = build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other')
         MasterText.stub(all: texts)
         visit master_texts_path
-        page.should have_content('many-many-many')
+        page.should have_content('othery-other')
         page.should have_content('one-one')
       end
     end
@@ -89,10 +89,10 @@ describe 'Master Text Pages' do
       let(:master_text) { create(:master_text, pluralizable: true) }
       it "allows me to change one and many" do
         fill_in "master_text_one", with: "My one one"
-        fill_in "master_text_many", with: "My many many"
+        fill_in "master_text_other", with: "My other other"
         expect {
           click_on "Save"
-        }.to change { [master_text.reload.one, master_text.many] }
+        }.to change { [master_text.reload.one, master_text.other] }
         page.should_not have_css("form.master_text")
       end
     end

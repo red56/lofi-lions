@@ -45,8 +45,8 @@ describe MasterText do
         new_master_text = MasterText.new(key: master_text.key)
         new_master_text.should_not be_valid
       end
-      it "requires many" do
-        master_text.many = nil
+      it "requires other" do
+        master_text.other = ''
         master_text.should_not be_valid
       end
     end
@@ -90,8 +90,8 @@ describe MasterText do
         master_text.one = "flong"
         master_text.text_changed?.should be_true
       end
-      it "is true when many changing" do
-        master_text.many = "flong"
+      it "is true when other changing" do
+        master_text.other = "flong"
         master_text.text_changed?.should be_true
       end
       include_examples "shared_text_changed"

@@ -14,20 +14,20 @@ FactoryGirl.define do
     end
     trait :type_1_english do
       pluralizable_label_one "is 1"
-      pluralizable_label_many "everything else"
+      pluralizable_label_other "everything else"
       pluralizable_label_zero ''
       pluralizable_label_two  ''
       pluralizable_label_few ''
-      pluralizable_label_other ''
+      pluralizable_label_many ''
     end
     trait :type_7_russian do
       # need to check these interpretations of android <-> mozilla
-      pluralizable_label_one "one"
-      pluralizable_label_few "few"
-      pluralizable_label_many "many"
+      pluralizable_label_one "ends in 1, excluding 11"
+      pluralizable_label_few "ends in 2-4, excluding 12-14"
+      pluralizable_label_other "everything else"
       pluralizable_label_zero ''
       pluralizable_label_two  ''
-      pluralizable_label_other ''
+      pluralizable_label_many ''
     end
     trait :type_12_arabic do
       # need to check these interpretations of android <-> mozilla

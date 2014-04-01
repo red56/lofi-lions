@@ -21,7 +21,7 @@ class LocalizedTextEnforcer
   class MasterTextCrudder
     def self.create_or_update(key, text, raise_exception = false)
       MasterText.find_or_initialize_by(key: key).tap do |master_text|
-        master_text.many = text
+        master_text.other = text
         new(master_text).save_with_exception(raise_exception)
       end
     end
