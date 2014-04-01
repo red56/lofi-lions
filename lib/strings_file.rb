@@ -5,7 +5,7 @@ class StringsFile
     Parser.new(file)
   end
 
-  class Parser
+  class Parser < Localization::Collection
 
     TRAILING_QUOTE    = /"\z/
     NON_ESCAPED_QUOTE = /[^\\]"/
@@ -25,37 +25,17 @@ class StringsFile
       File.open(file.path, 'rb:BOM|UTF-16LE:UTF-8')
     end
 
-    def keys
-      strings.map(&:key)
-    end
-
-    def values
-      strings.map(&:value)
-    end
-
-    def to_a
-      strings.dup
-    end
-
-    def to_hash
-      Hash[strings.map { |l| [l.key, l] }]
-    end
-
-    def each(&block)
-      strings.each(&block)
-    end
-
-    def strings
-      @strings ||= parse_file
+    def localizations
+      @localizations ||= parse_file
     end
 
     def parse_file
-      strings = []
+      localizations = []
       lines.each do |line|
         key, value = parse_line(line)
-        strings << Localization.new(key, value) unless key.nil?
+        localizations << Localization.new(key, value) unless key.nil?
       end
-      strings
+      localizations
     end
 
     def parse_line(line)
