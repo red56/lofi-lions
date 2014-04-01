@@ -1,0 +1,15 @@
+%table.table.table-striped.table-condensed
+  %thead
+    %tr
+      %th
+      %th User
+      %th Roles
+  %tbody
+    - @users.each do |user|
+      %tr[user]
+        %td= link_to "Edit", edit_user_path(user), class: 'btn btn-default btn-xs'
+        %td= user.email
+        %td= user.is_administrator ? "Administrator" : ""
+
+.buttons
+  = link_to "Add", new_user_path, class: 'btn btn-primary'

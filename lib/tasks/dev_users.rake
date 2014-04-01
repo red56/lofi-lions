@@ -19,7 +19,7 @@ namespace :dev do
     else
       u = User.new(email: email, password: password)
     end
-    # u.is_administrator = admin
+    u.is_administrator = admin
     u.save!
     u
   end
