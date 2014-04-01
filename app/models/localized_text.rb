@@ -5,6 +5,22 @@ class LocalizedText < ActiveRecord::Base
   validates :master_text_id, presence: true
   validates :language_id, presence: true
 
-  delegate :key, :comment, to: :master_text
+  validate do
+    self.needs_entry = calculate_needs_entry
+  end
+  delegate :key, :comment, :pluralizable, to: :master_text
   delegate :text, to: :master_text, prefix: 'original'
+
+  def text= text
+    self.other = text
+  end
+  def text
+    raise Exception.new("Don't use text when pluralizable") if self.pluralizable
+    self.other
+  end
+
+  def calculate_needs_entry
+    return self.text.blank? unless pluralizable
+    self.language.plurals.keys.any?{|attr_name| self[attr_name].blank? }
+  end
 end

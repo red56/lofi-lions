@@ -9,7 +9,7 @@ class LocalizedTextEnforcer
 
   #used when a master text is changed. Assume localized texts are all created.
   def master_text_changed(master_text)
-    master_text.localized_texts.where('text != ?', '').update_all(needs_review: true)
+    master_text.localized_texts.where(needs_entry: false).update_all(needs_review: true)
   end
 
   def language_created(language)
@@ -21,7 +21,7 @@ class LocalizedTextEnforcer
   class MasterTextCrudder
     def self.create_or_update(key, text, raise_exception = false)
       MasterText.find_or_initialize_by(key: key).tap do |master_text|
-        master_text.text = text
+        master_text.many = text
         new(master_text).save_with_exception(raise_exception)
       end
     end

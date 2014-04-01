@@ -3,7 +3,7 @@ require 'spec_helper'
 describe LocalizedTextEnforcer do
   let(:master_text) { create(:master_text) }
   let(:other_master_text) { create(:master_text) }
-  let(:language) { create(:language) }
+  let(:language) { create(:language, :type_1_english) }
   let(:other_language) { create(:language) }
 
   after do

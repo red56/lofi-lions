@@ -23,4 +23,23 @@ describe Language do
       language.should_not be_valid
     end
   end
+
+  describe "plurals" do
+    let(:language) { build(:language) }
+    it "should be a hash" do
+      language.plurals.should be_a(Hash)
+    end
+    context "with some specific labels" do
+      let(:language) { build(:language, :type_0_chinese) }
+      it "should be a hash" do
+        language.plurals.should == {other: 'everything'}
+      end
+    end
+    context "with some specific labels" do
+      let(:language) { build(:language, :type_1_english) }
+      it "should be a hash" do
+        language.plurals.should == {one: 'is 1', many: 'everything else'}
+      end
+    end
+  end
 end

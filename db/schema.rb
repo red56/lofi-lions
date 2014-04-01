@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140331202437) do
+ActiveRecord::Schema.define(version: 20140401221414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,16 +21,28 @@ ActiveRecord::Schema.define(version: 20140331202437) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "pluralizable_label_zero",  default: ""
+    t.string   "pluralizable_label_one",   default: ""
+    t.string   "pluralizable_label_two",   default: ""
+    t.string   "pluralizable_label_few",   default: ""
+    t.string   "pluralizable_label_many",  default: ""
+    t.string   "pluralizable_label_other", default: ""
   end
 
   create_table "localized_texts", force: true do |t|
     t.integer  "master_text_id"
     t.integer  "language_id"
-    t.text     "text",           default: ""
+    t.text     "other",          default: ""
     t.text     "comment",        default: ""
     t.boolean  "needs_review",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "zero",           default: ""
+    t.text     "one",            default: ""
+    t.text     "two",            default: ""
+    t.text     "few",            default: ""
+    t.text     "many",           default: ""
+    t.boolean  "needs_entry"
   end
 
   add_index "localized_texts", ["language_id", "master_text_id"], name: "index_language_id_master_text_id_unqiue", unique: true, using: :btree
@@ -39,10 +51,12 @@ ActiveRecord::Schema.define(version: 20140331202437) do
 
   create_table "master_texts", force: true do |t|
     t.string   "key"
-    t.text     "text"
+    t.text     "many"
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pluralizable", default: false
+    t.text     "one",          default: ""
   end
 
   create_table "users", force: true do |t|

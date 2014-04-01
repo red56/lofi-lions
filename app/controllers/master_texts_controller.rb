@@ -26,7 +26,6 @@ class MasterTextsController < ApplicationController
   # POST /master_texts.json
   def create
     @master_text = MasterText.new(master_text_params)
-
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).save
         format.html { redirect_to master_texts_path, notice: 'Master text was successfully created.' }
@@ -70,6 +69,6 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :text, :comment)
+      params.require(:master_text).permit(:key, :many, :text, :comment)
     end
 end
