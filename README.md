@@ -84,8 +84,12 @@ Note the `@`, this is important.
 
 TO put in a localization file
 
+     curl -F file=@/path/to/Project/ja.lproj/Localizable.strings -X POST http://localhost:3007/languages/ja/import/ios
+     curl -F file=@/path/to/Project/res/values-ja/strings.xml -X POST http://localhost:3007/languages/ja/import/android
+     #or
+     thor ios:localizations ja < /path/to/Localizable.strings
      thor android:localizations ja < /path/to/strings.xml
-     thor ios:localizations ja < /path/to/strings.xml
+
 
 where ja is the already created language code. Master texts should be created too
 
