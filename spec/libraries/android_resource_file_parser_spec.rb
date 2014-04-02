@@ -1,4 +1,3 @@
-require 'android_resource_file'
 require "spec_helper"
 
 describe 'Android resource file parser' do
