@@ -1,4 +1,4 @@
-require 'localization'
+require 'nokogiri'
 
 class AndroidResourceFile
   def self.parse(file)
