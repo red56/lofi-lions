@@ -7,7 +7,7 @@ describe 'Language Pages' do
   let(:login) { stubbed_login_as_user }
 
   context "when not logged in" do
-    let(:login){ nil }
+    let(:login) { nil }
 
     it "redirects to login page" do
       visit languages_path
@@ -76,9 +76,9 @@ describe 'Language Pages' do
 
   describe "translations" do
     let(:ok_localized_text) { create(:localized_text, language: language, text: "zongy-bo!") }
-    let(:empty_localized_text) { create(:localized_text, language: language, text: "") }
+    let(:empty_localized_text) { create(:localized_text, language: language, needs_entry: true) }
     let(:needs_review_localized_text) { create(:localized_text, language: language,
-        text: "something new", needs_review: true) }
+        other: "something new", needs_review: true) }
     let(:localized_texts) { [ok_localized_text, empty_localized_text, needs_review_localized_text] }
 
     before { language }
@@ -97,6 +97,27 @@ describe 'Language Pages' do
         click_on "Save"
         visit language_texts_path(language)
         page.should have_content("flounce")
+      end
+
+      context 'when pluralizable' do
+        before { MasterText.any_instance.stub(pluralizable: true) }
+        it "displays" do
+          localized_text
+          visit path
+          page.should have_content(localized_text.master_text.other)
+          page.should have_css("#localized_text_#{localized_text.id}")
+        end
+        it "updates a localized other" do
+          localized_text
+          visit path
+          fill_in :language_localized_texts_attributes_0_other, with: "flounce"
+          click_on "Save"
+          visit language_texts_path(language)
+          page.should have_content("flounce")
+        end
+        it "has correct other fields/labels" do
+          pending "need to test this with different language types"
+        end
       end
       it "linked from index" do
         visit languages_path
@@ -139,6 +160,9 @@ describe 'Language Pages' do
       let(:localized_text) { empty_localized_text }
       let(:path) { entry_language_texts_path(language) }
       it_behaves_like "localized text list"
+      it "should be created needing entry" do
+        empty_localized_text.needs_entry.should be_true
+      end
       it "displays appropriate" do
         localized_texts
         visit path

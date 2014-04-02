@@ -9,7 +9,7 @@ class LocalizedText < ActiveRecord::Base
     self.needs_entry = calculate_needs_entry
   end
   delegate :key, :comment, :pluralizable, to: :master_text
-  delegate :text, to: :master_text, prefix: 'original'
+  delegate :text, :one, :other, to: :master_text, prefix: 'original'
 
   def text= text
     self.other = text

@@ -18,12 +18,14 @@ form.localized-texts tr td p {
 
   &.key {
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+    color: #ffffff;
+    background-color: #BBBBBB;
   }
   &.comment {
     font-style: italic;
+    color: #888888;
   }
   &.key, &.comment {
     font-size: 0.75em;
-    color: #888888;
   }
 }

@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :language do
     name { Faker::Lorem.words(4).join(' ') }
     code { Faker::Lorem.words(2).collect{|w| w[0..1]}.join('-') }
+    pluralizable_label_other "everything"
 
     # https://developer.mozilla.org/en/docs/Localization_and_Plurals#List_of_Plural_Rules
     trait :type_0_chinese do

@@ -16,16 +16,17 @@
           = master_text.key
           - if master_text.pluralizable
             (+ plural forms)
-        %td
+
           - if master_text.pluralizable
-            %p
-              %small.text-muted S
-              = master_text.one
-            %p
-              %small.text-muted PL
-              = master_text.other
+            %td.plurals
+              %p
+                %small.badge S
+                = master_text.one
+              %p
+                %small.badge PL
+                = master_text.other
           - else
-            = master_text.text
+            %td= master_text.text
 
         %td= master_text.comment
         %td

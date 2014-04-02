@@ -17,10 +17,22 @@
       = f.fields_for :localized_texts, @localized_texts do |ltext_fields|
         %tr[ltext_fields.object]
           %td
-            %p= ltext_fields.object.original_text
+            - if ltext_fields.object.pluralizable
+              %p.plurals
+                %small.badge S
+                = ltext_fields.object.original_one
+              %p.plurals
+                %small.badge PL
+                = ltext_fields.object.original_other
+            - else
+              %p= ltext_fields.object.original_text
             %p.comment= ltext_fields.object.comment
-            %p.key= ltext_fields.object.key
-          %td= ltext_fields.text_area :text, cols: 100
+            %p.label.label-default.key= ltext_fields.object.key
+          %td
+            - if ltext_fields.object.pluralizable
+              = ltext_fields.text_area :other, cols: 100
+            - else
+              = ltext_fields.text_area :text, cols: 100
           %td
             .checkbox
               %label
