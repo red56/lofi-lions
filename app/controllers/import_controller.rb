@@ -1,4 +1,5 @@
 require 'strings_file'
+require 'android_resource_file'
 class ImportController < ApplicationController
   # FIXME: needs some auth...
   # FIXME: this should only be for the API version
