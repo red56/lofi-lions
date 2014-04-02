@@ -49,6 +49,7 @@ describe ImportController do
       before do
         localizations = build_list(:localization, 3)
         AndroidResourceFile.should_receive(:parse).and_return(localizations)
+        localizations.should_receive(:close)
         Localization.should_receive(:create_master_texts).with(localizations)
       end
 

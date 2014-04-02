@@ -67,5 +67,9 @@ class StringsFile
     def source
       @source ||= @file.read
     end
+
+    def close
+      @file.close if @file
+    end
   end
 end

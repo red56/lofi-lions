@@ -52,5 +52,9 @@ class AndroidResourceFile
         end
       end
     end
+
+    def close
+      @file.close if @file
+    end
   end
 end

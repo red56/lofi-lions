@@ -43,12 +43,16 @@ class ImportController < ApplicationController
   end
 
   def import_ios(file)
-    localizations = StringsFile.parse(file)
-    Localization.create_master_texts(localizations)
+    create_master_texts(StringsFile.parse(file))
   end
 
   def import_android(file)
-    localizations = AndroidResourceFile.parse(file)
+    create_master_texts(AndroidResourceFile.parse(file))
+  end
+
+  def create_master_texts(localizations)
     Localization.create_master_texts(localizations)
+  ensure
+    localizations.close if localizations
   end
 end
