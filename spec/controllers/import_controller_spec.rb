@@ -30,7 +30,10 @@ describe ImportController do
     it "creates the expected master texts" do
       post :ios, {file: file_upload, format: 'json'}
       masters = MasterText.all
-      masters.map { |mt| [mt.key, mt.text] }.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
+      pairs = masters.map { |mt| [mt.key, mt.text] }
+      pairs.should include(["Adding", "Adding..."])
+      pairs.should include(["Almost done", "Almost done..."])
+      pairs.should include(["Done", "Done!"])
     end
 
     it "redirects to the master text view" do
