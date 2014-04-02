@@ -1,9 +1,9 @@
-require 'strings_file'
+require 'ios'
 require "spec_helper"
 
 describe 'Strings file parser' do
   let(:file_path) { File.expand_path("../../fixtures/#{file_name}.strings", __FILE__) }
-  let(:parsed) { StringsFile.parse(File.new(file_path)) }
+  let(:parsed) { IOS::StringsFile.parse(File.new(file_path)) }
 
   shared_examples "String file parsing" do
     it "should return keys in UTF-8" do

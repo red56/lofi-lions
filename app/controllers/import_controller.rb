@@ -43,11 +43,11 @@ class ImportController < ApplicationController
   end
 
   def import_ios(file)
-    create_master_texts(StringsFile.parse(file))
+    create_master_texts(IOS::StringsFile.parse(file))
   end
 
   def import_android(file)
-    create_master_texts(AndroidResourceFile.parse(file))
+    create_master_texts(Android::ResourceFile.parse(file))
   end
 
   def create_master_texts(localizations)

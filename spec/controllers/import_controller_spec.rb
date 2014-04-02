@@ -1,5 +1,6 @@
 require 'spec_helper'
-require 'android_resource_file'
+require 'android'
+require 'ios'
 
 describe ImportController do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
@@ -48,7 +49,7 @@ describe ImportController do
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
-        AndroidResourceFile.should_receive(:parse).and_return(localizations)
+        Android::ResourceFile.should_receive(:parse).and_return(localizations)
         localizations.should_receive(:close)
         Localization.should_receive(:create_master_texts).with(localizations)
       end

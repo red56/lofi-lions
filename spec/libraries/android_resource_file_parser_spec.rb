@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe 'Android resource file parser' do
   let(:file_path) { File.expand_path("../../fixtures/#{file_name}.xml", __FILE__) }
-  let(:parsed) { AndroidResourceFile.parse(File.new(file_path)) }
+  let(:parsed) { Android::ResourceFile.parse(File.new(file_path)) }
 
   shared_examples "Resource file parsing" do
     it "should return keys in UTF-8" do
