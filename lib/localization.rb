@@ -25,6 +25,23 @@ class Localization
       LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(localization.key, localization.text)
     end
   end
+  def self.create_localized_texts(language, localizations)
+    errors = {}
+    localizations.each do |localization|
+      master_text = MasterText.find_by_key(localization.key)
+      if master_text.nil?
+        errors[localization.key] = "couldn't find master text"
+      else
+        localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, language_id: language.id)
+        if localization.value.is_a?(Hash)
+          localized_text.update_attributes!(localization.value)
+        else
+          localized_text.update_attributes!(other: localization.value)
+        end
+      end
+    end
+    errors
+  end
 
   class Collection
     def keys
