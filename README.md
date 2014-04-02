@@ -70,15 +70,24 @@ rspec
 
 ## Localization File Import API
 
-Only supports iOS .strings files at present.
+Supports iOS .strings files and android strings.xml files.
+
+for setup:
 
 To upload a strings file using Curl:
 
-    curl -F file=@/path/to/fieldnotes-iphone-app/FieldNotes/en.lproj/Localizable.strings -X POST http://localhost:3000/import/ios
+    curl -F file=@/path/to/iphone-app/Project/en.lproj/Localizable.strings -X POST http://localhost:3000/import/ios
+    curl -F file=@/path/to/android-app/Project/res/values-en/strings.xml -X POST http://localhost:3000/import/android
 
 where `/path/to/fieldnotes-iphone-app/FieldNotes/en.lproj/Localizable.strings` is the path to the strings file you want to upload.
 Note the `@`, this is important.
 
+TO put in a localization file
+
+     thor android:localizations ja < /path/to/strings.xml
+     thor ios:localizations ja < /path/to/strings.xml
+
+where ja is the already created language code. Master texts should be created too
 
 ## Services (job queues, cache servers, search engines, etc.)
 

@@ -7,12 +7,12 @@ class StringsFile
 
   class Parser < Localization::Collection
 
-    TRAILING_QUOTE    = /"\z/
+    TRAILING_QUOTE = /"\z/
     NON_ESCAPED_QUOTE = /[^\\]"/
-    SLASH_STAR        = Regexp.escape("/*")
-    COMMENT_START     = %r[#{SLASH_STAR}\z]
-    TEXT_END          = %r[(#{SLASH_STAR}|\z)]
-    COMMENT_END       = Regexp.new(Regexp.escape("*/"))
+    SLASH_STAR = Regexp.escape("/*")
+    COMMENT_START = %r[#{SLASH_STAR}\z]
+    TEXT_END = %r[(#{SLASH_STAR}|\z)]
+    COMMENT_END = Regexp.new(Regexp.escape("*/"))
 
     # initialize with an IO object - we're mostly going to be
     # creating these from file uploads so best to just deal with the
@@ -22,7 +22,13 @@ class StringsFile
     end
 
     def reopen_with_utf16_encoding(file)
-      File.open(file.path, 'rb:BOM|UTF-16LE:UTF-8')
+      encoding = 'BOM|UTF-16LE:UTF-8'
+      if file.respond_to?(:path)
+        File.open(file.path, "rb:#{encoding}")
+      else
+        file.set_encoding(encoding)
+        file
+      end
     end
 
     def localizations
