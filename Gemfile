@@ -53,14 +53,22 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'quiet_assets', group: [:development]
-gem 'guard', group: [:development]
-gem 'guard-livereload', group: [:development]
-gem 'rack-livereload', group: [:development]
-gem 'rspec-rails', group: [:development, :test]
-gem 'capybara', group: [:development, :test]
-gem 'launchy', group: [:test]
-gem 'factory_girl_rails', group: [:test]
-gem 'faker', group: [:test]
-gem "spring", group: :development
-gem "spring-commands-rspec", group: :development
+group :development do
+  gem 'quiet_assets'
+  gem 'guard'
+  gem 'guard-livereload'
+  gem 'rack-livereload'
+  gem "spring"
+  gem "spring-commands-rspec"
+end
+
+group :test do
+  gem 'launchy'
+  gem 'factory_girl_rails'
+  gem 'faker'
+end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'capybara'
+end
