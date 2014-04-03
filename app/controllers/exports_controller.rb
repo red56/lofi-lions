@@ -4,7 +4,7 @@ class ExportsController < ApplicationController
   before_filter :load_language
 
   def android
-    export#(:android)
+    export
   end
 
   def ios
@@ -20,6 +20,17 @@ class ExportsController < ApplicationController
   end
 
   def load_language
-    @language = Language.where(code: params[:language]).first
+    code = params[:language]
+    @language = Language.where(code: code).first
+    return load_language_fallback(code) if @language.nil?
+  end
+
+  def load_language_fallback(code)
+    if code == "en"
+      @language = Language.en if code == "en"
+    else
+      render text: "Language #{code} not found", status: 404
+      return false
+    end
   end
 end

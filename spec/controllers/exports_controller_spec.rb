@@ -1,14 +1,15 @@
 require 'spec_helper'
 
 describe ExportsController do
-  let(:languages) { [:en, :ja] }
+  let(:languages) { [:es, :ja] }
   let(:master_texts) { %w(title welcome complete) }
   let(:language) { Language.where(code: 'ja').first }
+  let(:language_code) { language.code }
   let(:master_text) { MasterText.where(key: 'title').first }
 
   before do
     @master_texts = master_texts.map do |key|
-      MasterText.create(key: key, other: key)
+      MasterText.create(key: key, other: key.capitalize)
     end
     @languages = languages.map do |code|
       Language.create(name: code, code: code)
@@ -20,19 +21,26 @@ describe ExportsController do
     end
   end
 
+  describe "common" do
+    it "returns a 404 if the language is uknown" do
+      get :android, language: "xx"
+      response.status.should == 404
+    end
+  end
   describe "ios" do
     let(:platform) { :ios }
     before do
-      get platform, language: language.code
+      get platform, language: language_code
     end
+    describe "translated texts" do
 
-    it "should return a zip file" do
-      response.content_type.should == "application/octet-stream"
-    end
+      it "should return a zip file" do
+        response.content_type.should == "application/octet-stream"
+      end
 
-    it "has a relative filename in the headers" do
-      response.header["X-Path"].should == "ja.lproj/Localizable.strings"
-    end
+      it "has a relative filename in the headers" do
+        response.header["X-Path"].should == "ja.lproj/Localizable.strings"
+      end
 
       describe "escaping" do
         before do
@@ -56,12 +64,19 @@ describe ExportsController do
           end
         end
       end
+    end
 
-      context "double quotes" do
-        let(:text) { "\"that's\" crazy" }
+    describe "english texts" do
+      let(:language_code) { 'en' }
+      it "uses fallbacks to produce the english version" do
+        response.status.should == 200
+      end
 
-        it "are escaped correctly" do
-          @string.should == "\\\"that's\\\" crazy"
+      it "uses the master text values" do
+        file = IOS::StringsFile.parse(StringIO.new(response.body))
+        @master_texts.each do |mt|
+          local = file.localizations.detect { |l| l.key == mt.key }
+          local.value.should == mt.other
         end
       end
     end
@@ -72,7 +87,7 @@ describe ExportsController do
 
     describe "singular" do
       before do
-        get platform, language: language.code
+        get platform, language: language_code
       end
 
       it "should return a zip file" do
@@ -96,11 +111,11 @@ describe ExportsController do
     end
 
     describe "plurals" do
-      let(:plural_master_texts) { %w(fish sheep) }
+      let(:plural_master_texts) { %w(cow duck) }
 
       before do
         @plural_master_texts = plural_master_texts.map do |key|
-          MasterText.create(key: key, one: key, other: "#{key}s", pluralizable: true)
+          MasterText.create(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
         end
         @master_texts.concat(@plural_master_texts)
         @fr = Language.create(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
@@ -130,6 +145,19 @@ describe ExportsController do
           [:one, :zero, :many].each do |amount|
             plur.value[amount].should == [plur.key, @fr.code, amount].join(":")
           end
+        end
+      end
+
+      it "uses the master text for the english version" do
+        get platform, language: "en"
+        resource = Android::ResourceFile.parse(response.body)
+        locals = resource.localizations
+        plurals = locals.select { |l| plural_master_texts.include?(l.key) }
+        plurals.length.should == plural_master_texts.length
+        @plural_master_texts.each do |mt|
+          plur = locals.detect { |l| l.key == mt.key }
+          plur.value[:one].should == mt.one
+          plur.value[:other].should == mt.other
         end
       end
     end
@@ -165,6 +193,24 @@ describe ExportsController do
         items = array.css("item")
         items.length.should == 2
         items.map(&:text).should == ["door[0]:ja:3", "door[1]:ja:4"]
+      end
+
+      it "includes master texts of arrays for english" do
+        get platform, language: "en"
+        doc = Nokogiri::XML(response.body)
+        array = doc.css('string-array[name="planet"]')
+        array.length.should == 1
+        array = array.first
+        items = array.css("item")
+        items.length.should == 3
+        items.map(&:text).should == ["planet[0]", "planet[1]", "planet[2]"]
+
+        array = doc.css('string-array[name="door"]')
+        array.length.should == 1
+        array = array.first
+        items = array.css("item")
+        items.length.should == 2
+        items.map(&:text).should == ["door[0]", "door[1]"]
       end
 
       it "escapes text within string arrays" do
