@@ -162,7 +162,6 @@ describe ExportsController do
           other: "escape'd \""
         })
         get platform, language: language.code
-        puts response.body
         doc = Nokogiri::XML(response.body)
         array = doc.css('string-array[name="escape"]')
         item = array.css('item').first
@@ -175,8 +174,8 @@ describe ExportsController do
         lt = LocalizedText.where(language: language, master_text: master_text).first
         lt.update_attributes(other: text)
         get platform, language: language.code
-        resource = Android::ResourceFile.parse(response.body)
-        @string = resource.localizations.detect { |l| l.key == master_text.key }.text#@doc.css("string[name='#{master_text.key}']").first.text
+        doc = Nokogiri::XML(response.body)
+        @string = doc.css("string[name='#{master_text.key}']").first.text
       end
 
       context "apostrophes" do
