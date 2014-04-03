@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="double">\"double\"</string>
+    <string name="apostrophe">don't</string>
+    <string name="both">\"don\'t\"</string>
+</resources>

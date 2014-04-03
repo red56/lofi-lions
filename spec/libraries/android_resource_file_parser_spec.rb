@@ -47,6 +47,7 @@ describe 'Android resource file parser' do
     let(:file_name) { "simple_strings" }
     include_examples "Resource file parsing"
   end
+
   context "file with plurals" do
     let(:file_name) { "strings_with_plurals" }
     it "should return keys in UTF-8" do
@@ -64,8 +65,8 @@ describe 'Android resource file parser' do
     it "can give a list of plural values" do
       parsed.to_hash['remaining_days'].should == Localization.new('remaining_days', one: '%d day', other: '%d days')
     end
-
   end
+
   context "file with string arrays" do
     let(:file_name) { "strings_with_array" }
     it "should return keys in UTF-8" do
@@ -80,8 +81,24 @@ describe 'Android resource file parser' do
       parsed.to_hash['server_choice[0]'].should == Localization.new('server_choice[0]', 'Production')
       parsed.to_hash['server_choice[1]'].should == Localization.new('server_choice[1]', 'Staging')
     end
-
   end
+
+  context "file with escaped characters" do
+    let(:file_name) { "with_escaped_characters" }
+    it "unescapes apostrophes" do
+      local = parsed.localizations.detect { |l| l.key == "apostrophe"}
+      local.value.should == "don't"
+    end
+    it "unescapes double quotes" do
+      local = parsed.localizations.detect { |l| l.key == "double"}
+      local.value.should == '"double"'
+    end
+    it "unescapes mixed escapes" do
+      local = parsed.localizations.detect { |l| l.key == "both"}
+      local.value.should == '"don\'t"'
+    end
+  end
+
   context "real world example" do
     let(:file_name) { "full_example" }
     it "works" do
