@@ -13,5 +13,5 @@
 /config/database.yml
 /bin
 /spec/support/local_only*.rb
-
+.rspec
 .ruby-*
