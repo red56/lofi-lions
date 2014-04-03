@@ -27,9 +27,8 @@ module IOS
       end
 
       def reopen_with_utf16_encoding(file)
+        return File.open(file.path, "rb:#{IOS::STRINGS_FILE_ENCODING}") if file.respond_to?(:path)
         case file
-        when File
-          File.open(file.path, "rb:#{IOS::STRINGS_FILE_ENCODING}")
         when IO
           file.set_encoding( "rb:#{IOS::STRINGS_FILE_ENCODING}")
           file
