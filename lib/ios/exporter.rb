@@ -18,11 +18,12 @@ module IOS
     end
 
     ESCAPES = {
-      '"' => "\\\""
+      '"' => "\\\"",
+      "\n" => "\\n"
     }.freeze
 
     def escape(other)
-      other.gsub(/"/, ESCAPES)
+      other.gsub(/["\n]/, ESCAPES)
     end
   end
 end
