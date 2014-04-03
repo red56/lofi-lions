@@ -34,11 +34,11 @@ class LanguagesImportController < ApplicationController
   end
 
   def import_ios(file)
-    create_localized_texts(StringsFile.parse(file))
+    create_localized_texts(IOS::StringsFile.parse(file))
   end
 
   def import_android(file)
-    create_localized_texts(AndroidResourceFile.parse(file))
+    create_localized_texts(Android::ResourceFile.parse(file))
   end
 
   def create_localized_texts(localizations)

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'android_resource_file'
+require 'android/resource_file'
 
 describe LanguagesImportController do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
@@ -24,7 +24,7 @@ describe LanguagesImportController do
 
       it "accepts a android xml upload" do
         Language.should_receive(:find_by_code).with('zh').and_return(chinese)
-        StringsFile.should_receive(:parse).and_return(localizations)
+        IOS::StringsFile.should_receive(:parse).and_return(localizations)
         localizations.should_receive(:close)
         Localization.should_receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
         post :ios, {file: file_upload, id: 'zh', format: 'json'}
@@ -37,12 +37,13 @@ describe LanguagesImportController do
     end
 
     context("full-stack") do
-      before {
+      before do
         create :language, code: 'zh'
         ["Adding", "Almost done", "Done"].each do |key|
           create :master_text, key: key
         end
-      }
+      end
+
       it "creates the expected localised texts" do
         post :ios, {file: file_upload, id: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
@@ -63,7 +64,7 @@ describe LanguagesImportController do
 
       it "accepts a android xml upload" do
         Language.should_receive(:find_by_code).with('zh').and_return(chinese)
-        AndroidResourceFile.should_receive(:parse).and_return(localizations)
+        Android::ResourceFile.should_receive(:parse).and_return(localizations)
         localizations.should_receive(:close)
         Localization.should_receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
         post :android, {file: file_upload, id: 'zh', format: 'json'}

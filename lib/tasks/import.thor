@@ -31,7 +31,7 @@ class ImportThor < Thor
 
     def localizations(code, filename="-")
       ImportThor.new.localizations(code, filename) do |io|
-        StringsFile.parse(io)
+        ::IOS::StringsFile.parse(io)
       end
     end
   end
@@ -42,7 +42,7 @@ class ImportThor < Thor
 
     def localizations(code, filename="-")
       ImportThor.new.localizations(code, filename) do |io|
-        AndroidResourceFile.parse(io)
+        ::Android::ResourceFile.parse(io)
       end
     end
   end
