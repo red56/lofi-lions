@@ -1,4 +1,5 @@
 class LocalizedTextsController < ApplicationController
+  before_action :set_languages_section
 
   before_filter :find_language
   def index

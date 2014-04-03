@@ -1,6 +1,7 @@
 class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :set_master_texts_section
 
   # GET /master_texts
   # GET /master_texts.json

@@ -10,8 +10,8 @@
       = link_to 'Localization', root_path, class: 'navbar-brand'
     .navbar-collapse.collapse
       %ul.nav.navbar-nav
-        %li.active= link_to "Master Texts", master_texts_path
-        %li= link_to "Languages", languages_path
+        %li{active_section("master-texts")}= link_to "Master Texts", master_texts_path
+        %li{active_section("languages")}= link_to "Languages", languages_path
       -#  %li.dropdown
       -#    %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
       -#      Dropdown
