@@ -36,10 +36,6 @@ class ImportController < ApplicationController
       end
     rescue => e
       render text: "Error #{e}", status: :unprocessable_entity
-      # respond_to do |format|
-      #   # format.html { render action: 'import' }
-      #   format.json { render text: "Error", status: :unprocessable_entity }
-      # end
     end
   end
 
