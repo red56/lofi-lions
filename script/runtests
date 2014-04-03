@@ -29,8 +29,8 @@ then
   CUCUMBER="spring cucumber features"
 else
   export DISABLE_SPRING=true
-  RAKE="bundle exec rake"
-  RSPEC="bundle exec rspec --tag focus:non-existant-to-force-all"
+  RAKE="rake"
+  RSPEC="rspec --tag focus:non-existant-to-force-all"
   CUCUMBER="cucumber features"
 fi
 ## JSHint
