@@ -17,6 +17,13 @@ Here are the aims of the project:
 * make subsets of this project with one or more texts included
 * Translator assistance: be able to download / upload CSV of translations rather than have
 
+NB: There are some limitations:
+
+* Master text is in English. (To change this would require thinking more seriously about plurals in Master text and how to display them for localization).
+* Android should not use string_array. Android also doesn't use html formatting within texts.
+* We use a particular library for iphone plural strings
+* no .po or .yml yet
+* you need to define the pluralization defaults for each language.
 
 The rest of this doc is about how to develop and install it locally. The software is written in Ruby (2.0) and Ruby-on-Rails (v4.0). You'll need to know these two to carry on.
 
