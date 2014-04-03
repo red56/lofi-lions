@@ -33,11 +33,19 @@ The rest of this doc is about how to develop and install it locally. The softwar
 install postgres
 *get the git repo, ensure right ruby, bundler... then: *
 ```
+bundle config --delete bin
 bundle install
 bundle exec spring binstub --all
 ```
 see https://github.com/rails/spring#setup
 
+NB (rails 4 stuff):
+> When you install a gem whose executable you want to use in your app,
+> generate it and add it to source control:
+```
+  bundle binstubs some-gem-name
+  git add bin/new-executable
+```
 
 #### setup db
 ```
