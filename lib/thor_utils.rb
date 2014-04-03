@@ -2,7 +2,6 @@ module ThorUtils
   protected
   def io_from_filename(filename, &io_block)
     if filename == '-'
-      puts "reading from STDIN"
       if io_block
         io_block.call($stdin)
       else

@@ -60,4 +60,10 @@ class Localization
       localizations.each(&block)
     end
   end
+  class CollectionWrappingArray < Collection
+    attr_reader :localizations
+    def initialize(localizations)
+      @localizations = localizations
+    end
+  end
 end
