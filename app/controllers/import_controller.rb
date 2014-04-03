@@ -5,10 +5,10 @@ class ImportController < ApplicationController
 
   def auto
     case File.extname(params[:file].original_filename)
-      when ".strings"
-        ios
-      when ".xml"
-        android
+    when ".strings"
+      ios
+    when ".xml"
+      android
     end
   end
 
