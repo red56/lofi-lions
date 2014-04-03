@@ -152,6 +152,22 @@ describe ExportsController do
         items.length.should == 2
         items.map(&:text).should == ["door[0]:ja:3", "door[1]:ja:4"]
       end
+
+      it "escapes text within string arrays" do
+        key = "escape[0]"
+        mt = MasterText.create(key: key, other: "#{key}", pluralizable: false)
+        LocalizedText.create({
+          master_text: mt,
+          language: language,
+          other: "escape'd \""
+        })
+        get platform, language: language.code
+        puts response.body
+        doc = Nokogiri::XML(response.body)
+        array = doc.css('string-array[name="escape"]')
+        item = array.css('item').first
+        item.text.should == "escape\\'d \\\""
+      end
     end
 
     describe "escaping" do

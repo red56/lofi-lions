@@ -57,7 +57,7 @@ module Android
       arrays.each do |key, texts|
         xml.send("string-array", name: key) do
           texts.sort.each do |text|
-            xml.item(text.other)
+            xml.item(escape(text.other))
           end
         end
       end
