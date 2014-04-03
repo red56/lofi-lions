@@ -57,7 +57,7 @@ module IOS
         key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
         scanner.skip(/\s*=\s*"/)
         value = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
-        [key, value]
+        [key, value].map { |s| unescape(s) }
       end
 
       def lines
@@ -82,6 +82,14 @@ module IOS
 
       def close
         @file.close if @file
+      end
+
+      UNESCAPES = {
+        "\\n" => "\n",
+        "\\\"" => '"'
+      }
+      def unescape(value)
+        value.gsub(/(\\n|\\")/, UNESCAPES)
       end
     end
   end

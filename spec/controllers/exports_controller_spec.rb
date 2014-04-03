@@ -34,13 +34,27 @@ describe ExportsController do
       response.header["X-Path"].should == "ja.lproj/Localizable.strings"
     end
 
-    describe "escaping" do
-      before do
-        lt = LocalizedText.where(language: language, master_text: master_text).first
-        lt.update_attributes(other: text)
-        get platform, language: language.code
-        resource = IOS::StringsFile.parse(StringIO.new(response.body))
-        @string = resource.localizations.detect { |l| l.key == master_text.key }.text
+      describe "escaping" do
+        before do
+          lt = LocalizedText.where(language: language, master_text: master_text).first
+          lt.update_attributes(other: text)
+          get platform, language: language.code
+        end
+
+        context "double quotes" do
+          let(:text) { "\"that's\"\ncrazy" }
+
+          it "are escaped correctly" do
+            response.body.should =~ /^"title" *= *"\\"that's\\"\\ncrazy";$/
+          end
+
+          # round trip
+          it "survive re-import" do
+            file = IOS::StringsFile.parse(StringIO.new(response.body))
+            local = file.localizations.detect { |l| l.key == master_text.key }
+            local.value.should == text
+          end
+        end
       end
 
       context "double quotes" do

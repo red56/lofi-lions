@@ -76,7 +76,7 @@ describe 'Strings file parser' do
     end
 
     it "can give values" do
-      parsed.localizations.first.value.should == 'Almost \"done\"\nanother line'
+      parsed.localizations.first.value.should == "Almost \"done\"\nanother line"
     end
   end
 end
