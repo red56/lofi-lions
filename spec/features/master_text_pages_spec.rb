@@ -87,12 +87,18 @@ describe 'Master Text Pages' do
 
     context "when pluralizable" do
       let(:master_text) { create(:master_text, pluralizable: true) }
-      it "allows me to change one and many" do
+      it "allows me to change one" do
         fill_in "master_text_one", with: "My one one"
+        expect {
+          click_on "Save"
+        }.to change { master_text.reload.one }
+        page.should_not have_css("form.master_text")
+      end
+      it "allows me to change many" do
         fill_in "master_text_other", with: "My other other"
         expect {
           click_on "Save"
-        }.to change { [master_text.reload.one, master_text.other] }
+        }.to change { master_text.reload.other }
         page.should_not have_css("form.master_text")
       end
     end
