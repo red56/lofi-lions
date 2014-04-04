@@ -15,14 +15,15 @@ describe 'Master Text Pages' do
   end
 
   describe "index" do
+    let(:texts){ build_stubbed_list(:master_text, 3)}
+    before{ texts.stub(order:texts)}
     it "can list several" do
-      texts = build_stubbed_list(:master_text, 3)
       MasterText.stub(all: texts)
       visit master_texts_path
     end
     context "with plural forms" do
+      let(:texts){ build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
       it "can list one" do
-        texts = build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other')
         MasterText.stub(all: texts)
         visit master_texts_path
         page.should have_content('othery-other')

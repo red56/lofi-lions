@@ -6,7 +6,8 @@ class MasterTextsController < ApplicationController
   # GET /master_texts
   # GET /master_texts.json
   def index
-    @master_texts = MasterText.all
+    @master_texts = MasterText.order("LOWER(key)")
+    # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
 
   # GET /master_texts/1
