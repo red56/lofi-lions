@@ -6,7 +6,8 @@
       %th Name
       %th Code
       %th Translations
-      %th Editing
+      - if current_user.is_administrator
+        %th Editing
   %tbody
     - @languages.each do |language|
       %tr
@@ -16,10 +17,11 @@
           = link_to 'To enter', entry_language_texts_path(language), class: 'btn btn-default'
           = link_to 'To review', review_language_texts_path(language), class: 'btn btn-default'
           = link_to 'All', language_texts_path(language), class: 'btn btn-default'
-        %td
-          = link_to 'Edit language', edit_language_path(language), class: 'btn btn-default'
-          = link_to 'Delete language', language, :method => :delete, :data => { :confirm => 'Are you sure?' },
-          class: 'btn btn-warning'
+        - if current_user.is_administrator
+          %td
+            = link_to 'Edit language', edit_language_path(language), class: 'btn btn-default'
+            -#= link_to 'Delete language', language, :method => :delete, :data => { :confirm => 'Are you sure?' },
+            -#class: 'btn btn-warning'
 
 %br
 
