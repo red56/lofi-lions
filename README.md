@@ -108,6 +108,21 @@ TO put in a localization file
 
 where ja is the already created language code. Master texts should be created too
 
+## Localization File Export API
+
+Change to the root of the iOS/Android application code and do something like the following:
+*iOS*
+
+    export lang=ja
+    curl -o project/$lang.lproj/Localizable.strings http://localhost:3000/export/ios/$lang
+
+iOS .strings files should be UTF-16 LE with BOM. It might be worth ensuring that this is the case using a capable text editor.
+
+*Android*
+
+    export lang=ja
+    curl -o project/res/values-$lang/strings.xml http://localhost:3000/export/android/$lang
+
 ## Services (job queues, cache servers, search engines, etc.)
 
 ## Deployment
