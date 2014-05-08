@@ -14,9 +14,16 @@ class LocalizedText < ActiveRecord::Base
   def text= text
     self.other = text
   end
+
   def text
     raise Exception.new("Don't use text when pluralizable") if self.pluralizable
     self.other
+  end
+
+  # Provides a value or master text fallback for the exporters
+  def other_export
+    return other unless other.blank?
+    original_other
   end
 
   def calculate_needs_entry

@@ -81,7 +81,7 @@ module Android
     end
 
     def singular(xml, text)
-      xml.string(escape(text.other), name: text.key)
+      xml.string(escape(text.other_export), name: text.key)
     end
 
     def plural(xml, text)

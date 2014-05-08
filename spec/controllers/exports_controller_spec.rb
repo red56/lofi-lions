@@ -56,6 +56,18 @@ describe ExportsController do
         response.body.encoding.should == Encoding::UTF_16LE
       end
 
+      it "should fallback to the english version" do
+        # create mt with no localizations
+        mt = MasterText.create(key: "missing", other: "Missing")
+        @languages.each do |lang|
+          LocalizedText.create(master_text: mt, language: lang, other: "")
+        end
+        get platform, language: language_code
+        file = IOS::StringsFile.parse(StringIO.new(body))
+        local = file.localizations.detect { |l| l.key == mt.key }
+        local.value.should == mt.other
+      end
+
       it "should order the keys alphabetically" do
         keys = body.lines.map { |line| line.split(/ *= */).first }
         sorted = keys.dup.sort
@@ -127,6 +139,18 @@ describe ExportsController do
           string = locals.detect { |l| l.key == key }
           string.text.should == "#{key}:ja"
         end
+      end
+
+      it "should fallback to the english version" do
+        # create mt with no localizations
+        mt = MasterText.create(key: "missing", other: "Missing")
+        @languages.each do |lang|
+          LocalizedText.create(master_text: mt, language: lang, other: "")
+        end
+        get platform, language: language_code
+        file = Android::ResourceFile.parse(response.body)
+        local = file.localizations.detect { |l| l.key == mt.key }
+        local.value.should == mt.other
       end
     end
 

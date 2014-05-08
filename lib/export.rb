@@ -23,6 +23,10 @@ module Export
       @master_text.one
     end
 
+    def other_export
+      @master_text.other
+    end
+
     Language.plurals.reject { |form| form == :one }.each do |form|
       module_eval (<<-RB)
         def #{form}
