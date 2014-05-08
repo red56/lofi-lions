@@ -1,12 +1,15 @@
+# encoding: utf-8
+
+require 'export/platform'
 
 module IOS
   class Exporter < ::Export::Platform
     def localisation(texts)
       strings = ""
       texts.each do |text|
-        strings << %("#{escape(text.key)}" = "#{escape(text.other)}";\n)
+        strings << %("#{escape(text.key)}" = "#{escape(text.other_export)}";\n)
       end
-      strings.encode(Encoding::UTF_8)
+      "\xFF\xFE".force_encoding(encoding) << strings.encode(encoding)
     end
 
     def path
@@ -14,7 +17,7 @@ module IOS
     end
 
     def content_type
-      "application/octet-stream"
+      "application/octet-stream; charset=#{Encoding::UTF_16.name}"
     end
 
     ESCAPES = {
@@ -24,6 +27,10 @@ module IOS
 
     def escape(other)
       other.gsub(/["\n]/, ESCAPES)
+    end
+
+    def encoding
+      Encoding::UTF_16LE
     end
   end
 end

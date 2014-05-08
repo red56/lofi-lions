@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe ExportsController do
@@ -8,6 +10,7 @@ describe ExportsController do
   let(:master_text) { MasterText.where(key: 'title').first }
 
   before do
+    MasterText.delete_all
     @master_texts = master_texts.map do |key|
       MasterText.create(key: key, other: key.capitalize)
     end
@@ -29,17 +32,28 @@ describe ExportsController do
   end
   describe "ios" do
     let(:platform) { :ios }
+    let(:body) { response.body[1..-1].encode(Encoding::UTF_8) }
     before do
       get platform, language: language_code
     end
+
     describe "translated texts" do
 
       it "should return a zip file" do
-        response.content_type.should == "application/octet-stream"
+        response.content_type.should == "application/octet-stream; charset=#{Encoding::UTF_16.name}"
       end
 
       it "has a relative filename in the headers" do
         response.header["X-Path"].should == "ja.lproj/Localizable.strings"
+      end
+
+      it "should start with a UTF-16LE BOM" do
+        bom = response.body.bytes[0..1]
+        bom.should == "\xFF\xFE".bytes
+      end
+
+      it "should have an encoding of UTF16LE" do
+        response.body.encoding.should == Encoding::UTF_16LE
       end
 
       describe "escaping" do
@@ -53,12 +67,12 @@ describe ExportsController do
           let(:text) { "\"that's\"\ncrazy" }
 
           it "are escaped correctly" do
-            response.body.should =~ /^"title" *= *"\\"that's\\"\\ncrazy";$/
+            body.should =~ /^"title" *= *"\\"that's\\"\\ncrazy";$/
           end
 
           # round trip
           it "survive re-import" do
-            file = IOS::StringsFile.parse(StringIO.new(response.body))
+            file = IOS::StringsFile.parse(StringIO.new(body))
             local = file.localizations.detect { |l| l.key == master_text.key }
             local.value.should == text
           end

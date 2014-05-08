@@ -33,7 +33,7 @@ module IOS
           file.set_encoding( "rb:#{IOS::STRINGS_FILE_ENCODING}")
           file
         when StringIO
-          file
+          StringIO.new(file.string.encode(Encoding::UTF_8))
         end
       end
 
