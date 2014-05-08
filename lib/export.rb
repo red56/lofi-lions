@@ -48,7 +48,7 @@ module Export
     end
 
     def master_texts
-      @master_texts ||= MasterText.all
+      @master_texts ||= MasterText.order(:key).all
     end
 
     def platform

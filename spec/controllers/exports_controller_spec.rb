@@ -56,6 +56,12 @@ describe ExportsController do
         response.body.encoding.should == Encoding::UTF_16LE
       end
 
+      it "should order the keys alphabetically" do
+        keys = body.lines.map { |line| line.split(/ *= */).first }
+        sorted = keys.dup.sort
+        keys.should == sorted
+      end
+
       describe "escaping" do
         before do
           lt = LocalizedText.where(language: language, master_text: master_text).first
