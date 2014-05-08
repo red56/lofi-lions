@@ -79,4 +79,12 @@ describe 'Strings file parser' do
       parsed.localizations.first.value.should == "Almost \"done\"\nanother line"
     end
   end
+
+  describe "with missing localisations" do
+    let(:file_name) { "with_missing_values" }
+    it "can parse the file" do
+      parsed.keys.should == ["Adding", "Almost done", "Done"]
+      parsed.values.should == ["Adding...", "", ""]
+    end
+  end
 end

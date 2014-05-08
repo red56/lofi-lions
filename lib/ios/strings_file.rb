@@ -56,7 +56,7 @@ module IOS
         scanner.skip_until(/"/)
         key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
         scanner.skip(/\s*=\s*"/)
-        value = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
+        value = (scanner.scan_until(NON_ESCAPED_QUOTE) || "").gsub(TRAILING_QUOTE, '')
         [key, value].map { |s| unescape(s) }
       end
 

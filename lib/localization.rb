@@ -48,6 +48,10 @@ class Localization
       localizations.map(&:key)
     end
 
+    def values
+      localizations.map(&:value)
+    end
+
     def to_a
       localizations.dup
     end
