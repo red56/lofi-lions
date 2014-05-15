@@ -162,13 +162,17 @@ describe ExportsController do
           MasterText.create(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
         end
         @master_texts.concat(@plural_master_texts)
-        @fr = Language.create(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
+        # create language without labels to test that we're outputting pluralized forms even without defined labels
+        # this is a temporary hack until pluralizable labels are implemented in the UI
+        # @fr = Language.create(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many", pluralizable_label_other: "other")
+        @fr = Language.create(code: "fr", name: "French")
         @master_texts.each do |mt|
           case mt.pluralizable?
           when true
             LocalizedText.create({
               master_text: mt,
               language: @fr,
+              other: [mt.key, @fr.code, "other"].join(":"),
               one: [mt.key, @fr.code, "one"].join(":"),
               zero: [mt.key, @fr.code, "zero"].join(":"),
               many: [mt.key, @fr.code, "many"].join(":")
@@ -186,7 +190,7 @@ describe ExportsController do
         plurals = locals.select { |l| plural_master_texts.include?(l.key) }
         plurals.length.should == plural_master_texts.length
         plurals.each do |plur|
-          [:one, :zero, :many].each do |amount|
+          [:other, :one, :zero, :many].each do |amount|
             plur.value[amount].should == [plur.key, @fr.code, amount].join(":")
           end
         end
