@@ -141,11 +141,19 @@ heroku addons:add sendgrid:starter
 
 ### Routine deployment
 
+#### Prepare release
 ```
-release prepare -s LASTVERSION NEXTVERSION
+#update config/initializers/00-version.rb with NEXTVERSION
+release prepare -s vLASTVERSION vNEXTVERSION
+# review release_notes/vNEXTVERSION and then
+git add release_notes/vNEXTVERSION config/initializers/00-version.rb
+git commit
+```
+#### Tag and deploy
+```
 git push origin master
-git tag -a NEXTVERSION
-git push origin NEXTVERSION
+git tag -a vNEXTVERSION
+git push origin vNEXTVERSION
 thor heroku:deploy production
 ```
 
