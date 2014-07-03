@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/red56/releasetool.git
+  revision: 18d47e98ae3f50a468c1da84ad4e052147e5cba9
+  branch: master
+  specs:
+    releasetool (0.0.1)
+      thor (~> 0.18)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -227,6 +235,7 @@ DEPENDENCIES
   rack-livereload
   rack-timeout
   rails (= 4.0.1)
+  releasetool!
   rspec-rails
   sass-rails (~> 4.0.0)
   sdoc

@@ -142,9 +142,11 @@ heroku addons:add sendgrid:starter
 ### Routine deployment
 
 ```
-git push heroku master
-heroku run rake db:migrate
-
+release prepare -s LASTVERSION NEXTVERSION
+git push origin master
+git tag -a NEXTVERSION
+git push origin NEXTVERSION
+thor heroku:deploy production
 ```
 
 # License

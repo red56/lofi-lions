@@ -11,6 +11,7 @@
 
 # Ignore local-only files
 /config/database.yml
+/config/heroku_targets.yml
 /spec/support/local_only*.rb
 .rspec
 .ruby-*
