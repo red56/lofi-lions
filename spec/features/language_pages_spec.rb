@@ -9,8 +9,20 @@ describe 'Language Pages' do
   context "when not logged in" do
     let(:login) { nil }
 
-    it "redirects to login page" do
+    it "languages index redirects to login page" do
       visit languages_path
+      current_path.should == new_user_session_path
+    end
+    it "language page redirects to login page" do
+      visit language_path(language)
+      current_path.should == new_user_session_path
+    end
+    it "review localized text page redirects to login page" do
+      visit review_language_texts_path(language)
+      current_path.should == new_user_session_path
+    end
+    it "all localized text page redirects to login page" do
+      visit language_texts_path(language)
       current_path.should == new_user_session_path
     end
   end
