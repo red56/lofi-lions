@@ -7,28 +7,8 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      = link_to 'Localization', root_path, class: 'navbar-brand'
+      = link_to request.host, root_path, class: 'navbar-brand'
     .navbar-collapse.collapse
-      %ul.nav.navbar-nav
-        %li.active= link_to "Master Texts", master_texts_path
-        %li= link_to "Languages", languages_path
-      -#  %li.dropdown
-      -#    %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-      -#      Dropdown
-      -#      %b.caret
-      -#    %ul.dropdown-menu
-      -#      %li
-      -#        %a{:href => "#"} Action
-      -#      %li
-      -#        %a{:href => "#"} Another action
-      -#      %li
-      -#        %a{:href => "#"} Something else here
-      -#      %li.divider
-      -#      %li.dropdown-header Nav header
-      -#      %li
-      -#        %a{:href => "#"} Separated link
-      -#      %li
-      -#        %a{:href => "#"} One more separated link
       %ul.nav.navbar-nav.navbar-right
         %li= link_to 'Login', new_user_session_path
     / /.nav-collapse

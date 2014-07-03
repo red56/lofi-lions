@@ -30,6 +30,10 @@
         = yield
 
 
-    #footer
-      .container
-        %p.text-muted Information about lofi-lions
+    - if user_signed_in?
+      #footer
+        .container
+          %p.text-muted
+            Powered by
+            = link_to 'Lofi-LIONs', "https://github.com/red56/lofi-lions"
+            = version_details
