@@ -26,17 +26,7 @@ class Language < ActiveRecord::Base
     @plurals ||= Hash[active_plurals]
   end
 
-  # Replace with #active_plurals_with_labels functionality once the UI for entering pluralizable labels
-  # for languages has been implemented.
   def active_plurals
-    active_plurals_without_labels
-  end
-
-  def active_plurals_without_labels
-    Language.plurals_fields.map { |form, field| [form, form.to_s] }
-  end
-
-  def active_plurals_with_labels
     Language.plurals_fields.reject { |form, field| self[field].blank? }.map { |form, field| [form, self[field]] }
   end
 end
