@@ -52,7 +52,7 @@ module Export
     end
 
     def master_texts
-      @master_texts ||= MasterText.order(:key).all
+      @master_texts ||= MasterText.order(:key)
     end
 
     def platform
