@@ -27,18 +27,18 @@ describe Language do
   describe "plurals" do
     let(:language) { build(:language) }
     it "should be a hash" do
-      language.plurals.should be_a(Hash)
+      language.plural_forms_with_fields.should be_a(Hash)
     end
     context "with some specific labels" do
       let(:language) { build(:language, :type_0_chinese) }
       it "should be a hash" do
-        language.plurals.should == {other: 'everything'}
+        language.plural_forms_with_fields.should == {other: 'everything'}
       end
     end
     context "with some specific labels" do
       let(:language) { build(:language, :type_1_english) }
       it "should be a hash" do
-        language.plurals.should == {one: 'is 1', other: 'everything else'}
+        language.plural_forms_with_fields.should == {one: 'is 1', other: 'everything else'}
       end
     end
   end

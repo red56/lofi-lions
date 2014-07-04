@@ -71,7 +71,10 @@ class LanguagesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def language_params
       params.require(:language).permit(
-          :name, :code, localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
+          :name, :code,
+          :pluralizable_label_zero, :pluralizable_label_one, :pluralizable_label_two, :pluralizable_label_few,
+          :pluralizable_label_many, :pluralizable_label_other,
+          localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
       )
     end
 

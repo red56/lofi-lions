@@ -86,7 +86,7 @@ module Android
 
     def plural(xml, text)
       xml.plurals(name: text.key) do
-        @language.plurals.each do |key, label|
+        @language.plural_forms_with_fields.each do |key, label|
           xml.item(escape(text.send(key)), quantity: key)
         end
       end

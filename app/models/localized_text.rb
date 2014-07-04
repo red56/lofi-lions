@@ -28,6 +28,6 @@ class LocalizedText < ActiveRecord::Base
 
   def calculate_needs_entry
     return self.text.blank? unless pluralizable
-    self.language.plurals.keys.any?{|attr_name| self[attr_name].blank? }
+    self.language.plural_forms_with_fields.keys.any?{|attr_name| self[attr_name].blank? }
   end
 end

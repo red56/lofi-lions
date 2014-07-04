@@ -1,12 +1,8 @@
 class Language < ActiveRecord::Base
 
-  def self.plurals
-    [:zero, :one, :two, :few, :many, :other]
-  end
+  PLURAL_FORMS = [:zero, :one, :two, :few, :many, :other].freeze
+  PLURAL_FORMS_WITH_FIELDS = PLURAL_FORMS.map { |form| [form, "pluralizable_label_#{form}".to_sym] }.freeze
 
-  def self.plurals_fields
-    @plurals_fields ||= plurals.map { |form| [form, "pluralizable_label_#{form}".to_sym] }
-  end
 
   has_many :localized_texts, inverse_of: :language, dependent: :destroy
   accepts_nested_attributes_for :localized_texts
@@ -22,12 +18,9 @@ class Language < ActiveRecord::Base
     Language.new(code: "en", name: "English (fallback)", pluralizable_label_one: "One", pluralizable_label_other: "Other")
   end
 
-  def plurals
-    @plurals ||= Hash[active_plurals]
-  end
-
-  def active_plurals
-    @active_plurals ||= Language.plurals_fields.reject { |form, field| self[field].blank? }.map { |form, field| [form, self[field]] }
+  def plural_forms_with_fields
+    @plurals ||=  Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form,
+        field| [form, self[field]] }]
   end
 
 end

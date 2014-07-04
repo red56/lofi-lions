@@ -76,6 +76,12 @@ describe 'Language Pages' do
       click_on "Save"
       page.should_not have_css("form.language")
     end
+    it "has labels" do
+      %w{zero one two few many other}.each do |plural_form|
+        page.should have_field("language_pluralizable_label_#{plural_form}")
+      end
+    end
+
     it "displays errors" do
       page.should have_css("form.language")
       fill_in "language_name", with: ''

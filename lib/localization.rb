@@ -15,6 +15,10 @@ class Localization
     [key, value]
   end
 
+  def to_s
+    "Localization[#{key}]:'#{value}'"
+  end
+
   include Comparable
   def <=> other
     return [key, value] <=> [other.key, other.value]

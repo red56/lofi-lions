@@ -27,7 +27,7 @@ module Export
       @master_text.other
     end
 
-    Language.plurals.reject { |form| form == :one }.each do |form|
+    Language::PLURAL_FORMS.reject { |form| form == :one }.each do |form|
       module_eval (<<-RB)
         def #{form}
           @master_text.other

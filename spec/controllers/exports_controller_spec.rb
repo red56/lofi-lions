@@ -159,14 +159,14 @@ describe ExportsController do
 
       before do
         @plural_master_texts = plural_master_texts.map do |key|
-          MasterText.create(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
+          MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
         end
         @master_texts.concat(@plural_master_texts)
-        @fr = Language.create(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
+        @fr = Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
         @master_texts.each do |mt|
           case mt.pluralizable?
           when true
-            LocalizedText.create({
+            LocalizedText.create!({
               master_text: mt,
               language: @fr,
               one: [mt.key, @fr.code, "one"].join(":"),
@@ -174,7 +174,7 @@ describe ExportsController do
               many: [mt.key, @fr.code, "many"].join(":")
             })
           when false
-            LocalizedText.create(master_text: mt, language: @fr, other: [mt.key, @fr.code].join(":"))
+            LocalizedText.create!(master_text: mt, language: @fr, other: [mt.key, @fr.code].join(":"))
           end
         end
       end

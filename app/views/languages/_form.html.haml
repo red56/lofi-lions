@@ -17,6 +17,22 @@
       = f.label :code
       = f.text_field :code, class: 'form-control'
 
+  %h3
+    Plural form labels
+    %small.text-muted
+      leave blank if language doesn't have this plural form)
+  %p
+    You may need to look at
+    = link_to nil, 'https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals'
+    for reference
+  .form-group.row
+    - Language::PLURAL_FORMS_WITH_FIELDS.each do |plural_form, field|
+      .col-xs-2
+        = f.label field, plural_form.to_s.titleize
+        = f.text_field field, class: 'form-control'
+
+
+
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'
 
