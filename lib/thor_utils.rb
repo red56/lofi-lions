@@ -8,7 +8,6 @@ module ThorUtils
         return $stdin
       end
     else
-      puts "reading from file #{filename}"
       if io_block
         open(filename, 'rb', &io_block)
       else
