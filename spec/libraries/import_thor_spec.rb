@@ -19,7 +19,9 @@ describe 'ImportThor' do
     it "should stop if it receives unknown code" do
       Language.should_receive(:find_by_code).with('zh').and_return(nil)
       Localization.should_not_receive(:create_localized_texts)
-      ImportThor::Ios.new.localizations('zh', Rails.root.join('spec/fixtures/with_escaped_characters.strings'))
+      expect {
+        ImportThor::Ios.new.localizations('zh', Rails.root.join('spec/fixtures/with_escaped_characters.strings'))
+      }.to output(/Couldn't find language code.+zh/).to_stdout
     end
   end
   describe "Android" do
@@ -30,13 +32,15 @@ describe 'ImportThor' do
     it "can run something against a file" do
       Language.should_receive(:find_by_code).with('zh').and_return(chinese)
       Localization.should_receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection)).and_return({})
-      ImportThor::Ios.new.localizations('zh', Rails.root.join('spec/fixtures/simple_strings.xml'))
+      ImportThor::Android.new.localizations('zh', Rails.root.join('spec/fixtures/simple_strings.xml'))
     end
 
     it "should stop if it receives unknown code" do
       Language.should_receive(:find_by_code).with('zh').and_return(nil)
       Localization.should_not_receive(:create_localized_texts)
-      ImportThor::Ios.new.localizations('zh', Rails.root.join('spec/fixtures/simple_strings.xml'))
+      expect {
+        ImportThor::Android.new.localizations('zh', Rails.root.join('spec/fixtures/simple_strings.xml'))
+      }.to output(/Couldn't find language code.+zh/).to_stdout
     end
   end
 end
