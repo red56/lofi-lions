@@ -27,6 +27,7 @@ class Language < ActiveRecord::Base
   end
 
   def active_plurals
-    Language.plurals_fields.reject { |form, field| self[field].blank? }.map { |form, field| [form, self[field]] }
+    @active_plurals ||= Language.plurals_fields.reject { |form, field| self[field].blank? }.map { |form, field| [form, self[field]] }
   end
+
 end
