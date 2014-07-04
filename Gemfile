@@ -70,6 +70,6 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'capybara'
+  gem 'capybara', '>=2.2.0'
   gem "releasetool", github: "red56/releasetool", branch: 'master'
 end

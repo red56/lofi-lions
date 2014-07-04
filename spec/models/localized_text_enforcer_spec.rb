@@ -38,7 +38,7 @@ describe LocalizedTextEnforcer do
           LocalizedTextEnforcer.new.master_text_changed(master_text)
         }.not_to change { [LocalizedText.count, localized_text.reload.text]
         }
-        localized_text.reload.needs_review.should be_true
+        localized_text.reload.needs_review.should be_truthy
       end
     end
 
@@ -90,7 +90,7 @@ describe LocalizedTextEnforcer do
         expect {
           mt_crudder.update(text: "flong")
         }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-        localized_text.reload.needs_review.should be_true
+        localized_text.reload.needs_review.should be_truthy
         master_text.reload.text.should == "flong"
       end
       it "doesn't mark as needing review if text unchanged" do
@@ -109,7 +109,7 @@ describe LocalizedTextEnforcer do
         expect {
           mt_crudder.save
         }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-        localized_text.reload.needs_review.should be_true
+        localized_text.reload.needs_review.should be_truthy
         master_text.reload.text.should == "flong"
 
       end
@@ -157,7 +157,7 @@ describe LocalizedTextEnforcer do
           expect {
             LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
           }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-          localized_text.reload.needs_review.should be_true
+          localized_text.reload.needs_review.should be_truthy
           mt.reload.text.should == new_text
         end
       end
@@ -176,11 +176,11 @@ describe LocalizedTextEnforcer do
       end
       it "returns true when saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language))
-        l_crudder.save.should be_true
+        l_crudder.save.should be_truthy
       end
       it "returns false when not saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ''))
-        l_crudder.save.should be_false
+        l_crudder.save.should be_falsey
       end
     end
 

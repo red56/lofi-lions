@@ -13,7 +13,7 @@ describe Localization do
       expect {
         Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")])
       }.to change { MasterText.count }.by(1)
-      MasterText.last.pluralizable.should be_true
+      MasterText.last.pluralizable.should be_truthy
       MasterText.last.one.should == "one sandwich"
       MasterText.last.other.should == "%d sandwiches"
     end

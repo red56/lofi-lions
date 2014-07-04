@@ -66,21 +66,21 @@ describe MasterText do
     shared_examples_for "shared_text_changed" do
       it "is false when key changing" do
         master_text.key = "flong"
-        master_text.text_changed?.should be_false
+        master_text.text_changed?.should be_falsey
       end
       it "is false when nothing changing" do
-        master_text.text_changed?.should be_false
+        master_text.text_changed?.should be_falsey
       end
       it "is true when pluralizable" do
         master_text.pluralizable = !master_text.pluralizable
-        master_text.text_changed?.should be_true
+        master_text.text_changed?.should be_truthy
       end
     end
     context "when unpluralized" do
       let(:master_text) { create(:master_text, pluralizable: false) }
       it "is true when text changing" do
         master_text.text = "flong"
-        master_text.text_changed?.should be_true
+        master_text.text_changed?.should be_truthy
       end
       include_examples "shared_text_changed"
     end
@@ -88,11 +88,11 @@ describe MasterText do
       let(:master_text) { create(:master_text, pluralizable: true) }
       it "is true when one changing" do
         master_text.one = "flong"
-        master_text.text_changed?.should be_true
+        master_text.text_changed?.should be_truthy
       end
       it "is true when other changing" do
         master_text.other = "flong"
-        master_text.text_changed?.should be_true
+        master_text.text_changed?.should be_truthy
       end
       include_examples "shared_text_changed"
     end

@@ -173,7 +173,7 @@ describe 'Language Pages' do
       let(:path) { entry_language_texts_path(language) }
       it_behaves_like "localized text list"
       it "should be created needing entry" do
-        empty_localized_text.needs_entry.should be_true
+        empty_localized_text.needs_entry.should be_truthy
       end
       it "displays appropriate" do
         localized_texts

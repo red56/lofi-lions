@@ -56,11 +56,11 @@ describe LocalizedText do
     context "unpluralizable" do
       it "is true if text is empty" do
         localized_text.text = ''
-        localized_text.calculate_needs_entry.should be_true
+        localized_text.calculate_needs_entry.should be_truthy
       end
       it 'is false if text is filled' do
         localized_text.text = 'fillll'
-        localized_text.calculate_needs_entry.should be_false
+        localized_text.calculate_needs_entry.should be_falsey
       end
     end
 
@@ -74,11 +74,11 @@ describe LocalizedText do
         let(:language) { build :language, :type_0_chinese }
         it "is true if other is empty" do
           localized_text.other = ''
-          localized_text.calculate_needs_entry.should be_true
+          localized_text.calculate_needs_entry.should be_truthy
         end
         it 'is false if everything important is filled' do
           localized_text.one = ''
-          localized_text.calculate_needs_entry.should be_false
+          localized_text.calculate_needs_entry.should be_falsey
         end
       end
 
@@ -86,15 +86,15 @@ describe LocalizedText do
         let(:language) { build :language, :type_1_english }
         it "is true if one is empty" do
           localized_text.one = ''
-          localized_text.calculate_needs_entry.should be_true
+          localized_text.calculate_needs_entry.should be_truthy
         end
         it "is true if other is empty" do
           localized_text.other = ''
-          localized_text.calculate_needs_entry.should be_true
+          localized_text.calculate_needs_entry.should be_truthy
         end
         it 'is false if everything important is filled' do
           localized_text.few = ''
-          localized_text.calculate_needs_entry.should be_false
+          localized_text.calculate_needs_entry.should be_falsey
         end
       end
     end
