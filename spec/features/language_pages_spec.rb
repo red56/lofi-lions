@@ -128,7 +128,8 @@ describe 'Language Pages' do
           page.should have_content("flounce")
         end
         it "has correct other fields/labels" do
-          pending "need to test this with different language types"
+          pending
+          flunk "need to test this with different language types"
         end
       end
       it "linked from index" do

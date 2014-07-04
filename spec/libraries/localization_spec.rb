@@ -53,7 +53,7 @@ describe Localization do
           expect {
             Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
                 two: "two sandwiches", other: "%d sandwiches")])
-          }.not_to change { LocalizedText.count }.by(1)
+          }.not_to change { LocalizedText.count }
           localized_text.reload
           localized_text.one.should == "one sandwich"
           localized_text.two.should == "two sandwiches"

@@ -46,12 +46,11 @@ describe 'User management pages' do
       end
     end
 
-    specify "has link to add" do
-      pending "not yet" do
-        visit users_path
-        click_on "Add"
-        page.current_path.should == new_user_path
-      end
+    pending "has link to add" do
+      pending "not yet"
+      visit users_path
+      click_on "Add"
+      page.current_path.should == new_user_path
     end
   end
 
