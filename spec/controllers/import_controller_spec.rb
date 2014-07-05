@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'android'
 require 'ios'
 
-describe ImportController do
+describe ImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
 
   context "without auth token" do
@@ -32,14 +32,14 @@ describe ImportController do
       post :ios, {file: file_upload, format: 'json'}
       masters = MasterText.all
       pairs = masters.map { |mt| [mt.key, mt.text] }
-      pairs.should include(["Adding", "Adding..."])
-      pairs.should include(["Almost done", "Almost done..."])
-      pairs.should include(["Done", "Done!"])
+      expect(pairs).to include(["Adding", "Adding..."])
+      expect(pairs).to include(["Almost done", "Almost done..."])
+      expect(pairs).to include(["Done", "Done!"])
     end
 
     it "redirects to the master text view" do
       post :ios, {file: file_upload, format: 'html'}
-      response.should redirect_to(master_texts_path)
+      expect(response).to redirect_to(master_texts_path)
     end
   end
 
@@ -49,9 +49,9 @@ describe ImportController do
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
-        Android::ResourceFile.should_receive(:parse).and_return(localizations)
-        localizations.should_receive(:close)
-        Localization.should_receive(:create_master_texts).with(localizations)
+        expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
+        expect(localizations).to receive(:close)
+        expect(Localization).to receive(:create_master_texts).with(localizations)
       end
 
       it "recognises a android xml" do
@@ -71,7 +71,7 @@ describe ImportController do
       it "creates the expected master texts" do
         post :android, {file: file_upload, format: 'json'}
         masters = MasterText.all
-        masters.map { |mt| [mt.key, mt.text] }.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
+        expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
     end
   end

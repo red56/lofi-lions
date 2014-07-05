@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe UsersController do
+describe UsersController, :type => :controller do
 
   before { login }
   let(:login) { stubbed_login_as_admin_user }
@@ -10,7 +10,7 @@ describe UsersController do
     let(:login) { nil }
     it "redirects to login page" do
       get :index
-      response.should redirect_to(new_user_session_path)
+      expect(response).to redirect_to(new_user_session_path)
     end
   end
 
@@ -29,7 +29,7 @@ describe UsersController do
   describe "index" do
     it "works" do
       get :index
-      response.status.should == 200
+      expect(response.status).to eq(200)
     end
   end
 

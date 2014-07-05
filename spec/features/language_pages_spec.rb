@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'Language Pages' do
+describe 'Language Pages', :type => :feature do
   let(:language) { create(:language) }
 
   before { login }
@@ -11,35 +11,35 @@ describe 'Language Pages' do
 
     it "languages index redirects to login page" do
       visit languages_path
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
     it "language page redirects to login page" do
       visit language_path(language)
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
     it "review localized text page redirects to login page" do
       visit review_language_texts_path(language)
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
     it "all localized text page redirects to login page" do
       visit language_texts_path(language)
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
   end
 
   describe "index" do
     it "can list several" do
       langs = build_stubbed_list(:language, 3)
-      Language.stub(all: langs)
+      allow(Language).to receive_messages(all: langs)
       visit languages_path
     end
     it "links to new" do
       visit languages_path
-      page.should have_link_to(new_language_path)
+      expect(page).to have_link_to(new_language_path)
     end
     it "is linked from home" do
       visit root_path
-      page.should have_link_to(languages_path)
+      expect(page).to have_link_to(languages_path)
     end
   end
 
@@ -48,21 +48,21 @@ describe 'Language Pages' do
       visit new_language_path
     end
     it "works" do
-      LocalizedTextEnforcer.any_instance.should_receive(:language_created)
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:language_created)
       visit new_language_path
-      page.should have_css("form.language")
+      expect(page).to have_css("form.language")
       fill_in "language_code", with: 'FR'
       fill_in "language_name", with: 'Frenchie'
       click_on "Save"
-      page.should_not have_css("form.language")
+      expect(page).not_to have_css("form.language")
     end
     it "displays errors" do
       visit new_language_path
-      page.should have_css("form.language")
+      expect(page).to have_css("form.language")
       fill_in "language_name", with: 'fr'
       click_on "Save"
-      page.should have_css("form.language")
-      page.should have_css("form.language .errors")
+      expect(page).to have_css("form.language")
+      expect(page).to have_css("form.language .errors")
     end
   end
   describe "edit" do
@@ -71,23 +71,23 @@ describe 'Language Pages' do
       visit new_language_path
     end
     it "works" do
-      page.should have_css("form.language")
+      expect(page).to have_css("form.language")
       fill_in "language_name", with: 'Franglais'
       click_on "Save"
-      page.should_not have_css("form.language")
+      expect(page).not_to have_css("form.language")
     end
     it "has labels" do
       %w{zero one two few many other}.each do |plural_form|
-        page.should have_field("language_pluralizable_label_#{plural_form}")
+        expect(page).to have_field("language_pluralizable_label_#{plural_form}")
       end
     end
 
     it "displays errors" do
-      page.should have_css("form.language")
+      expect(page).to have_css("form.language")
       fill_in "language_name", with: ''
       click_on "Save"
-      page.should have_css("form.language")
-      page.should have_css("form.language .errors")
+      expect(page).to have_css("form.language")
+      expect(page).to have_css("form.language .errors")
     end
   end
 
@@ -105,8 +105,8 @@ describe 'Language Pages' do
       it "displays one" do
         localized_text
         visit path
-        page.should have_content(localized_text.master_text.text)
-        page.should have_css("#localized_text_#{localized_text.id}")
+        expect(page).to have_content(localized_text.master_text.text)
+        expect(page).to have_css("#localized_text_#{localized_text.id}")
       end
       it "updates one" do
         localized_text
@@ -114,16 +114,16 @@ describe 'Language Pages' do
         fill_in :language_localized_texts_attributes_0_text, with: "flounce"
         click_on "Save"
         visit language_texts_path(language)
-        page.should have_content("flounce")
+        expect(page).to have_content("flounce")
       end
 
       context 'when pluralizable' do
-        before { MasterText.any_instance.stub(pluralizable: true) }
+        before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true) }
         it "displays" do
           localized_text
           visit path
-          page.should have_content(localized_text.master_text.other)
-          page.should have_css("#localized_text_#{localized_text.id}")
+          expect(page).to have_content(localized_text.master_text.other)
+          expect(page).to have_css("#localized_text_#{localized_text.id}")
         end
         it "updates a localized other" do
           localized_text
@@ -131,7 +131,7 @@ describe 'Language Pages' do
           fill_in :language_localized_texts_attributes_0_other, with: "flounce"
           click_on "Save"
           visit language_texts_path(language)
-          page.should have_content("flounce")
+          expect(page).to have_content("flounce")
         end
         it "has correct other fields/labels" do
           pending
@@ -140,24 +140,24 @@ describe 'Language Pages' do
       end
       it "linked from index" do
         visit languages_path
-        page.should have_link_to(path)
+        expect(page).to have_link_to(path)
       end
       it "linked from all" do
         visit language_texts_path(language)
-        page.should have_link_to(path)
+        expect(page).to have_link_to(path)
       end
       it "linked from entry" do
         visit entry_language_texts_path(language)
-        page.should have_link_to(path)
+        expect(page).to have_link_to(path)
       end
       it "linked from review" do
         visit review_language_texts_path(language)
-        page.should have_link_to(path)
+        expect(page).to have_link_to(path)
       end
       it "is active" do
         visit path
         within "ul.localized-texts.nav li.active" do
-          page.should have_link_to(path)
+          expect(page).to have_link_to(path)
         end
       end
     end
@@ -170,7 +170,7 @@ describe 'Language Pages' do
         localized_texts
         visit path
         localized_texts.each do |localized_text|
-          page.should have_css("#localized_text_#{localized_text.id}")
+          expect(page).to have_css("#localized_text_#{localized_text.id}")
         end
       end
     end
@@ -180,14 +180,14 @@ describe 'Language Pages' do
       let(:path) { entry_language_texts_path(language) }
       it_behaves_like "localized text list"
       it "should be created needing entry" do
-        empty_localized_text.needs_entry.should be_truthy
+        expect(empty_localized_text.needs_entry).to be_truthy
       end
       it "displays appropriate" do
         localized_texts
         visit path
-        page.should have_css("#localized_text_#{empty_localized_text.id}")
-        page.should_not have_css("#localized_text_#{ok_localized_text.id}")
-        page.should_not have_css("#localized_text_#{needs_review_localized_text.id}")
+        expect(page).to have_css("#localized_text_#{empty_localized_text.id}")
+        expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
+        expect(page).not_to have_css("#localized_text_#{needs_review_localized_text.id}")
       end
     end
 
@@ -198,9 +198,9 @@ describe 'Language Pages' do
       it "displays all" do
         localized_texts
         visit path
-        page.should have_css("#localized_text_#{needs_review_localized_text.id}")
-        page.should_not have_css("#localized_text_#{ok_localized_text.id}")
-        page.should_not have_css("#localized_text_#{empty_localized_text.id}")
+        expect(page).to have_css("#localized_text_#{needs_review_localized_text.id}")
+        expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
+        expect(page).not_to have_css("#localized_text_#{empty_localized_text.id}")
       end
     end
   end

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe ExportsController do
+describe ExportsController, :type => :controller do
   let(:languages) { [:es, :ja] }
   let(:master_texts) { %w(title welcome complete) }
   let(:language) { Language.where(code: 'ja').first }
@@ -27,7 +27,7 @@ describe ExportsController do
   describe "common" do
     it "returns a 404 if the language is uknown" do
       get :android, language: "xx"
-      response.status.should == 404
+      expect(response.status).to eq(404)
     end
   end
   describe "ios" do
@@ -40,20 +40,20 @@ describe ExportsController do
     describe "translated texts" do
 
       it "should return a zip file" do
-        response.content_type.should == "application/octet-stream; charset=#{Encoding::UTF_16.name}"
+        expect(response.content_type).to eq("application/octet-stream; charset=#{Encoding::UTF_16.name}")
       end
 
       it "has a relative filename in the headers" do
-        response.header["X-Path"].should == "ja.lproj/Localizable.strings"
+        expect(response.header["X-Path"]).to eq("ja.lproj/Localizable.strings")
       end
 
       it "should start with a UTF-16LE BOM" do
         bom = response.body.bytes[0..1]
-        bom.should == "\xFF\xFE".bytes
+        expect(bom).to eq("\xFF\xFE".bytes)
       end
 
       it "should have an encoding of UTF16LE" do
-        response.body.encoding.should == Encoding::UTF_16LE
+        expect(response.body.encoding).to eq(Encoding::UTF_16LE)
       end
 
       it "should fallback to the english version" do
@@ -65,13 +65,13 @@ describe ExportsController do
         get platform, language: language_code
         file = IOS::StringsFile.parse(StringIO.new(body))
         local = file.localizations.detect { |l| l.key == mt.key }
-        local.value.should == mt.other
+        expect(local.value).to eq(mt.other)
       end
 
       it "should order the keys alphabetically" do
         keys = body.lines.map { |line| line.split(/ *= */).first }
         sorted = keys.dup.sort
-        keys.should == sorted
+        expect(keys).to eq(sorted)
       end
 
       describe "escaping" do
@@ -85,14 +85,14 @@ describe ExportsController do
           let(:text) { "\"that's\"\ncrazy" }
 
           it "are escaped correctly" do
-            body.should =~ /^"title" *= *"\\"that's\\"\\ncrazy";$/
+            expect(body).to match(/^"title" *= *"\\"that's\\"\\ncrazy";$/)
           end
 
           # round trip
           it "survive re-import" do
             file = IOS::StringsFile.parse(StringIO.new(body))
             local = file.localizations.detect { |l| l.key == master_text.key }
-            local.value.should == text
+            expect(local.value).to eq(text)
           end
         end
       end
@@ -101,14 +101,14 @@ describe ExportsController do
     describe "english texts" do
       let(:language_code) { 'en' }
       it "uses fallbacks to produce the english version" do
-        response.status.should == 200
+        expect(response.status).to eq(200)
       end
 
       it "uses the master text values" do
         file = IOS::StringsFile.parse(StringIO.new(response.body))
         @master_texts.each do |mt|
           local = file.localizations.detect { |l| l.key == mt.key }
-          local.value.should == mt.other
+          expect(local.value).to eq(mt.other)
         end
       end
     end
@@ -123,21 +123,21 @@ describe ExportsController do
       end
 
       it "should return a zip file" do
-        response.content_type.should == "text/xml"
+        expect(response.content_type).to eq("text/xml")
       end
 
       it "has a relative filename in the headers" do
-        response.header["X-Path"].should == "res/values-ja/strings.xml"
+        expect(response.header["X-Path"]).to eq("res/values-ja/strings.xml")
       end
 
       it "returns a valid xml document for a language" do
         # io = StringIO.new(response.body)
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
-        locals.map(&:key).sort.should == master_texts.sort
+        expect(locals.map(&:key).sort).to eq(master_texts.sort)
         master_texts.each do |key|
           string = locals.detect { |l| l.key == key }
-          string.text.should == "#{key}:ja"
+          expect(string.text).to eq("#{key}:ja")
         end
       end
 
@@ -150,7 +150,7 @@ describe ExportsController do
         get platform, language: language_code
         file = Android::ResourceFile.parse(response.body)
         local = file.localizations.detect { |l| l.key == mt.key }
-        local.value.should == mt.other
+        expect(local.value).to eq(mt.other)
       end
     end
 
@@ -184,10 +184,10 @@ describe ExportsController do
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
         plurals = locals.select { |l| plural_master_texts.include?(l.key) }
-        plurals.length.should == plural_master_texts.length
+        expect(plurals.length).to eq(plural_master_texts.length)
         plurals.each do |plur|
           [:one, :zero, :many].each do |amount|
-            plur.value[amount].should == [plur.key, @fr.code, amount].join(":")
+            expect(plur.value[amount]).to eq([plur.key, @fr.code, amount].join(":"))
           end
         end
       end
@@ -197,11 +197,11 @@ describe ExportsController do
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
         plurals = locals.select { |l| plural_master_texts.include?(l.key) }
-        plurals.length.should == plural_master_texts.length
+        expect(plurals.length).to eq(plural_master_texts.length)
         @plural_master_texts.each do |mt|
           plur = locals.detect { |l| l.key == mt.key }
-          plur.value[:one].should == mt.one
-          plur.value[:other].should == mt.other
+          expect(plur.value[:one]).to eq(mt.one)
+          expect(plur.value[:other]).to eq(mt.other)
         end
       end
     end
@@ -225,36 +225,36 @@ describe ExportsController do
         get platform, language: language.code
         doc = Nokogiri::XML(response.body)
         array = doc.css('string-array[name="planet"]')
-        array.length.should == 1
+        expect(array.length).to eq(1)
         array = array.first
         items = array.css("item")
-        items.length.should == 3
-        items.map(&:text).should == ["planet[0]:ja:0", "planet[1]:ja:1", "planet[2]:ja:2"]
+        expect(items.length).to eq(3)
+        expect(items.map(&:text)).to eq(["planet[0]:ja:0", "planet[1]:ja:1", "planet[2]:ja:2"])
 
         array = doc.css('string-array[name="door"]')
-        array.length.should == 1
+        expect(array.length).to eq(1)
         array = array.first
         items = array.css("item")
-        items.length.should == 2
-        items.map(&:text).should == ["door[0]:ja:3", "door[1]:ja:4"]
+        expect(items.length).to eq(2)
+        expect(items.map(&:text)).to eq(["door[0]:ja:3", "door[1]:ja:4"])
       end
 
       it "includes master texts of arrays for english" do
         get platform, language: "en"
         doc = Nokogiri::XML(response.body)
         array = doc.css('string-array[name="planet"]')
-        array.length.should == 1
+        expect(array.length).to eq(1)
         array = array.first
         items = array.css("item")
-        items.length.should == 3
-        items.map(&:text).should == ["planet[0]", "planet[1]", "planet[2]"]
+        expect(items.length).to eq(3)
+        expect(items.map(&:text)).to eq(["planet[0]", "planet[1]", "planet[2]"])
 
         array = doc.css('string-array[name="door"]')
-        array.length.should == 1
+        expect(array.length).to eq(1)
         array = array.first
         items = array.css("item")
-        items.length.should == 2
-        items.map(&:text).should == ["door[0]", "door[1]"]
+        expect(items.length).to eq(2)
+        expect(items.map(&:text)).to eq(["door[0]", "door[1]"])
       end
 
       it "escapes text within string arrays" do
@@ -269,7 +269,7 @@ describe ExportsController do
         doc = Nokogiri::XML(response.body)
         array = doc.css('string-array[name="escape"]')
         item = array.css('item').first
-        item.text.should == "escape\\'d \\\""
+        expect(item.text).to eq("escape\\'d \\\"")
       end
     end
 
@@ -286,7 +286,7 @@ describe ExportsController do
         let(:text) { "that's crazy" }
 
         it "are escaped correctly" do
-          @string.should == "that\\'s crazy"
+          expect(@string).to eq("that\\'s crazy")
         end
       end
 
@@ -294,7 +294,7 @@ describe ExportsController do
         let(:text) { "\"that's\" crazy" }
 
         it "are escaped correctly" do
-          @string.should == "\\\"that\\'s\\\" crazy"
+          expect(@string).to eq("\\\"that\\'s\\\" crazy")
         end
       end
     end

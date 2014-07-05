@@ -13,9 +13,9 @@ describe Localization do
       expect {
         Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")])
       }.to change { MasterText.count }.by(1)
-      MasterText.last.pluralizable.should be_truthy
-      MasterText.last.one.should == "one sandwich"
-      MasterText.last.other.should == "%d sandwiches"
+      expect(MasterText.last.pluralizable).to be_truthy
+      expect(MasterText.last.one).to eq("one sandwich")
+      expect(MasterText.last.other).to eq("%d sandwiches")
     end
   end
 
@@ -28,12 +28,12 @@ describe Localization do
         expect {
           Localization.create_localized_texts(language, [Localization.new("somekey", "something new in sandwiches")])
         }.to change { LocalizedText.count }.by(1)
-        LocalizedText.last.language.should == language
+        expect(LocalizedText.last.language).to eq(language)
       end
       it "returns no errors" do
         result = Localization.create_localized_texts(language, [Localization.new("somekey",
             "something new in sandwiches")])
-        result.should be_empty
+        expect(result).to be_empty
       end
       it 'creates pluralized forms' do
         expect {
@@ -41,9 +41,9 @@ describe Localization do
               two: "two sandwiches", other: "%d sandwiches")])
         }.to change { LocalizedText.count }.by(1)
         localized_text = LocalizedText.last
-        localized_text.one.should == "one sandwich"
-        localized_text.two.should == "two sandwiches"
-        localized_text.other.should == "%d sandwiches"
+        expect(localized_text.one).to eq("one sandwich")
+        expect(localized_text.two).to eq("two sandwiches")
+        expect(localized_text.other).to eq("%d sandwiches")
       end
       context "when already exists" do
         before { localized_text }
@@ -55,9 +55,9 @@ describe Localization do
                 two: "two sandwiches", other: "%d sandwiches")])
           }.not_to change { LocalizedText.count }
           localized_text.reload
-          localized_text.one.should == "one sandwich"
-          localized_text.two.should == "two sandwiches"
-          localized_text.other.should == "%d sandwiches"
+          expect(localized_text.one).to eq("one sandwich")
+          expect(localized_text.two).to eq("two sandwiches")
+          expect(localized_text.other).to eq("%d sandwiches")
         end
       end
     end
@@ -66,7 +66,7 @@ describe Localization do
         expect {
           result = Localization.create_localized_texts(language, [Localization.new("somekey",
               "something new in sandwiches")])
-          result.should_not be_empty
+          expect(result).not_to be_empty
         }.not_to change { LocalizedText.count }
 
       end

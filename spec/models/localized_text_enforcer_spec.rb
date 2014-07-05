@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe LocalizedTextEnforcer do
+describe LocalizedTextEnforcer, :type => :model do
   let(:master_text) { create(:master_text) }
   let(:other_master_text) { create(:master_text) }
   let(:language) { create(:language, :type_1_english) }
@@ -38,7 +38,7 @@ describe LocalizedTextEnforcer do
           LocalizedTextEnforcer.new.master_text_changed(master_text)
         }.not_to change { [LocalizedText.count, localized_text.reload.text]
         }
-        localized_text.reload.needs_review.should be_truthy
+        expect(localized_text.reload.needs_review).to be_truthy
       end
     end
 
@@ -82,7 +82,7 @@ describe LocalizedTextEnforcer do
             blank_localized_text.needs_review,
             blank_localized_text.text]
         }
-        master_text.reload.text.should == "flong"
+        expect(master_text.reload.text).to eq("flong")
       end
       it "makes filled localized texts as needing review" do
         localized_text= create(:localized_text, master_text: master_text, language: language, text: "Quelque chose d'ancien")
@@ -90,8 +90,8 @@ describe LocalizedTextEnforcer do
         expect {
           mt_crudder.update(text: "flong")
         }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-        localized_text.reload.needs_review.should be_truthy
-        master_text.reload.text.should == "flong"
+        expect(localized_text.reload.needs_review).to be_truthy
+        expect(master_text.reload.text).to eq("flong")
       end
       it "doesn't mark as needing review if text unchanged" do
         localized_text= create(:localized_text, master_text: master_text, language: language, text: "Quelque chose d'ancien")
@@ -99,7 +99,7 @@ describe LocalizedTextEnforcer do
         expect {
           mt_crudder.update(key: "flong")
         }.not_to change { [LocalizedText.count, localized_text.reload.text, localized_text.reload.needs_review] }
-        master_text.reload.key.should == "flong"
+        expect(master_text.reload.key).to eq("flong")
       end
       it "should do something if save called on a exisitng record" do
         language
@@ -109,8 +109,8 @@ describe LocalizedTextEnforcer do
         expect {
           mt_crudder.save
         }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-        localized_text.reload.needs_review.should be_truthy
-        master_text.reload.text.should == "flong"
+        expect(localized_text.reload.needs_review).to be_truthy
+        expect(master_text.reload.text).to eq("flong")
 
       end
 
@@ -125,9 +125,9 @@ describe LocalizedTextEnforcer do
         expect {
           mt = LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text)
         }.to change { MasterText.count }.by(1)
-        mt.should be_instance_of MasterText
-        mt.key.should == key
-        mt.text.should == text
+        expect(mt).to be_instance_of MasterText
+        expect(mt.key).to eq(key)
+        expect(mt.text).to eq(text)
       end
 
       it "doesn't touch an existing master text with same value" do
@@ -157,8 +157,8 @@ describe LocalizedTextEnforcer do
           expect {
             LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
           }.not_to change { [LocalizedText.count, localized_text.reload.text] }
-          localized_text.reload.needs_review.should be_truthy
-          mt.reload.text.should == new_text
+          expect(localized_text.reload.needs_review).to be_truthy
+          expect(mt.reload.text).to eq(new_text)
         end
       end
     end
@@ -176,11 +176,11 @@ describe LocalizedTextEnforcer do
       end
       it "returns true when saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language))
-        l_crudder.save.should be_truthy
+        expect(l_crudder.save).to be_truthy
       end
       it "returns false when not saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ''))
-        l_crudder.save.should be_falsey
+        expect(l_crudder.save).to be_falsey
       end
     end
 

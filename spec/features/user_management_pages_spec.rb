@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'User management pages' do
+describe 'User management pages', :type => :feature do
 
   before { login }
   let(:login) { stubbed_login_as_admin_user }
@@ -9,7 +9,7 @@ describe 'User management pages' do
     let(:login) { nil }
     it "redirects to login page" do
       visit users_path
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
   end
 
@@ -19,7 +19,7 @@ describe 'User management pages' do
     it "redirects to login page" do
       begin
         visit users_path
-        page.status_code.should == 404
+        expect(page.status_code).to eq(404)
       rescue ActionController::RoutingError
       end
 
@@ -29,20 +29,20 @@ describe 'User management pages' do
   describe "index" do
     let(:users) { build_stubbed_list(:user, 3) }
     before do
-      User.stub(all: users)
+      allow(User).to receive_messages(all: users)
     end
 
     specify "lists users" do
       visit users_path
       users.each do |user|
-        page.should have_content(user.email)
+        expect(page).to have_content(user.email)
       end
     end
 
     specify "lists users" do
       visit users_path
       users.each do |user|
-        page.should have_link_to(edit_user_path(user))
+        expect(page).to have_link_to(edit_user_path(user))
       end
     end
 
@@ -50,7 +50,7 @@ describe 'User management pages' do
       pending "not yet"
       visit users_path
       click_on "Add"
-      page.current_path.should == new_user_path
+      expect(page.current_path).to eq(new_user_path)
     end
   end
 

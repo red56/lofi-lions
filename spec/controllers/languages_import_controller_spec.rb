@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'android/resource_file'
 
-describe LanguagesImportController do
+describe LanguagesImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
 
   context "without auth token" do
@@ -23,15 +23,15 @@ describe LanguagesImportController do
       end
 
       it "accepts a android xml upload" do
-        Language.should_receive(:find_by_code).with('zh').and_return(chinese)
-        IOS::StringsFile.should_receive(:parse).and_return(localizations)
-        localizations.should_receive(:close)
-        Localization.should_receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
+        expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+        expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
+        expect(localizations).to receive(:close)
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
         post :ios, {file: file_upload, id: 'zh', format: 'json'}
       end
       it "should stop if it receives unknown code" do
-        Language.should_receive(:find_by_code).with('zh').and_return(nil)
-        Localization.should_not_receive(:create_localized_texts)
+        expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
+        expect(Localization).not_to receive(:create_localized_texts)
         post :ios, {file: file_upload, id: 'zh', format: 'json'}
       end
     end
@@ -47,9 +47,9 @@ describe LanguagesImportController do
       it "creates the expected localised texts" do
         post :ios, {file: file_upload, id: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
-        localized.should include(["Adding", "Adding..."])
-        localized.should include(["Almost done", "Almost done..."])
-        localized.should include(["Done", "Done!"])
+        expect(localized).to include(["Adding", "Adding..."])
+        expect(localized).to include(["Almost done", "Almost done..."])
+        expect(localized).to include(["Done", "Done!"])
       end
     end
   end
@@ -63,15 +63,15 @@ describe LanguagesImportController do
       end
 
       it "accepts a android xml upload" do
-        Language.should_receive(:find_by_code).with('zh').and_return(chinese)
-        Android::ResourceFile.should_receive(:parse).and_return(localizations)
-        localizations.should_receive(:close)
-        Localization.should_receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
+        expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+        expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
+        expect(localizations).to receive(:close)
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
         post :android, {file: file_upload, id: 'zh', format: 'json'}
       end
       it "should stop if it receives unknown code" do
-        Language.should_receive(:find_by_code).with('zh').and_return(nil)
-        Localization.should_not_receive(:create_localized_texts)
+        expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
+        expect(Localization).not_to receive(:create_localized_texts)
         post :android, {file: file_upload, id: 'zh', format: 'json'}
       end
     end
@@ -87,9 +87,9 @@ describe LanguagesImportController do
       it "creates the expected master texts" do
         post :android, {file: file_upload, id: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
-        localized.should include(["Adding", "Adding..."])
-        localized.should include(["Almost done", "Almost done..."])
-        localized.should include(["Done", "Done!"])
+        expect(localized).to include(["Adding", "Adding..."])
+        expect(localized).to include(["Almost done", "Almost done..."])
+        expect(localized).to include(["Done", "Done!"])
       end
     end
   end

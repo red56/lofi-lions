@@ -1,7 +1,7 @@
 #require('rspec')
 require "spec_helper"
 
-describe 'Master Text Pages' do
+describe 'Master Text Pages', :type => :feature do
 
   before { login }
   let(:login) { stubbed_login_as_user }
@@ -10,33 +10,33 @@ describe 'Master Text Pages' do
     let(:login) { nil }
     it "redirects to login page" do
       visit master_texts_path
-      current_path.should == new_user_session_path
+      expect(current_path).to eq(new_user_session_path)
     end
   end
 
   describe "index" do
     let(:texts){ build_stubbed_list(:master_text, 3)}
-    before{ texts.stub(order:texts)}
+    before{ allow(texts).to receive_messages(order:texts)}
     it "can list several" do
-      MasterText.stub(all: texts)
+      allow(MasterText).to receive_messages(all: texts)
       visit master_texts_path
     end
     context "with plural forms" do
       let(:texts){ build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
       it "can list one" do
-        MasterText.stub(all: texts)
+        allow(MasterText).to receive_messages(all: texts)
         visit master_texts_path
-        page.should have_content('othery-other')
-        page.should have_content('one-one')
+        expect(page).to have_content('othery-other')
+        expect(page).to have_content('one-one')
       end
     end
     it "links to new" do
       visit master_texts_path
-      page.should have_link_to(new_master_text_path)
+      expect(page).to have_link_to(new_master_text_path)
     end
     it "is linked from home" do
       visit root_path
-      page.should have_link_to(master_texts_path)
+      expect(page).to have_link_to(master_texts_path)
     end
   end
 
@@ -45,21 +45,21 @@ describe 'Master Text Pages' do
       visit new_master_text_path
     end
     it "works" do
-      LocalizedTextEnforcer.any_instance.should_receive(:master_text_created)
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_created)
       visit new_master_text_path
-      page.should have_css("form.master_text")
+      expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       fill_in "master_text_text", with: 'My text'
       click_on "Save"
-      page.should_not have_css("form.master_text")
+      expect(page).not_to have_css("form.master_text")
     end
     it "displays errors" do
       visit new_master_text_path
-      page.should have_css("form.master_text")
+      expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       click_on "Save"
-      page.should have_css("form.master_text")
-      page.should have_css("form.master_text .errors")
+      expect(page).to have_css("form.master_text")
+      expect(page).to have_css("form.master_text .errors")
     end
   end
   describe "edit" do
@@ -69,20 +69,20 @@ describe 'Master Text Pages' do
       visit new_master_text_path
     end
     it "works" do
-      LocalizedTextEnforcer.any_instance.should_receive(:master_text_changed).with(master_text)
-      page.should have_css("form.master_text")
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
+      expect(page).to have_css("form.master_text")
       fill_in "master_text_text", with: 'My new text'
       click_on "Save"
-      page.should_not have_css("form.master_text")
+      expect(page).not_to have_css("form.master_text")
     end
     it "can change pluralizable" do
-      LocalizedTextEnforcer.any_instance.should_receive(:master_text_changed).with(master_text)
-      page.should have_css("form.master_text")
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
+      expect(page).to have_css("form.master_text")
       expect {
         page.check('plural')
         click_on "Save"
       }.to change { master_text.reload.pluralizable }
-      page.should_not have_css("form.master_text")
+      expect(page).not_to have_css("form.master_text")
 
     end
 
@@ -93,24 +93,24 @@ describe 'Master Text Pages' do
         expect {
           click_on "Save"
         }.to change { master_text.reload.one }
-        page.should_not have_css("form.master_text")
+        expect(page).not_to have_css("form.master_text")
       end
       it "allows me to change many" do
         fill_in "master_text_other", with: "My other other"
         expect {
           click_on "Save"
         }.to change { master_text.reload.other }
-        page.should_not have_css("form.master_text")
+        expect(page).not_to have_css("form.master_text")
       end
     end
 
     it "displays errors" do
-      LocalizedTextEnforcer.any_instance.should_not_receive(:master_text_changed)
-      page.should have_css("form.master_text")
+      expect_any_instance_of(LocalizedTextEnforcer).not_to receive(:master_text_changed)
+      expect(page).to have_css("form.master_text")
       fill_in "master_text_text", with: ''
       click_on "Save"
-      page.should have_css("form.master_text")
-      page.should have_css("form.master_text .errors")
+      expect(page).to have_css("form.master_text")
+      expect(page).to have_css("form.master_text .errors")
     end
   end
 end

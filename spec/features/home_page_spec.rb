@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe 'Home page' do
+describe 'Home page', :type => :feature do
 
     context "when not logged in" do
       it "redirects to login page" do
         visit '/'
-        current_path.should == new_user_session_path
+        expect(current_path).to eq(new_user_session_path)
       end
     end
 
@@ -16,8 +16,8 @@ describe 'Home page' do
 
     it "works" do
       visit '/'
-      current_path.should == '/'
-      page.should have_content(@user.email)
+      expect(current_path).to eq('/')
+      expect(page).to have_content(@user.email)
     end
     it "has logout" do
       visit '/'

@@ -6,19 +6,19 @@ describe 'Android resource file parser' do
 
   shared_examples "Resource file parsing" do
     it "should return keys in UTF-8" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can give a count of the keys" do
-      parsed.keys.count.should == 3
+      expect(parsed.keys.count).to eq(3)
     end
 
     it "can give a list of the keys" do
-      parsed.keys.should == ["Adding", "Almost done", "Done"]
+      expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
     end
 
     it "should return values in UTF-8 encoding" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can return a hash form" do
@@ -26,20 +26,20 @@ describe 'Android resource file parser' do
       hash = parsed.to_hash
       hash.keys.each_with_index do |key, i|
         l = hash[key]
-        l.should be_instance_of Localization
-        key.should == expected[i].first
-        l.key.should == expected[i].first
-        l.value.should == expected[i].last
+        expect(l).to be_instance_of Localization
+        expect(key).to eq(expected[i].first)
+        expect(l.key).to eq(expected[i].first)
+        expect(l.value).to eq(expected[i].last)
       end
     end
 
     it "allows for iteration over the key, value pairs" do
       result = []
       parsed.each do |string|
-        string.should be_instance_of Localization
+        expect(string).to be_instance_of Localization
         result << [string.key, string.value]
       end
-      result.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
+      expect(result).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
     end
   end
 
@@ -51,35 +51,35 @@ describe 'Android resource file parser' do
   context "file with plurals" do
     let(:file_name) { "strings_with_plurals" }
     it "should return keys in UTF-8" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can give a count of the keys" do
-      parsed.keys.count.should == 3
+      expect(parsed.keys.count).to eq(3)
     end
 
     it "can give a list of the keys" do
-      parsed.keys.should == ["login_to_get_started", "email", "remaining_days"]
+      expect(parsed.keys).to eq(["login_to_get_started", "email", "remaining_days"])
     end
 
     it "can give a list of plural values" do
-      parsed.to_hash['remaining_days'].should == Localization.new('remaining_days', one: '%d day', other: '%d days')
+      expect(parsed.to_hash['remaining_days']).to eq(Localization.new('remaining_days', one: '%d day', other: '%d days'))
     end
   end
 
   context "file with string arrays" do
     let(:file_name) { "strings_with_array" }
     it "should return keys in UTF-8" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can give a list of the keys" do
-      parsed.keys.should == ["login_to_get_started", "email", "server_choice[0]", 'server_choice[1]']
+      expect(parsed.keys).to eq(["login_to_get_started", "email", "server_choice[0]", 'server_choice[1]'])
     end
 
     it "can give a the array items" do
-      parsed.to_hash['server_choice[0]'].should == Localization.new('server_choice[0]', 'Production')
-      parsed.to_hash['server_choice[1]'].should == Localization.new('server_choice[1]', 'Staging')
+      expect(parsed.to_hash['server_choice[0]']).to eq(Localization.new('server_choice[0]', 'Production'))
+      expect(parsed.to_hash['server_choice[1]']).to eq(Localization.new('server_choice[1]', 'Staging'))
     end
   end
 
@@ -87,15 +87,15 @@ describe 'Android resource file parser' do
     let(:file_name) { "with_escaped_characters" }
     it "unescapes apostrophes" do
       local = parsed.localizations.detect { |l| l.key == "apostrophe"}
-      local.value.should == "don't"
+      expect(local.value).to eq("don't")
     end
     it "unescapes double quotes" do
       local = parsed.localizations.detect { |l| l.key == "double"}
-      local.value.should == '"double"'
+      expect(local.value).to eq('"double"')
     end
     it "unescapes mixed escapes" do
       local = parsed.localizations.detect { |l| l.key == "both"}
-      local.value.should == '"don\'t"'
+      expect(local.value).to eq('"don\'t"')
     end
   end
 

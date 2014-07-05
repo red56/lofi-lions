@@ -7,19 +7,19 @@ describe 'Strings file parser' do
 
   shared_examples "String file parsing" do
     it "should return keys in UTF-8" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can give a count of the keys" do
-      parsed.keys.count.should == 3
+      expect(parsed.keys.count).to eq(3)
     end
 
     it "can give a list of the keys" do
-      parsed.keys.should == ["Adding", "Almost done", "Done"]
+      expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
     end
 
     it "should return keys in UTF-8 encoding" do
-      parsed.keys.first.encoding.should == Encoding::UTF_8
+      expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
     it "can return a hash form" do
@@ -27,20 +27,20 @@ describe 'Strings file parser' do
       hash = parsed.to_hash
       hash.keys.each_with_index do |key, i|
         l = hash[key]
-        l.should be_instance_of Localization
-        key.should == expected[i].first
-        l.key.should == expected[i].first
-        l.value.should == expected[i].last
+        expect(l).to be_instance_of Localization
+        expect(key).to eq(expected[i].first)
+        expect(l.key).to eq(expected[i].first)
+        expect(l.value).to eq(expected[i].last)
       end
     end
 
     it "allows for iteration over the key, value pairs" do
       result = []
       parsed.each do |string|
-        string.should be_instance_of Localization
+        expect(string).to be_instance_of Localization
         result << [string.key, string.value]
       end
-      result.should == [["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]]
+      expect(result).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
     end
   end
 
@@ -68,23 +68,23 @@ describe 'Strings file parser' do
     let(:file_name) { "with_escaped_characters" }
 
     it "can give a count of the keys" do
-      parsed.keys.count.should == 1
+      expect(parsed.keys.count).to eq(1)
     end
 
     it "can give a list of the keys" do
-      parsed.keys.should == ["Almost done"]
+      expect(parsed.keys).to eq(["Almost done"])
     end
 
     it "can give values" do
-      parsed.localizations.first.value.should == "Almost \"done\"\nanother line"
+      expect(parsed.localizations.first.value).to eq("Almost \"done\"\nanother line")
     end
   end
 
   describe "with missing localisations" do
     let(:file_name) { "with_missing_values" }
     it "can parse the file" do
-      parsed.keys.should == ["Adding", "Almost done", "Done"]
-      parsed.values.should == ["Adding...", "", ""]
+      expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
+      expect(parsed.values).to eq(["Adding...", "", ""])
     end
   end
 end

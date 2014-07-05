@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe MasterTextsController do
+describe MasterTextsController, :type => :controller do
 
   before { login }
   let(:login) { stubbed_login_as_user }
@@ -10,7 +10,7 @@ describe MasterTextsController do
     let(:login) { nil }
     it "redirects to sign in page" do
       post :create, {:master_text => attributes_for(:master_text)}
-      response.should redirect_to(new_user_session_path)
+      expect(response).to redirect_to(new_user_session_path)
     end
   end
 
@@ -27,13 +27,13 @@ describe MasterTextsController do
 
       it "assigns a newly created master_text as @master_text" do
         post :create, {:master_text => attributes_for(:master_text)}
-        assigns(:master_text).should be_a(MasterText)
-        assigns(:master_text).should be_persisted
+        expect(assigns(:master_text)).to be_a(MasterText)
+        expect(assigns(:master_text)).to be_persisted
       end
 
       it "redirects to the created master_text" do
         post :create, {:master_text => attributes_for(:master_text)}
-        response.should redirect_to(master_texts_path)
+        expect(response).to redirect_to(master_texts_path)
       end
 
 
@@ -42,16 +42,16 @@ describe MasterTextsController do
     describe "with invalid params" do
       it "assigns a newly created but unsaved master_text as @master_text" do
         # Trigger the behavior that occurs when invalid params are submitted
-        MasterText.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
         post :create, {:master_text => {"key" => "invalid value"}}
-        assigns(:master_text).should be_a_new(MasterText)
+        expect(assigns(:master_text)).to be_a_new(MasterText)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        MasterText.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
         post :create, {:master_text => {"key" => "invalid value"}}
-        response.should render_template("new")
+        expect(response).to render_template("new")
       end
     end
   end
@@ -60,34 +60,34 @@ describe MasterTextsController do
     before { master_text }
     describe "with valid params" do
       it "updates the requested master_text" do
-        MasterText.any_instance.should_receive(:assign_attributes).with({"key" => "MyString"})
+        expect_any_instance_of(MasterText).to receive(:assign_attributes).with({"key" => "MyString"})
         put :update, {:id => master_text.to_param, :master_text => {"key" => "MyString"}}
       end
 
       it "assigns the requested master_text as @master_text" do
         put :update, {:id => master_text.to_param, :master_text => attributes_for(:master_text)}
-        assigns(:master_text).should eq(master_text)
+        expect(assigns(:master_text)).to eq(master_text)
       end
 
       it "redirects to the master_text" do
         put :update, {:id => master_text.to_param, :master_text => attributes_for(:master_text)}
-        response.should redirect_to(master_texts_path)
+        expect(response).to redirect_to(master_texts_path)
       end
     end
 
     describe "with invalid params" do
       before do
         # Trigger the behavior that occurs when invalid params are submitted
-        MasterText.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
       end
       it "assigns the master_text as @master_text" do
         put :update, {:id => master_text.to_param, :master_text => {"key" => "invalid value"}}
-        assigns(:master_text).should eq(master_text)
+        expect(assigns(:master_text)).to eq(master_text)
       end
 
       it "re-renders the 'edit' template" do
         put :update, {:id => master_text.to_param, :master_text => {"key" => "invalid value"}}
-        response.should render_template("edit")
+        expect(response).to render_template("edit")
       end
     end
   end
@@ -102,7 +102,7 @@ describe MasterTextsController do
 
     it "redirects to the master_texts list" do
       delete :destroy, {:id => master_text.to_param}
-      response.should redirect_to(master_texts_url)
+      expect(response).to redirect_to(master_texts_url)
     end
   end
 
