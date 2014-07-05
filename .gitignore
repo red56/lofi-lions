@@ -15,5 +15,6 @@
 /spec/support/local_only*.rb
 .rspec
 .ruby-*
+local-only
 ios-project
 android-project
