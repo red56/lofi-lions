@@ -3,6 +3,7 @@ namespace :dev do
   task :dev_users => :environment do
     raise Exception.new('Should only do in development!') unless (Rails.env.development? || Rails.env.staging?)
     ensure_users 'password'
+    User.all.each{|u| u.update_attributes(password: 'password')}
   end
 
   def ensure_users password
