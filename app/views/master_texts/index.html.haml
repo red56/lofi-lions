@@ -29,9 +29,13 @@
             %td= master_text.text
 
         %td= master_text.comment
-        %td
-          = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'
-          = link_to 'Delete', master_text, method: :delete, data: { confirm: 'Are you sure?' },
-        class: 'btn btn-warning'
+        %td.together
+          - if current_user.is_developer? || current_user.edits_master_text?
+            = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'
+          - if current_user.is_developer?
+            = link_to master_text, method: :delete, data: { confirm: 'Are you sure?' },
+              class: 'btn btn-default' do
+              %span.text-danger #{icon('times')}
 %br/
-= link_to 'New Master text', new_master_text_path, class: 'btn btn-primary'
+
+= link_to 'New Master text', new_master_text_path, class: 'btn btn-primary' if current_user.is_developer?

@@ -1,4 +1,4 @@
-%table.table.table-striped.table-condensed
+%table.table.table-striped.table-condensed.table-hover
   %thead
     %tr
       %th
@@ -10,10 +10,25 @@
         %td= link_to "Edit", edit_user_path(user), class: 'btn btn-default btn-xs'
         %td= user.email
         %td
-          = user.is_administrator ? "Administrator" : ""
+          - if user.is_administrator?
+            .label.label-default Admin
+          - if user.is_developer?
+            .label.label-danger
+              %small.language Dev
+          - if user.edits_master_text?
+            = link_to master_texts_path do
+              .label.label-primary
+                %small.language English
           - user.languages.each do |language|
-            %small.language= language.code
+            = link_to language_texts_path(language) do
+              .label.label-primary
+                %small.language #{language.name}
 
 
-.buttons
+.buttons.well
   = link_to "Add", new_user_path, class: 'btn btn-primary'
+  %p.text-muted
+    After you add a user you need to email them, asking them to create a password as if they had "forgotten" their
+    password.
+    You can send them the reset passord url:
+    %strong= new_user_password_url

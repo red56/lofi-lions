@@ -14,6 +14,11 @@ def stubbed_login_as_user
   _stub_authenticated_user(ensure_user)
 end
 
+def stubbed_login_as_developer
+  @user = build_stubbed(:user, email: 'dev@example.com', is_developer: true)
+  _stub_authenticated_user(@user)
+end
+
 def ensure_user
   @user ||= build_stubbed(:user, email: 'test@example.com')
 end

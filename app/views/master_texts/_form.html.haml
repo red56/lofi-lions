@@ -1,13 +1,14 @@
 = form_for(@master_text, html: {class: 'master_text', role: 'form'}) do |f|
   = render partial: '_common/form_errors', locals: {instance: @master_text}
 
-  .form-group
-    = f.label :key
-    = f.text_field :key, class: 'form-control'
-    .checkbox
-      %label
-        = f.check_box :pluralizable
-        Has plural forms
+  - if current_user.is_developer?
+    .form-group
+      = f.label :key
+      = f.text_field :key, class: 'form-control'
+      .checkbox
+        %label
+          = f.check_box :pluralizable
+          Has plural forms
 
   - if @master_text.pluralizable
     .form-group

@@ -51,7 +51,7 @@ describe 'User management pages', :type => :feature do
       end
     end
     specify "lists users with editing privileges" do
-      expect(users.last).to receive_messages(languages: [build_stubbed(:language, code: 'fingle')])
+      expect(users.last).to receive_messages(languages: [build_stubbed(:language, name: 'fingle')])
       visit users_path
       expect(page).to have_content('fingle')
     end
@@ -94,6 +94,19 @@ describe 'User management pages', :type => :feature do
     end
 
     specify "can specify email address to be master text editor"
+    it "user to be admin" do
+      visit edit_user_path(user)
+      find("#user_is_administrator").set(true)
+      find("#user_edits_master_text").set(true)
+      find("#user_is_developer").set(true)
+      click_on "Save"
+      expect(current_path).to eq(users_path)
+      within ("#user_#{user.id}") do
+        expect(page).to have_content('Admin')
+        expect(page).to have_content('English')
+        expect(page).to have_content('Dev')
+      end
+    end
     it "user to be specific language editor" do
       languages
       visit edit_user_path(user)
@@ -103,7 +116,7 @@ describe 'User management pages', :type => :feature do
       click_on "Save"
       expect(current_path).to eq(users_path)
       languages.each do |language|
-        expect(page).to have_content(language.code)
+        expect(page).to have_content(language.name)
       end
     end
   end

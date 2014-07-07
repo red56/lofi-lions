@@ -31,6 +31,8 @@ describe 'Master Text Pages', :type => :feature do
       end
     end
     it "links to new" do
+      login
+      expect(@user).to receive_messages(is_developer?: true)
       visit master_texts_path
       expect(page).to have_link_to(new_master_text_path)
     end
@@ -44,7 +46,8 @@ describe 'Master Text Pages', :type => :feature do
     it "displays" do
       visit new_master_text_path
     end
-    it "works" do
+    it "works for developer" do
+      expect(@user).to receive_messages(is_developer?: true)
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_created)
       visit new_master_text_path
       expect(page).to have_css("form.master_text")
@@ -54,6 +57,7 @@ describe 'Master Text Pages', :type => :feature do
       expect(page).not_to have_css("form.master_text")
     end
     it "displays errors" do
+      expect(@user).to receive_messages(is_developer?: true)
       visit new_master_text_path
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
@@ -64,14 +68,24 @@ describe 'Master Text Pages', :type => :feature do
   end
   describe "edit" do
     let(:master_text) { create(:master_text) }
+    let(:login) { stubbed_login_as_developer }
     before { visit edit_master_text_path(master_text) }
     it "displays" do
       visit new_master_text_path
     end
-    it "works" do
+    context "for editor" do
+      let(:login) { stubbed_login_as_user }
+      it "works" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
       expect(page).to have_css("form.master_text")
       fill_in "master_text_text", with: 'My new text'
+      click_on "Save"
+      expect(page).not_to have_css("form.master_text")
+    end
+    end
+    it "works for developer to change key" do
+      expect(page).to have_css("form.master_text")
+      fill_in "master_text_key", with: 'new.key'
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
     end

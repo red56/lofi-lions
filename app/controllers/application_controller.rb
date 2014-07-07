@@ -11,4 +11,8 @@ class ApplicationController < ActionController::Base
     @section = "master-texts"
   end
 
+  def set_users_section
+    @section = "users"
+  end
+
 end

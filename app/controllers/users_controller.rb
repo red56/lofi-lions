@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :require_administrator!
   before_action :find_user, only: [:edit, :update]
+  before_action :set_users_section
 
   def index
     @users = User.all.includes(:languages).order(:email)
@@ -39,7 +40,7 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-        :email, language_ids: []
+        :email, :is_administrator, :is_developer, :edits_master_text, language_ids: []
     )
 
   end

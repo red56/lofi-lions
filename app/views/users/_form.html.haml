@@ -4,6 +4,9 @@
   = render partial: '_common/form_errors', locals: {instance: @user}
 
   = f.input :email
+  = f.input :is_administrator, label: 'Admin'
+  = f.input :is_developer, label: 'Dev'
+  = f.input :edits_master_text, label: 'Masters (English)'
 
   = f.association :languages,   as: :check_boxes
 
