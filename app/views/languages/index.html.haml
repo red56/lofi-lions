@@ -18,6 +18,10 @@
           = link_to 'To enter', entry_language_texts_path(language), class: 'btn btn-default'
           = link_to 'To review', review_language_texts_path(language), class: 'btn btn-default'
           = link_to 'All', language_texts_path(language), class: 'btn btn-default'
+          = link_to language_views_path(language), class: 'btn btn-default' do
+            = icon('list-alt')
+            Views
+
         - if current_user.is_administrator
           %td
             - language.users.each do |user|

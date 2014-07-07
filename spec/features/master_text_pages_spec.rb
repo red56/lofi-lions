@@ -15,14 +15,14 @@ describe 'Master Text Pages', :type => :feature do
   end
 
   describe "index" do
-    let(:texts){ build_stubbed_list(:master_text, 3)}
-    before{ allow(texts).to receive_messages(order:texts)}
+    let(:texts) { build_stubbed_list(:master_text, 3) }
+    before { allow(texts).to receive_messages(order: texts, includes: texts) }
     it "can list several" do
       allow(MasterText).to receive_messages(all: texts)
       visit master_texts_path
     end
     context "with plural forms" do
-      let(:texts){ build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
+      let(:texts) { build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
       it "can list one" do
         allow(MasterText).to receive_messages(all: texts)
         visit master_texts_path
@@ -76,18 +76,35 @@ describe 'Master Text Pages', :type => :feature do
     context "for editor" do
       let(:login) { stubbed_login_as_user }
       it "works" do
-      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
-      expect(page).to have_css("form.master_text")
-      fill_in "master_text_text", with: 'My new text'
-      click_on "Save"
-      expect(page).not_to have_css("form.master_text")
-    end
+        expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
+        expect(page).to have_css("form.master_text")
+        fill_in "master_text_text", with: 'My new text'
+        click_on "Save"
+        expect(page).not_to have_css("form.master_text")
+      end
     end
     it "works for developer to change key" do
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'new.key'
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
+    end
+
+    context "with views" do
+      let(:view){create(:view)}
+      let(:master_text) {
+        view
+        super()
+      }
+      it "works for developer to add view" do
+        expect(page).to have_css("form.master_text")
+        fill_in "master_text_key", with: 'new.key'
+        find("#master_text_view_ids_#{view.id}").set(true)
+        click_on "Save"
+        expect(page).not_to have_css("form.master_text")
+        expect(page).to have_content(view.name)
+        expect(page).to have_link_to(view_path(view))
+      end
     end
     it "can change pluralizable" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)

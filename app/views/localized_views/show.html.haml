@@ -1,0 +1,10 @@
+= render :partial => 'languages/language_tabs'
+
+%h2
+  = icon('list-alt')
+  = @view.name
+%p
+  %em
+    = @view.comments
+
+= render :partial => 'localized_texts/localized_texts_table', locals: {localized_texts: @localized_texts.includes(:views)}

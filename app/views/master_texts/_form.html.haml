@@ -1,4 +1,4 @@
-= form_for(@master_text, html: {class: 'master_text', role: 'form'}) do |f|
+= simple_form_for(@master_text, html: {class: 'form master_text', role: 'form'}) do |f|
   = render partial: '_common/form_errors', locals: {instance: @master_text}
 
   - if current_user.is_developer?
@@ -26,6 +26,8 @@
   .form-group
     = f.label :comment
     = f.text_area :comment, class: 'form-control'
+
+  = f.association :views,   as: :check_boxes
 
   = f.submit "Save", class: 'btn btn-default btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

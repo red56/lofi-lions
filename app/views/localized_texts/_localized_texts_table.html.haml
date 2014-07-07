@@ -1,0 +1,42 @@
+= form_for(@language, html:{class: 'localized-texts', role: 'form'}) do |f|
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Master Text (English)  / key / comment
+        %th Localized Text (#{@language})
+        %th Needs review
+    %tbody
+      = f.fields_for :localized_texts, localized_texts do |ltext_fields|
+        %tr[ltext_fields.object]
+          %td
+            - if ltext_fields.object.pluralizable
+              %p.plurals
+                %small.badge S
+                = ltext_fields.object.original_one
+              %p.plurals
+                %small.badge PL
+                = ltext_fields.object.original_other
+            - else
+              %p= ltext_fields.object.original_text
+            %p.comment= ltext_fields.object.comment
+            %div
+              .label.label-default.key= ltext_fields.object.key
+            - ltext_fields.object.views.each do |view|
+              = link_to language_view_path(@language, view) do
+                %span
+                  %small
+                    = icon('list-alt')
+                    = view.name
+              %span.divider
+          %td
+            - if ltext_fields.object.pluralizable
+              = ltext_fields.text_area :other, cols: 100
+            - else
+              = ltext_fields.text_area :text, cols: 100
+          %td
+            .checkbox
+              %label
+                = ltext_fields.check_box :needs_review
+
+  = f.submit 'Save', class: 'btn btn-primary'
+  = link_to 'Cancel', :back, class: 'btn btn-link'

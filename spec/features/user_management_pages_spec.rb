@@ -93,7 +93,6 @@ describe 'User management pages', :type => :feature do
       end
     end
 
-    specify "can specify email address to be master text editor"
     it "user to be admin" do
       visit edit_user_path(user)
       find("#user_is_administrator").set(true)

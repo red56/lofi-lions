@@ -33,11 +33,6 @@ class UsersController < ApplicationController
   end
 
   private
-  def require_administrator!
-    authenticate_user!
-    raise ActionController::RoutingError.new('Not Found') unless current_user.is_administrator
-  end
-
   def user_params
     params.require(:user).permit(
         :email, :is_administrator, :is_developer, :edits_master_text, language_ids: []

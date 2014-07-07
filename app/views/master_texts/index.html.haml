@@ -1,41 +1,8 @@
-%h1 Master texts
-.alert.alert-info
-  = render :partial => 'welcome/master_texts'
+= render :partial => 'master_texts/tabs'
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th Key (unique reference in the code)
-      %th Master Text (English)
-      %th Comment
-      %th
-  %tbody
-    - @master_texts.each do |master_text|
-      %tr
-        %td.text-muted
-          = master_text.key
-          - if master_text.pluralizable
-            (+ plural forms)
-
-          - if master_text.pluralizable
-            %td.plurals
-              %p
-                %small.badge S
-                = master_text.one
-              %p
-                %small.badge PL
-                = master_text.other
-          - else
-            %td= master_text.text
-
-        %td= master_text.comment
-        %td.together
-          - if current_user.is_developer? || current_user.edits_master_text?
-            = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'
-          - if current_user.is_developer?
-            = link_to master_text, method: :delete, data: { confirm: 'Are you sure?' },
-              class: 'btn btn-default' do
-              %span.text-danger #{icon('times')}
+= render :partial => 'master_texts_table', locals: {master_texts: @master_texts}
 %br/
 
-= link_to 'New Master text', new_master_text_path, class: 'btn btn-primary' if current_user.is_developer?
+.well
+  = link_to 'New Master text', new_master_text_path, class: 'btn btn-primary' if current_user.is_developer?
+  = render :partial => 'welcome/master_texts'

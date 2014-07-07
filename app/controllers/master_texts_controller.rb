@@ -7,6 +7,7 @@ class MasterTextsController < ApplicationController
   # GET /master_texts.json
   def index
     @master_texts = MasterText.order("LOWER(key)")
+    @active_tab = :all
     # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
 
@@ -71,6 +72,6 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable)
+      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, view_ids: [])
     end
 end

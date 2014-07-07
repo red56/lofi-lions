@@ -1,0 +1,8 @@
+%ul.nav.nav-tabs.master-texts
+  %li.title
+    %a English (Master text)
+  %li{class: @active_tab == :all ? 'active':''}= link_to "All", master_texts_path
+  %li{class: @active_tab == :view ? 'active':''}
+    = link_to views_path do
+      = icon('list-alt')
+      Views

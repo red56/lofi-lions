@@ -1,3 +1,7 @@
 .together {
   white-space: nowrap;
 }
+
+span.divider + a {
+  margin-left: 10px;
+}

@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140707133256) do
+ActiveRecord::Schema.define(version: 20140707153829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "key_placements", force: true do |t|
+    t.integer  "master_text_id"
+    t.integer  "view_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "key_placements", ["master_text_id"], name: "index_key_placements_on_master_text_id", using: :btree
+  add_index "key_placements", ["view_id"], name: "index_key_placements_on_view_id", using: :btree
 
   create_table "languages", force: true do |t|
     t.string   "name"
@@ -87,5 +98,12 @@ ActiveRecord::Schema.define(version: 20140707133256) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "views", force: true do |t|
+    t.string   "name"
+    t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

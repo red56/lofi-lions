@@ -1,0 +1,15 @@
+= render :partial => 'master_texts/tabs'
+
+%h2
+  = icon('list-alt')
+  = @view.name
+%p
+  %em
+    = @view.comments
+
+= render :partial => 'master_texts/master_texts_table', locals: {master_texts: @view.master_texts}
+
+- if current_user.is_developer?
+  = link_to 'Edit', edit_view_path(@view)
+  \|
+= link_to 'Back', views_path

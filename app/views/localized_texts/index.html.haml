@@ -1,42 +1,4 @@
 
-%ul.nav.nav-tabs.localized-texts
-  %li.title
-    %a= @language
-  %li{class: @active_tab == :entry ? 'active':''}= link_to "To enter", entry_language_texts_path(@language)
-  %li{class: @active_tab == :review ? 'active':''}= link_to "For review", review_language_texts_path(@language)
-  %li{class: @active_tab == :all ? 'active':''}= link_to "All", language_texts_path(@language)
+= render :partial => 'languages/language_tabs'
 
-= form_for(@language, html:{class: 'localized-texts', role: 'form'}) do |f|
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Master Text (English)  / key / comment
-        %th Localized Text (#{@language})
-        %th Needs review
-    %tbody
-      = f.fields_for :localized_texts, @localized_texts do |ltext_fields|
-        %tr[ltext_fields.object]
-          %td
-            - if ltext_fields.object.pluralizable
-              %p.plurals
-                %small.badge S
-                = ltext_fields.object.original_one
-              %p.plurals
-                %small.badge PL
-                = ltext_fields.object.original_other
-            - else
-              %p= ltext_fields.object.original_text
-            %p.comment= ltext_fields.object.comment
-            %p.label.label-default.key= ltext_fields.object.key
-          %td
-            - if ltext_fields.object.pluralizable
-              = ltext_fields.text_area :other, cols: 100
-            - else
-              = ltext_fields.text_area :text, cols: 100
-          %td
-            .checkbox
-              %label
-                = ltext_fields.check_box :needs_review
-
-  = f.submit 'Save', class: 'btn btn-primary'
-  = link_to 'Cancel', :back, class: 'btn btn-link'
+= render :partial => 'localized_texts_table', locals: {localized_texts: @localized_texts.includes(:views)}

@@ -1,4 +1,6 @@
 LofiLions::Application.routes.draw do
+  resources :views
+
   devise_for :users
 
   resources :languages do |language|
@@ -8,6 +10,7 @@ LofiLions::Application.routes.draw do
         get :review
       end
     end
+    resources :views, controller: 'localized_views'
   end
 
   resources :master_texts
