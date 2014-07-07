@@ -12,6 +12,7 @@
       %ul.nav.navbar-nav
         %li{active_section("master-texts")}= link_to "Master Texts", master_texts_path
         %li{active_section("languages")}= link_to "Languages", languages_path
+        %li{active_section("users")}= link_to "Users", users_path if current_user.is_administrator?
       -#  %li.dropdown
       -#    %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
       -#      Dropdown

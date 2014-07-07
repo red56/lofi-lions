@@ -7,6 +7,7 @@ class LanguagesController < ApplicationController
   # GET /languages.json
   def index
     @languages = Language.all
+    @languages = @languages.includes(:users) if current_user.is_administrator?
   end
 
   # GET /languages/1

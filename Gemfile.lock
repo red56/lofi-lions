@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/plataformatec/simple_form.git
+  revision: 01ccfcebd45b8de0a6846d0f33b9daf74673dcc1
+  specs:
+    simple_form (3.1.0.rc1)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
+
+GIT
   remote: git://github.com/red56/releasetool.git
   revision: 18d47e98ae3f50a468c1da84ad4e052147e5cba9
   branch: master
@@ -36,9 +44,12 @@ GEM
     addressable (2.3.5)
     arel (4.0.2)
     bcrypt (3.1.7)
-    bootstrap-sass-rails (3.0.3.0)
-      railties (>= 3.1.0)
-      sass-rails (>= 3.1.0)
+    bootstrap-sass (3.1.0.2)
+      sass (~> 3.2)
+    bootstrap-sass-rails (3.1.0.0)
+      bootstrap-sass (~> 3.1.0.0)
+      railties (>= 3.2.0)
+      sass-rails (>= 3.2.0)
     builder (3.1.4)
     capybara (2.4.1)
       mime-types (>= 1.16)
@@ -243,6 +254,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.0)
   sdoc
+  simple_form!
   spring
   spring-commands-rspec
   uglifier (>= 1.3.0)

@@ -1,12 +1,6 @@
 = form_for(@master_text, html: {class: 'master_text', role: 'form'}) do |f|
-  - if @master_text.errors.any?
-    .errors
-      %strong
-        = pluralize(@master_text.errors.count, "error")
-      prohibited this master_text from being saved:
-      %ul
-        - @master_text.errors.full_messages.each do |msg|
-          %li= msg
+  = render partial: '_common/form_errors', locals: {instance: @master_text}
+
   .form-group
     = f.label :key
     = f.text_field :key, class: 'form-control'

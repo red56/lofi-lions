@@ -6,6 +6,7 @@ class Language < ActiveRecord::Base
 
   has_many :localized_texts, inverse_of: :language, dependent: :destroy
   accepts_nested_attributes_for :localized_texts
+  has_and_belongs_to_many :users
 
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true

@@ -1,0 +1,12 @@
+= simple_form_for(@user, html: { class: 'form' },
+    wrapper: :vertical_form,
+    wrapper_mappings:{check_boxes: :horizontal_radio_and_checkboxes}) do |f|
+  = render partial: '_common/form_errors', locals: {instance: @user}
+
+  = f.input :email
+
+  = f.association :languages,   as: :check_boxes
+
+  = f.submit 'Save', class: 'btn btn-primary'
+  = link_to 'Cancel', :back, class: 'btn btn-link'
+

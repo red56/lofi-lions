@@ -1,12 +1,5 @@
 = form_for(@language, html: {class: 'language', role: 'form'})do |f|
-  - if @language.errors.any?
-    .errors
-      %strong
-        = pluralize(@language.errors.count, "error")
-      prohibited this language from being saved:"
-      %ul
-        - @language.errors.full_messages.each do |msg|
-          %li= msg
+  = render partial: '_common/form_errors', locals: {instance: @language}
 
   .form-group
     = f.label :name

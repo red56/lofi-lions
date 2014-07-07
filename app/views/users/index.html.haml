@@ -9,7 +9,11 @@
       %tr[user]
         %td= link_to "Edit", edit_user_path(user), class: 'btn btn-default btn-xs'
         %td= user.email
-        %td= user.is_administrator ? "Administrator" : ""
+        %td
+          = user.is_administrator ? "Administrator" : ""
+          - user.languages.each do |language|
+            %small.language= language.code
+
 
 .buttons
   = link_to "Add", new_user_path, class: 'btn btn-primary'
