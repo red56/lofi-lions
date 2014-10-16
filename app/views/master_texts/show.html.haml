@@ -1,13 +1,31 @@
 %p#notice= notice
-%p
+%p.key
   %strong Key:
-  = @master_text.key
-%p
-  %strong Text:
-  = @master_text.text
-%p
-  %strong Comment:
-  = @master_text.comment
+  = render partial: 'key', locals: {master_text: @master_text}
+
+- if @master_text.pluralizable
+  .plurals
+    %p
+      %strong Text
+      %small.badge S:
+      = @master_text.one
+    %p
+      %strong Text
+      %small.badge PL:
+      = @master_text.other
+- else
+  %p
+    %strong Text:
+    = @master_text.text
+
+- unless @master_text.comment.blank?
+  %p
+    %strong Comment:
+    = @master_text.comment
+
+%h3 Localizations:
+= render :partial => 'localized_texts_table', locals: {localized_texts: @master_text.localized_texts.includes(:views)}
+
 = link_to 'Edit', edit_master_text_path(@master_text)
 |
 \#{link_to 'Back', master_texts_path}

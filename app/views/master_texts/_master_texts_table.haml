@@ -10,9 +10,7 @@
       %tr{id: master_text.id}
         %td.text-muted
           = link_to anchor: master_text.id do
-            .label.label-default= master_text.key
-            - if master_text.pluralizable
-              (+ plural forms)
+            = render partial: 'master_texts/key', locals: {master_text: master_text}
           %div
             - master_text.views.each do |view|
               = link_to view do

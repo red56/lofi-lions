@@ -144,4 +144,18 @@ describe 'Master Text Pages', :type => :feature do
       expect(page).to have_css("form.master_text .errors")
     end
   end
+
+  describe "show" do
+    let(:master_text){build_stubbed :master_text}
+    let(:localized_texts){build_stubbed_list :localized_text, 3, master_text: master_text}
+    before do
+      allow(MasterText).to receive_messages(find: master_text)
+      expect(master_text).to receive_messages(localized_texts: localized_texts)
+      allow(localized_texts).to receive_messages(includes: localized_texts)
+    end
+    it "shows multiple languages" do
+      visit master_text_path(master_text)
+    end
+  end
+
 end
