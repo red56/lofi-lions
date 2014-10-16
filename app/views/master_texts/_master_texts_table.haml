@@ -7,11 +7,12 @@
       %th
   %tbody
     - master_texts.includes(:views).each do |master_text|
-      %tr
+      %tr{id: master_text.id}
         %td.text-muted
-          .label.label-default= master_text.key
-          - if master_text.pluralizable
-            (+ plural forms)
+          = link_to anchor: master_text.id do
+            .label.label-default= master_text.key
+            - if master_text.pluralizable
+              (+ plural forms)
           %div
             - master_text.views.each do |view|
               = link_to view do
