@@ -33,4 +33,7 @@ LofiLions::Application.configure do
   ENV['DEVISE_KEY'] = 'not-so-random'
   config.action_mailer.default_url_options = { host: ENV['CANONICAL_HOST'] || 'localhost:3007' }
 
+  # mailcatcher setup
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 end

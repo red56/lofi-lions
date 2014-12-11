@@ -158,6 +158,21 @@ git push origin vNEXTVERSION
 thor heroku:deploy production
 ```
 
+## Email
+
+To set up mailcatcher (with rvm) locally on your dev environment:
+
+    rvm default@mailcatcher --create do gem install mailcatcher
+    rvm wrapper default@mailcatcher --no-prefix mailcatcher catchmail
+
+To view mail sent:
+
+    mailcatcher
+    open http://localhost:1080
+
+more info: https://github.com/sj26/mailcatcher
+
+
 # License
 
 This project is open-sourced under the Apache 2.0 license. See LICENSE.TXT
