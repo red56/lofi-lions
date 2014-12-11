@@ -64,7 +64,7 @@ guard -i
 #for live reload
 script/serve -s
 ```
-runs on http://localhost:3007
+runs on http://localhost:3010
 
 ### Configuration
 
@@ -91,16 +91,16 @@ for setup:
 
 To upload a strings file using Curl:
 
-    curl -F file=@/path/to/iphone-app/Project/en.lproj/Localizable.strings -X POST http://localhost:3007/import/ios
-    curl -F file=@/path/to/android-app/Project/res/values-en/strings.xml -X POST http://localhost:3007/import/android
+    curl -F file=@/path/to/iphone-app/Project/en.lproj/Localizable.strings -X POST http://localhost:3010/import/ios
+    curl -F file=@/path/to/android-app/Project/res/values-en/strings.xml -X POST http://localhost:3010/import/android
 
 where `/path/to/fieldnotes-iphone-app/FieldNotes/en.lproj/Localizable.strings` is the path to the strings file you want to upload.
 Note the `@`, this is important.
 
 TO put in a localization file
 
-     curl -F file=@/path/to/Project/ja.lproj/Localizable.strings -X POST http://localhost:3007/languages/ja/import/ios
-     curl -F file=@/path/to/Project/res/values-ja/strings.xml -X POST http://localhost:3007/languages/ja/import/android
+     curl -F file=@/path/to/Project/ja.lproj/Localizable.strings -X POST http://localhost:3010/languages/ja/import/ios
+     curl -F file=@/path/to/Project/res/values-ja/strings.xml -X POST http://localhost:3010/languages/ja/import/android
      #or
      thor ios:localizations ja < /path/to/Localizable.strings
      thor android:localizations ja < /path/to/strings.xml
@@ -114,14 +114,14 @@ Change to the root of the iOS/Android application code and do something like the
 *iOS*
 
     export lang=ja
-    curl -o ios-project/$lang.lproj/Localizable.strings http://localhost:3007/export/ios/$lang
+    curl -o ios-project/$lang.lproj/Localizable.strings http://localhost:3010/export/ios/$lang
 
 iOS .strings files should be UTF-16 LE with BOM. It might be worth ensuring that this is the case using a capable text editor.
 
 *Android*
 
     export lang=ja
-    curl -o android-project/res/values-$lang/strings.xml http://localhost:3007/export/android/$lang
+    curl -o android-project/res/values-$lang/strings.xml http://localhost:3010/export/android/$lang
 
 ## Services (job queues, cache servers, search engines, etc.)
 

@@ -1,23 +1,5 @@
 #! /bin/bash
 
-while getopts ":zs" opt; do
-  case $opt in
-    z)
-      SPRING=1
-      ;;
-    s)
-      SPRING=1
-      ;;
-  esac
-done
-
-if [ $SPRING ];
-then
-  echo "using spring" >&2
-  bundle exec spring rails s -p 3007
-else
-  echo "not using zeus (-z to use zeus)" >&2
-  bundle exec rails s -p 3007
-fi
+rails s -p 3010
 
 
