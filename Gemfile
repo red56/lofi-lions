@@ -63,6 +63,7 @@ group :development do
   gem 'rack-livereload'
   gem "spring"
   gem "spring-commands-rspec"
+  gem "mail_view", "~> 2.0.4"
 end
 
 group :test do

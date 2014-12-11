@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :languages
 
+  scope :admins, -> { where(is_administrator: true) }
+
   def to_s
     "User(#{email})"
   end

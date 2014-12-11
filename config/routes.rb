@@ -23,4 +23,7 @@ LofiLions::Application.routes.draw do
 
   root 'welcome#index'
 
+  if Rails.env.development?
+    mount MailPreview => 'mail_view'
+  end
 end

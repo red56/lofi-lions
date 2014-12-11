@@ -135,6 +135,7 @@ Notes for heroku deployment:
 heroku config:set DEVISE_KEY=some-very-long-random-string
 heroku config:set DEVISE_EMAIL_FROM=someone@example.com
 heroku config:set CANONICAL_HOST=lofi.example.com
+heroku config:set CRON_EMAIL_FROM=cron@example.com
 
 heroku addons:add sendgrid:starter
 ```
