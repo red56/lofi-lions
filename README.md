@@ -140,6 +140,8 @@ heroku config:set CRON_EMAIL_FROM=cron@example.com
 heroku addons:add sendgrid:starter
 ```
 
+Also add scheduled tasks add on with a daily task which runs `rake cron:if_monday` (weekly email)
+
 ### Routine deployment
 
 #### Prepare release
