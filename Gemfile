@@ -56,6 +56,9 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# needs to be in production because of autoloading... not because it's actually used!
+gem "mail_view", "~> 2.0.4"
+
 group :development do
   gem 'quiet_assets'
   gem 'guard'
@@ -63,7 +66,6 @@ group :development do
   gem 'rack-livereload'
   gem "spring"
   gem "spring-commands-rspec"
-  gem "mail_view", "~> 2.0.4"
 end
 
 group :test do
