@@ -206,8 +206,9 @@ providing the server supports the set_message task. If you give no MESSAGE, it w
       rails_env = ENV['RAILS_ENV'] || 'development'
       db_config = DbConfiguration.config[rails_env]
       db_username = db_config["username"]
+      db_username_flag = db_username.blank? ? "" : "-U #{db_username}"
       db = db_config["database"]
-      system_with_clean_env "pg_restore --verbose --clean --no-acl --no-owner -h localhost -U #{db_username} -d #{db} #{source.dump_filename}"
+      system_with_clean_env "pg_restore --verbose --clean --no-acl --no-owner -h localhost #{db_username_flag} -d #{db} #{source.dump_filename}"
       system_with_clean_env "rake db:migrate"
       system_with_clean_env "rake dev:dev_users"
       system_with_clean_env "rake db:test:prepare"
