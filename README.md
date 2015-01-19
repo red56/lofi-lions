@@ -80,7 +80,7 @@ cp spec/support/focus.rb.disabled spec/support/local_only_focus.rb
 
 ### run tests
 ```
-rspec
+script/runtests
 ```
 
 ## Localization File Import API
