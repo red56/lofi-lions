@@ -24,14 +24,14 @@ echo SPRING=$SPRING
 echo FAILFAST=$FAILFAST
 if [ $SPRING ];
 then
-  RAKE="spring rake"
-  RSPEC="spring rspec --tag focus:non-existant-to-force-all"
-  CUCUMBER="spring cucumber features"
+  RAKE="bin/spring rake"
+  RSPEC="bin/spring rspec --tag focus:non-existant-to-force-all"
+  CUCUMBER="bin/spring cucumber features"
 else
   export DISABLE_SPRING=true
-  RAKE="rake"
-  RSPEC="rspec --tag focus:non-existant-to-force-all"
-  CUCUMBER="cucumber features"
+  RAKE="bin/rake"
+  RSPEC="bin/rspec --tag focus:non-existant-to-force-all"
+  CUCUMBER="bin/cucumber features"
 fi
 ## JSHint
 #echo "jshint:"
