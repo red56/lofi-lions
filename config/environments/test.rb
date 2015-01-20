@@ -36,4 +36,9 @@ LofiLions::Application.configure do
 
   ENV['DEVISE_KEY'] = 'not-so-random'
   config.action_mailer.default_url_options = { host: 'www.example.com' }
+
+  # Explicitly express test ordering.
+  Rails.application.configure do
+    config.active_support.test_order = :sorted # or `:random` if you prefer
+  end
 end
