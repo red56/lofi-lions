@@ -2,6 +2,7 @@ Feature: New User
 I want to be able to add an email with the password reset link
 to active job when an admin creates a new user
 
+@wip
 Scenario: An email is sent when a new user is created
 	Given I am logged in as an administrator
 	And I create a new user "someone@example.com"

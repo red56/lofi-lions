@@ -73,6 +73,7 @@ $command
 echo
 echo
 #
+
 # Spinach
 echo "spinach acceptance"
 echo
@@ -81,3 +82,13 @@ echo $command
 $command
 echo
 echo
+
+# Spinach wip
+echo "spinach wip"
+echo
+command="spinach --tags @wip"
+echo $command
+! $command
+echo
+echo
+echo done -- all good
