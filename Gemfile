@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'haml'
 gem 'haml-rails'
 
-gem 'devise'
+gem 'devise', :git => 'https://github.com/plataformatec/devise.git', :branch => 'lm-rails-4-2'
 
 gem 'unicorn'
 gem 'rack-timeout'
