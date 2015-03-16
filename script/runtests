@@ -73,11 +73,19 @@ $command
 echo
 echo
 #
-# Spinach
-echo "spinach acceptance"
-echo
-command="spinach"
-echo $command
-$command
-echo
-echo
+## Cucumber working features
+#echo "cucumber working features:"
+#echo
+#command="$CUCUMBER"
+#echo $command
+#$command
+#echo
+#echo
+#
+## Cucumber work in progress should fail
+#echo "cucumber failing work in progress"
+#echo "(anything that is working counts as an error! - remove @wip from these features/scenarios before committing):"
+#echo
+#command="$CUCUMBER --tags @wip -P --wip"
+#echo $command
+#$command
