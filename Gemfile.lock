@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/red56/releasetool.git
-  revision: 147475218b89c7991bd4e9937a786ade344388c1
+  revision: fb752d80ad8d3104edd5c06764202467670eff70
   branch: master
   specs:
     releasetool (0.0.1)
