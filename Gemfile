@@ -61,9 +61,9 @@ gem "mail_view", "~> 2.0.4"
 
 group :development do
   gem 'quiet_assets'
-  gem 'guard'
+  gem 'guard-rails'
+  gem 'thin'
   gem 'guard-livereload'
-  gem 'rack-livereload'
   gem "spring"
   gem "spring-commands-rspec"
 end

@@ -1,6 +1,11 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
+guard 'rails', server: :thin, port: 3010 do
+  watch('Gemfile.lock')
+  watch(%r{^(config|lib)/.*})
+end
+
 guard 'livereload' do
   watch(%r{app/views/.+\.(erb|haml|slim)$})
   watch(%r{app/helpers/.+\.rb})
