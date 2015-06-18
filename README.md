@@ -60,9 +60,7 @@ bundle exec rake db:test:prepare
 ### server
 
 ```
-guard -i
-#for live reload
-script/serve -s
+guard
 ```
 runs on http://localhost:3010
 
