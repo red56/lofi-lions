@@ -2,7 +2,7 @@
 module DbConfiguration
   class << self
     def config
-      @@db_configuration ||= YAML.load(
+      @@db_configuration ||= YamlFormat.load(
           ERB.new(
               File.read(
                   File.expand_path('../../config/database.yml', __FILE__)

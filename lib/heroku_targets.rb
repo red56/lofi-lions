@@ -3,10 +3,10 @@ class HerokuTargets
 
   class << self
     def from_string(heroku_targets_yml)
-      HerokuTargets.new(YAML.load(heroku_targets_yml))
+      HerokuTargets.new(YamlFormat.load(heroku_targets_yml))
     end
     def from_file(yaml_file)
-      HerokuTargets.new(YAML.load(File.read(yaml_file)))
+      HerokuTargets.new(YamlFormat.load(File.read(yaml_file)))
     end
   end
 
