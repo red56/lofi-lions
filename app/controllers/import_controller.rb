@@ -55,7 +55,7 @@ class ImportController < ApplicationController
   end
 
   def import_yaml(file)
-    create_master_texts(YamlFormat::ResourceFile.parse(file))
+    create_master_texts(RailsYamlFormat::ResourceFile.parse(file))
   end
 
   def create_master_texts(localizations)

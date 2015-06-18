@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'android'
 require 'ios'
-require 'yaml_format'
 
 describe ImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
@@ -83,7 +82,7 @@ describe ImportController, :type => :controller do
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
-        expect(YamlFormat::ResourceFile).to receive(:parse).and_return(localizations)
+        expect(RailsYamlFormat::ResourceFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations)
       end
@@ -98,6 +97,14 @@ describe ImportController, :type => :controller do
 
       it "redirects to the master text view" do
         post :yaml, {file: file_upload, format: 'html'}
+      end
+    end
+
+    context("full-stack") do
+      it "creates the expected master texts" do
+        post :yaml, {file: file_upload, format: 'json'}
+        masters = MasterText.all
+        expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
     end
   end
