@@ -10,12 +10,12 @@ class Heroku < Thor
     end
 
     def lookup_heroku_staging(staging_target_name)
-      heroku_targets.staging_targets[staging_target_name.to_sym] or raise Thor::Error.new(missing_target_error(staging_target_name,
+      heroku_targets.staging_targets[staging_target_name] or raise Thor::Error.new(missing_target_error(staging_target_name,
           true))
     end
 
     def lookup_heroku(target_name)
-      heroku_targets.targets[target_name.to_sym] or raise Thor::Error.new(missing_target_error(target_name, false))
+      heroku_targets.targets[target_name] or raise Thor::Error.new(missing_target_error(target_name, false))
     end
 
     def missing_target_error(target_name, staging)
@@ -153,8 +153,8 @@ providing the server supports the set_message task. If you give no MESSAGE, it w
   def about(target_name=nil)
     if target_name.nil?
       puts "Targets: "
-      heroku_targets.targets.each_key do |target_name|
-        puts " * #{target_name}"
+      heroku_targets.targets.each_key do |key, target|
+        puts " * #{key} (#{target})"
       end
     else
       target = lookup_heroku(target_name)
@@ -192,8 +192,8 @@ providing the server supports the set_message task. If you give no MESSAGE, it w
       invoke 'warn', [], {from: options[:from]}
       source = lookup_heroku(options[:from])
       # Capture and pull db snapshot
-      capture_cmd = "heroku pgbackups:capture --expire --app=#{source.heroku_app}"
-      retrieve_cmd = "curl -o #{source.dump_filename} `heroku pgbackups:url --app=#{source.heroku_app}`"
+      capture_cmd = "heroku pg:backups capture --expire --app=#{source.heroku_app}"
+      retrieve_cmd = "curl -o #{source.dump_filename} `heroku pg:backups public-url --app=#{source.heroku_app}`"
       system_with_clean_env capture_cmd
       system_with_clean_env retrieve_cmd
     end
@@ -223,8 +223,9 @@ providing the server supports the set_message task. If you give no MESSAGE, it w
       invoke :warn, [], {from: options[:from]}
 
       puts_and_system %Q{
-                heroku pgbackups:capture --expire --app=#{source.heroku_app} &&
-                heroku pgbackups:restore DATABASE `heroku pgbackups:url --app=#{source.heroku_app}` --app=#{target.heroku_app} --confirm #{target.heroku_app}
+                heroku pg:backups capture --expire --app=#{source.heroku_app} &&
+                heroku pg:backups restore DATABASE `heroku pgbackups:url --app=#{source.heroku_app}` --app=#{target
+              .heroku_app} --confirm #{target.heroku_app}
       }
       puts_and_system %Q{
                 heroku run rake db:migrate --app=#{target.heroku_app}
