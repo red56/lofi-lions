@@ -47,7 +47,7 @@ class Localization
     errors
   end
 
-  class Collection
+  module Collection
     def keys
       localizations.map(&:key)
     end
@@ -68,7 +68,8 @@ class Localization
       localizations.each(&block)
     end
   end
-  class CollectionWrappingArray < Collection
+  class CollectionWrappingArray
+    include Collection
     attr_reader :localizations
     def initialize(localizations)
       @localizations = localizations

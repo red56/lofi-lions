@@ -14,7 +14,6 @@ describe ImportController, :type => :controller do
 
   describe "iOS" do
     let(:file_path) { "with_leading_comment.strings" }
-    let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
 
     it "recognises an ios strings file" do
       expect {
@@ -82,7 +81,7 @@ describe ImportController, :type => :controller do
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
-        expect(RailsYamlFormat::ResourceFile).to receive(:parse).and_return(localizations)
+        expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations)
       end

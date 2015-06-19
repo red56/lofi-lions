@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe 'Strings file parser' do
   let(:file_path) { File.expand_path("../../fixtures/simple_strings.yml", __FILE__) }
-  let(:parsed) { RailsYamlFormat::ResourceFile.parse(File.new(file_path)) }
+  let(:parsed) { RailsYamlFormat::YamlFile.parse(File.new(file_path)) }
 
   it "should return keys in UTF-8" do
     expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
@@ -16,5 +16,13 @@ describe 'Strings file parser' do
     expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
   end
 
+  it "returns localizations" do
+    expect(parsed.localizations).to be_a Array
+    expect(parsed.localizations.length).to eq(3)
+    expect(parsed.localizations.first).to be_a Localization
+  end
 
+  it "supports close" do
+    expect{parsed.close}.not_to raise_exception
+  end
 end
