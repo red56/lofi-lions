@@ -49,8 +49,15 @@ describe HerokuTargets do
       expect(valid_ht.staging_targets['whatevs']).to be_nil
     end
   end
-  it "our heroku targets should be ok" do
-    HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml'))
+
+  specify "template heroku targets should be ok" do
+    HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml.template'))
+  end
+
+  if File.exists?(Rails.root.join('config/heroku_targets.yml'))
+    specify "actual heroku targets should be ok" do
+      HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml'))
+    end
   end
 
   describe HerokuTargets::HerokuTarget do
