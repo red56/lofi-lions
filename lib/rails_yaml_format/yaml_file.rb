@@ -8,7 +8,7 @@ module RailsYamlFormat
           File.open(file.tempfile)
         when File
           file
-        when String
+        else
           File.open(file)
       end
     end
