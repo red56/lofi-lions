@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'Strings file parser' do
+describe 'Yaml file parser' do
   let(:file_path) { File.expand_path("../../fixtures/simple_strings.yml", __FILE__) }
   let(:parsed) { RailsYamlFormat::YamlFile.parse(File.new(file_path)) }
 
@@ -24,5 +24,10 @@ describe 'Strings file parser' do
 
   it "supports close" do
     expect{parsed.close}.not_to raise_exception
+  end
+
+  it "supports being given an Uploaded File" do
+    uploaded = ActionDispatch::Http::UploadedFile.new(tempfile: file_path)
+    expect(RailsYamlFormat::YamlFile.parse(uploaded).localizations).to be_a Array
   end
 end
