@@ -25,7 +25,8 @@
 
       .container
         - flash.each do |style, f|
-          .alert{class: "alert-#{style == :notice ? 'info' :style}"}
+          - style = case style; when 'alert'; 'warning' ; when 'notice' ; 'info' ; else style; end
+          .alert{class: "alert-#{style}"}
             = f
         = yield
 
