@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 module Android
-  class Exporter < ::Export::Platform
+  class Exporter < ::BaseExporter
     class ArrayText
       ARRAY_KEY = /\A(.+)\[(\d+)\]\z/o
 

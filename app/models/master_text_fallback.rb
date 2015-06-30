@@ -1,4 +1,5 @@
-class Export::MasterTextFallback
+#Not really sure if this needs to exist. see note at Language#localized_texts_with_fallback
+class MasterTextFallback
   def initialize(master_text)
     @master_text = master_text
   end

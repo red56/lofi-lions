@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module IOS
-  class Exporter < ::Export::Platform
+  class Exporter < ::BaseExporter
     def localisation(texts)
       strings = ""
       texts.each do |text|
