@@ -3,15 +3,11 @@ class BaseExporter
     @language = language
   end
 
-  def export_language(texts)
-    [localisation(texts), path, content_type]
+  def body
+    body_for(@language.localized_texts_with_fallback)
   end
 
-  def self.export(language, platform)
-    platform_class(platform).new(language).export_language(language.localized_texts_with_fallback)
-  end
-
-  def self.platform_class(platform)
+  def self.class_for(platform)
     case platform
       when "android", :android
         Android::Exporter
