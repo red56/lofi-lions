@@ -1,5 +1,3 @@
-require 'export'
-
 class ExportsController < ApplicationController
   before_filter :load_language
 
@@ -14,7 +12,7 @@ class ExportsController < ApplicationController
   protected
 
   def export(platform = params[:action])
-    data, path, type = Export.create(@language, platform)
+    data, path, type = Export::Exporter.export(@language, platform)
     headers["X-Path"] = path
     send_data data, type: type, disposition: "inline", filename: ::File.basename(path)
   end
