@@ -9,16 +9,15 @@ class Export::Exporter
   end
 
   def export
-    texts = master_texts.map { |mt| texts_with_mt_fallback(mt) }
-    platform.export_language(texts)
+    platform.export_language(localized_texts_with_fallback)
   end
 
-  def texts_with_mt_fallback(master_text)
+  def localized_texts_with_fallback
+    MasterText.order(:key).map { |mt| localized_text_with_fallback(mt) }
+  end
+
+  def localized_text_with_fallback(master_text)
     master_text.localized_texts.where(language: @language).first || ::Export::MasterTextFallback.new(master_text)
-  end
-
-  def master_texts
-    @master_texts ||= MasterText.order(:key)
   end
 
   def platform
