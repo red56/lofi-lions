@@ -1,4 +1,3 @@
-require 'export/platform'
 require 'nokogiri'
 
 module Android

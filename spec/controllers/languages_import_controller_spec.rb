@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'android/resource_file'
 
 describe LanguagesImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }

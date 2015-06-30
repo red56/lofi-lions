@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'export/platform'
-
 module IOS
   class Exporter < ::Export::Platform
     def localisation(texts)

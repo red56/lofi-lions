@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'android'
-require 'ios'
 
 describe ImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }

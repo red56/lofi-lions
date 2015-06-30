@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'localization'
-
 module IOS
   STRINGS_FILE_ENCODING = 'BOM|UTF-16LE:UTF-8'.freeze
 
