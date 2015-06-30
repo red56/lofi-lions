@@ -9,6 +9,10 @@ class ExportsController < ApplicationController
     export
   end
 
+  def yaml
+    export
+  end
+
   protected
 
   def export(platform = params[:action])

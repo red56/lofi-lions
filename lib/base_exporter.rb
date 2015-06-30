@@ -8,11 +8,15 @@ class BaseExporter
   end
 
   def self.class_for(platform)
-    case platform
-      when "android", :android
+    case platform.to_s
+      when "android"
         Android::Exporter
-      when "ios", :ios
+      when "ios"
         IOS::Exporter
+      when "yaml"
+        RailsYamlFormat::Exporter
+      else
+        fail "Not expecting #{platform}"
     end
   end
 end
