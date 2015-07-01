@@ -67,6 +67,7 @@ group :development do
   gem 'guard-livereload'
   gem "spring"
   gem "spring-commands-rspec"
+  gem "fix-db-schema-conflicts"
 end
 
 group :test do
