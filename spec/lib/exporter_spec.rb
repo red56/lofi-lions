@@ -93,7 +93,7 @@ describe "Exporters" do
             expect(subject.keys.count).to eq 1
           end
           it "should have relevant key" do
-            expect(subject.keys).to include(text.key.to_sym)
+            expect(subject.keys).to include(text.key)
           end
           it "should have relevant value" do
             expect(subject.values).to include(text.other_export.to_s)
