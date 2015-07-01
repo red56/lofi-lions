@@ -5,10 +5,11 @@ class View < ActiveRecord::Base
   has_many :master_texts, through: :key_placements
   has_many :localized_texts, through: :master_texts
 
+  validates :project_id, presence: true
   validates :name, presence: true, uniqueness: true
 
   default_scope { order('name asc') }
-  
+
   def keys
     @keys ||= master_texts.collect{|mt| mt.key}.join("\n")
   end

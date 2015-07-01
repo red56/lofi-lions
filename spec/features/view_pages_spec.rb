@@ -4,6 +4,7 @@ describe 'View pages', :type => :feature do
 
   before { login }
   let(:login) { stubbed_login_as_developer }
+  let!(:project) { create :project }
 
   context "when not logged in" do
     let(:login) { nil }
@@ -37,7 +38,7 @@ describe 'View pages', :type => :feature do
   end
 
   specify "when creating can write in keys to use" do
-    master_texts = create_list(:master_text, 5)
+    master_texts = create_list(:master_text, 5, project: project)
     visit new_view_path
     expect(page).to have_css("form.view")
     fill_in :view_name, with: "flongy"
@@ -60,8 +61,10 @@ describe 'View pages', :type => :feature do
       language.reload
     }
     let(:view) { create :view }
-    let(:master_texts) {
-      create_list(:localized_text,3, language: language).collect{|l|l.master_text}}
+    let(:master_texts) { create_list(:master_text, 3, project: project).tap do |mts|
+      mts.each{|mt| create(:localized_text, master_text: mt, language: language)}
+    end
+    }
     it "language index links to localize views" do
       visit languages_path
       expect(page).to have_link_to(language_views_path(language))

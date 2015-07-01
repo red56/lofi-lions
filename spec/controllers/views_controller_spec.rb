@@ -2,13 +2,14 @@ require 'rails_helper'
 
 describe ViewsController, :type => :controller do
   before { login }
+  let!(:project) { create :project }
   let(:login) { stubbed_login_as_developer}
 
   # This should return the minimal set of attributes required to create a valid
   # View. As you add validations to View, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    attributes_for(:view)
+    attributes_for(:view, project_id: project.id)
   }
 
   let(:invalid_attributes) {
