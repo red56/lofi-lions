@@ -28,6 +28,7 @@
     = f.text_area :comment, class: 'form-control'
 
   = f.association :views,   as: :check_boxes
+  = f.hidden_field :project_id
 
   = f.submit "Save", class: 'btn btn-default btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

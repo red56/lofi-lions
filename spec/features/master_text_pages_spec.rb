@@ -1,10 +1,10 @@
-#require('rspec')
 require 'rails_helper'
 
 describe 'Master Text Pages', :type => :feature do
 
   before { login }
   let(:login) { stubbed_login_as_user }
+  let!(:project) { create :project }
 
   context "when not logged in" do
     let(:login) { nil }
@@ -67,7 +67,7 @@ describe 'Master Text Pages', :type => :feature do
     end
   end
   describe "edit" do
-    let(:master_text) { create(:master_text) }
+    let(:master_text) { create(:master_text, project: project) }
     let(:login) { stubbed_login_as_developer }
     before { visit edit_master_text_path(master_text) }
     it "displays" do

@@ -19,8 +19,8 @@ class LocalizedTextEnforcer
   end
 
   class MasterTextCrudder
-    def self.create_or_update(key, text_or_text_hash, raise_exception = false)
-      MasterText.find_or_initialize_by(key: key).tap do |master_text|
+    def self.create_or_update(key, text_or_text_hash, project_id, raise_exception = false)
+      MasterText.find_or_initialize_by(key: key, project_id: project_id).tap do |master_text|
         if text_or_text_hash.is_a? Hash
           master_text.one = text_or_text_hash[:one]
           master_text.other = text_or_text_hash[:other]
@@ -33,8 +33,8 @@ class LocalizedTextEnforcer
       end
     end
 
-    def self.create_or_update!(key, text_or_text_hash)
-      create_or_update(key, text_or_text_hash, true)
+    def self.create_or_update!(key, text_or_text_hash, project_id)
+      create_or_update(key, text_or_text_hash, project_id, true)
     end
 
     def initialize(master_text)

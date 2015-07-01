@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe ImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
-
+  let!(:project) { create(:project) }
+  before{bypass_rescue}
   context "without auth token" do
     it "should fail with 401?"
   end
@@ -48,7 +49,7 @@ describe ImportController, :type => :controller do
         localizations = build_list(:localization, 3)
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations)
+        expect(Localization).to receive(:create_master_texts).with(localizations, project.id)
       end
 
       it "recognises a android xml" do
@@ -81,7 +82,7 @@ describe ImportController, :type => :controller do
         localizations = build_list(:localization, 3)
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations)
+        expect(Localization).to receive(:create_master_texts).with(localizations, project.id)
       end
 
       it "recognises a yaml file" do

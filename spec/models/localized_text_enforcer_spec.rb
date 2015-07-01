@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe LocalizedTextEnforcer, :type => :model do
-  let(:master_text) { create(:master_text) }
-  let(:other_master_text) { create(:master_text) }
+  let(:project) { create(:project) }
+  let(:master_text) { create(:master_text, project: project) }
+  let(:other_master_text) { create(:master_text, project: project) }
   let(:language) { create(:language, :type_1_english) }
   let(:other_language) { create(:language) }
 
@@ -123,7 +124,7 @@ describe LocalizedTextEnforcer, :type => :model do
       it "creates a new master text for key if none exists" do
         mt = nil
         expect {
-          mt = LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text)
+          mt = LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text, project.id)
         }.to change { MasterText.count }.by(1)
         expect(mt).to be_instance_of MasterText
         expect(mt.key).to eq(key)
@@ -133,29 +134,29 @@ describe LocalizedTextEnforcer, :type => :model do
       it "doesn't touch an existing master text with same value" do
         original = create(:master_text, key: key, text: text)
         expect {
-          LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text)
+          LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text, project.id)
         }.not_to change { original.reload.updated_at }
       end
 
       it "raises an exception if master text fails validation" do
         expect {
-          LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(key, nil)
+          LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(key, nil, project.id)
         }.to raise_error ActiveRecord::RecordInvalid
       end
 
       describe "with changed value" do
         let(:new_text) { "This is not my key" }
-        let!(:mt)  { create(:master_text, key: key, text: text) }
+        let!(:mt)  { create(:master_text, project: project, key: key, text: text) }
         it "updates the master text with the new value" do
           expect {
-            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
+            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text, project.id)
           }.to change { [mt.reload.updated_at, mt.reload.text] }
         end
 
         it "marks filled localized text as needing review" do
           localized_text= create(:localized_text, master_text: mt, language: language, text: "Quelque chose d'ancien")
           expect {
-            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text)
+            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text, project.id)
           }.not_to change { [LocalizedText.count, localized_text.reload.text] }
           expect(localized_text.reload.needs_review).to be_truthy
           expect(mt.reload.text).to eq(new_text)

@@ -1,16 +1,18 @@
 require 'rails_helper'
 
 describe Localization do
+  let(:project) { create :project }
 
   describe "create_master_texts" do
     it 'works with non pluralized' do
       expect {
-        Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")])
+        Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project.id)
       }.to change { MasterText.count }.by(1)
     end
     it 'works with non pluralized' do
       expect {
-        Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")])
+        Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")],
+            project.id)
       }.to change { MasterText.count }.by(1)
       expect(MasterText.last.pluralizable).to be_truthy
       expect(MasterText.last.one).to eq("one sandwich")

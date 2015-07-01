@@ -24,9 +24,9 @@ class Localization
     return [key, value] <=> [other.key, other.value]
   end
 
-  def self.create_master_texts(localizations)
+  def self.create_master_texts(localizations, project_id)
     localizations.each do |localization|
-      LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(localization.key, localization.text)
+      LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(localization.key, localization.text, project_id)
     end
   end
   def self.create_localized_texts(language, localizations)

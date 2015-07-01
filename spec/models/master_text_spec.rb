@@ -49,6 +49,10 @@ describe MasterText, :type => :model do
         master_text.other = ''
         expect(master_text).not_to be_valid
       end
+      it "requires a project" do
+        master_text.project_id = nil
+        expect(master_text).not_to be_valid
+      end
     end
   end
 

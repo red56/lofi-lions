@@ -3,12 +3,13 @@
 require 'rails_helper'
 
 describe ExportsController, :type => :controller do
+  let(:project) { create :project }
   let!(:languages) { [:es, :ja].map { |code| Language.create!(name: code, code: code) } }
   let(:keys) { %w(title welcome complete) }
   let(:language) { Language.where(code: 'ja').first }
   let(:language_code) { language.code }
   let(:master_text) { MasterText.where(key: 'title').first }
-  let(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize) } }
+  let(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize, project: project) } }
 
   def ensure_localised_texts(languages, master_texts)
     languages.each do |lang|
@@ -54,7 +55,7 @@ describe ExportsController, :type => :controller do
 
       it "should fallback to the english version" do
         # create mt with no localizations
-        mt = MasterText.create!(key: "missing", other: "Missing")
+        mt = MasterText.create!(key: "missing", other: "Missing", project: project)
         languages.each do |lang|
           LocalizedText.create!(master_text: mt, language: lang, other: "")
         end
@@ -139,7 +140,7 @@ describe ExportsController, :type => :controller do
 
       it "should fallback to the english version" do
         # create mt with no localizations
-        mt = MasterText.create!(key: "missing", other: "Missing")
+        mt = MasterText.create!(key: "missing", other: "Missing", project: project)
         languages.each do |lang|
           LocalizedText.create!(master_text: mt, language: lang, other: "")
         end
@@ -153,7 +154,8 @@ describe ExportsController, :type => :controller do
     describe "plurals" do
       let(:plural_keys) { %w(cow duck) }
       let(:plural_master_texts) { plural_keys.map do |key|
-        MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
+        MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true,
+            project: project)
       end
       }
 
@@ -207,7 +209,7 @@ describe ExportsController, :type => :controller do
       let(:array_master_texts) { %w(planet[0] planet[1] planet[2] door[0] door[1]) }
       before do
         @array_master_texts = array_master_texts.map do |key|
-          MasterText.create!(key: key, other: "#{key}", pluralizable: false)
+          MasterText.create!(key: key, other: "#{key}", pluralizable: false, project: project)
         end
         @array_master_texts.each_with_index do |mt, n|
           LocalizedText.create!({
@@ -256,7 +258,7 @@ describe ExportsController, :type => :controller do
 
       it "escapes text within string arrays" do
         key = "escape[0]"
-        mt = MasterText.create!(key: key, other: "#{key}", pluralizable: false)
+        mt = MasterText.create!(key: key, other: "#{key}", pluralizable: false, project: project)
         LocalizedText.create!({
                 master_text: mt,
                 language: language,

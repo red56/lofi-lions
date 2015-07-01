@@ -2,6 +2,7 @@ class ImportController < ApplicationController
   # FIXME: needs some auth...
   # FIXME: this should only be for the API version
   skip_before_action :verify_authenticity_token
+  before_action :find_project
 
   def auto
     case File.extname(params[:file].original_filename)
@@ -43,6 +44,8 @@ class ImportController < ApplicationController
       end
     rescue => e
       render text: "Error #{e}", status: :unprocessable_entity
+      raise # I know this overturns the point of the rescue... but we should actually decide what to look for here
+      # not just catch every exception...
     end
   end
 
@@ -59,8 +62,12 @@ class ImportController < ApplicationController
   end
 
   def create_master_texts(localizations)
-    Localization.create_master_texts(localizations)
+    Localization.create_master_texts(localizations, @project.id)
   ensure
     localizations.close if localizations
+  end
+
+  def find_project
+    (@project = Project.first) || fail("Must have project to add to") # temporary hack
   end
 end

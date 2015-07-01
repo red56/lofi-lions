@@ -2,7 +2,7 @@ class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
   before_action :set_master_texts_section
-
+  before_action :find_project, only: [:new]
   # GET /master_texts
   # GET /master_texts.json
   def index
@@ -18,7 +18,7 @@ class MasterTextsController < ApplicationController
 
   # GET /master_texts/new
   def new
-    @master_text = MasterText.new
+    @master_text = @project.master_texts.new
   end
 
   # GET /master_texts/1/edit
@@ -72,6 +72,10 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, view_ids: [])
+      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, :project_id, view_ids: [])
+    end
+
+    def find_project
+      (@project = Project.first) || fail("Must have project to add to") # temporary hack
     end
 end
