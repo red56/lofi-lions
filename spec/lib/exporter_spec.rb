@@ -74,9 +74,9 @@ describe "Exporters" do
           expect(subject).to be_a Hash
           expect(subject.keys.count).to eq localized_texts.length
         end
-        it "should have relevant keys which should be symbols" do
+        it "should have relevant keys which should be strings" do
           localized_texts.each do |text|
-            expect(subject.keys).to include(text.key.to_sym)
+            expect(subject.keys).to include(text.key.to_s)
           end
         end
         it "should have relevant values which should be strings" do
