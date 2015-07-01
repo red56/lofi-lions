@@ -1,4 +1,6 @@
 class View < ActiveRecord::Base
+
+  belongs_to :project, inverse_of: :views
   has_many :key_placements, -> { order 'position asc' }, inverse_of: :view, dependent: :destroy
   has_many :master_texts, through: :key_placements
   has_many :localized_texts, through: :master_texts
