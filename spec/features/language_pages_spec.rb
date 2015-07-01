@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe 'Language Pages', :type => :feature do
   let(:language) { create(:language) }

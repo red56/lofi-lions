@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe LocalizedText, :type => :model do
   let(:localized_text) { build(:localized_text, text: 'something').tap do |localized_text|

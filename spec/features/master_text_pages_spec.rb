@@ -1,5 +1,5 @@
 #require('rspec')
-require "spec_helper"
+require 'rails_helper'
 
 describe 'Master Text Pages', :type => :feature do
 

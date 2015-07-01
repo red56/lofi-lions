@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe LocalizedTextEnforcer, :type => :model do
   let(:master_text) { create(:master_text) }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe View, :type => :model do
   let(:view) { create :view }

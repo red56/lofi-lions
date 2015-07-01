@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ExportsController, :type => :controller do
   let!(:languages) { [:es, :ja].map { |code| Language.create!(name: code, code: code) } }
