@@ -33,13 +33,13 @@ describe Localization do
       end
       it "returns no errors" do
         result = Localization.create_localized_texts(language, [Localization.new("somekey",
-            "something new in sandwiches")])
+                    "something new in sandwiches")])
         expect(result).to be_empty
       end
       it 'creates pluralized forms' do
         expect {
           Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-              two: "two sandwiches", other: "%d sandwiches")])
+                      two: "two sandwiches", other: "%d sandwiches")])
         }.to change { LocalizedText.count }.by(1)
         localized_text = LocalizedText.last
         expect(localized_text.one).to eq("one sandwich")
@@ -53,7 +53,7 @@ describe Localization do
         it "updates" do
           expect {
             Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-                two: "two sandwiches", other: "%d sandwiches")])
+                        two: "two sandwiches", other: "%d sandwiches")])
           }.not_to change { LocalizedText.count }
           localized_text.reload
           expect(localized_text.one).to eq("one sandwich")
@@ -66,7 +66,7 @@ describe Localization do
       it 'returns errors' do
         expect {
           result = Localization.create_localized_texts(language, [Localization.new("somekey",
-              "something new in sandwiches")])
+                      "something new in sandwiches")])
           expect(result).not_to be_empty
         }.not_to change { LocalizedText.count }
 

@@ -91,7 +91,7 @@ describe 'Master Text Pages', :type => :feature do
     end
 
     context "with views" do
-      let(:view){create(:view)}
+      let(:view) { create(:view) }
       let(:master_text) {
         view
         super()
@@ -146,8 +146,8 @@ describe 'Master Text Pages', :type => :feature do
   end
 
   describe "show" do
-    let(:master_text){build_stubbed :master_text}
-    let(:localized_texts){build_stubbed_list :localized_text, 3, master_text: master_text}
+    let(:master_text) { build_stubbed :master_text }
+    let(:localized_texts) { build_stubbed_list :localized_text, 3, master_text: master_text }
     before do
       allow(MasterText).to receive_messages(find: master_text)
       expect(master_text).to receive_messages(localized_texts: localized_texts)
