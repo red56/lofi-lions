@@ -3,26 +3,22 @@
 require 'spec_helper'
 
 describe ExportsController, :type => :controller do
-  let(:languages) { [:es, :ja] }
-  let(:master_texts) { %w(title welcome complete) }
+  let!(:languages) { [:es, :ja].map { |code| Language.create(name: code, code: code) } }
+  let(:keys) { %w(title welcome complete) }
   let(:language) { Language.where(code: 'ja').first }
   let(:language_code) { language.code }
   let(:master_text) { MasterText.where(key: 'title').first }
+  let(:master_texts) { keys.map { |key| MasterText.create(key: key, other: key.capitalize) } }
 
-  before do
-    MasterText.delete_all
-    @master_texts = master_texts.map do |key|
-      MasterText.create(key: key, other: key.capitalize)
-    end
-    @languages = languages.map do |code|
-      Language.create(name: code, code: code)
-    end
-    @languages.each do |lang|
-      @master_texts.each do |mt|
+  def ensure_localised_texts(languages, master_texts)
+    languages.each do |lang|
+      master_texts.each do |mt|
         LocalizedText.create(master_text: mt, language: lang, other: [mt.key, lang.code].join(":"))
       end
     end
   end
+
+  before { ensure_localised_texts(languages, master_texts) }
 
   describe "common" do
     it "returns a 404 if the language is uknown" do
@@ -59,7 +55,7 @@ describe ExportsController, :type => :controller do
       it "should fallback to the english version" do
         # create mt with no localizations
         mt = MasterText.create(key: "missing", other: "Missing")
-        @languages.each do |lang|
+        languages.each do |lang|
           LocalizedText.create(master_text: mt, language: lang, other: "")
         end
         get platform, language: language_code
@@ -106,7 +102,7 @@ describe ExportsController, :type => :controller do
 
       it "uses the master text values" do
         file = IOS::StringsFile.parse(StringIO.new(response.body))
-        @master_texts.each do |mt|
+        master_texts.each do |mt|
           local = file.localizations.detect { |l| l.key == mt.key }
           expect(local.value).to eq(mt.other)
         end
@@ -134,8 +130,8 @@ describe ExportsController, :type => :controller do
         # io = StringIO.new(response.body)
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
-        expect(locals.map(&:key).sort).to eq(master_texts.sort)
-        master_texts.each do |key|
+        expect(locals.map(&:key).sort).to eq(keys.sort)
+        keys.each do |key|
           string = locals.detect { |l| l.key == key }
           expect(string.text).to eq("#{key}:ja")
         end
@@ -144,7 +140,7 @@ describe ExportsController, :type => :controller do
       it "should fallback to the english version" do
         # create mt with no localizations
         mt = MasterText.create(key: "missing", other: "Missing")
-        @languages.each do |lang|
+        languages.each do |lang|
           LocalizedText.create(master_text: mt, language: lang, other: "")
         end
         get platform, language: language_code
@@ -155,26 +151,27 @@ describe ExportsController, :type => :controller do
     end
 
     describe "plurals" do
-      let(:plural_master_texts) { %w(cow duck) }
+      let(:plural_keys) { %w(cow duck) }
+      let(:plural_master_texts) { plural_keys.map do |key|
+        MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
+      end
+      }
 
       before do
-        @plural_master_texts = plural_master_texts.map do |key|
-          MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true)
-        end
-        @master_texts.concat(@plural_master_texts)
+        master_texts.concat(plural_master_texts)
         @fr = Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
-        @master_texts.each do |mt|
+        master_texts.each do |mt|
           case mt.pluralizable?
-          when true
-            LocalizedText.create!({
-              master_text: mt,
-              language: @fr,
-              one: [mt.key, @fr.code, "one"].join(":"),
-              zero: [mt.key, @fr.code, "zero"].join(":"),
-              many: [mt.key, @fr.code, "many"].join(":")
-            })
-          when false
-            LocalizedText.create!(master_text: mt, language: @fr, other: [mt.key, @fr.code].join(":"))
+            when true
+              LocalizedText.create!({
+                      master_text: mt,
+                      language: @fr,
+                      one: [mt.key, @fr.code, "one"].join(":"),
+                      zero: [mt.key, @fr.code, "zero"].join(":"),
+                      many: [mt.key, @fr.code, "many"].join(":")
+                  })
+            when false
+              LocalizedText.create!(master_text: mt, language: @fr, other: [mt.key, @fr.code].join(":"))
           end
         end
       end
@@ -183,8 +180,8 @@ describe ExportsController, :type => :controller do
         get platform, language: @fr.code
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
-        plurals = locals.select { |l| plural_master_texts.include?(l.key) }
-        expect(plurals.length).to eq(plural_master_texts.length)
+        plurals = locals.select { |l| plural_keys.include?(l.key) }
+        expect(plurals.length).to eq(plural_keys.length)
         plurals.each do |plur|
           [:one, :zero, :many].each do |amount|
             expect(plur.value[amount]).to eq([plur.key, @fr.code, amount].join(":"))
@@ -196,9 +193,9 @@ describe ExportsController, :type => :controller do
         get platform, language: "en"
         resource = Android::ResourceFile.parse(response.body)
         locals = resource.localizations
-        plurals = locals.select { |l| plural_master_texts.include?(l.key) }
-        expect(plurals.length).to eq(plural_master_texts.length)
-        @plural_master_texts.each do |mt|
+        plurals = locals.select { |l| plural_keys.include?(l.key) }
+        expect(plurals.length).to eq(plural_keys.length)
+        plural_master_texts.each do |mt|
           plur = locals.detect { |l| l.key == mt.key }
           expect(plur.value[:one]).to eq(mt.one)
           expect(plur.value[:other]).to eq(mt.other)
@@ -214,10 +211,10 @@ describe ExportsController, :type => :controller do
         end
         @array_master_texts.each_with_index do |mt, n|
           LocalizedText.create({
-            master_text: mt,
-            language: language,
-            other: [mt.key, language.code, "#{n}"].join(":")
-          })
+                  master_text: mt,
+                  language: language,
+                  other: [mt.key, language.code, "#{n}"].join(":")
+              })
         end
       end
 
@@ -261,10 +258,10 @@ describe ExportsController, :type => :controller do
         key = "escape[0]"
         mt = MasterText.create(key: key, other: "#{key}", pluralizable: false)
         LocalizedText.create({
-          master_text: mt,
-          language: language,
-          other: "escape'd \""
-        })
+                master_text: mt,
+                language: language,
+                other: "escape'd \""
+            })
         get platform, language: language.code
         doc = Nokogiri::XML(response.body)
         array = doc.css('string-array[name="escape"]')
