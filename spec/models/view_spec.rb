@@ -5,7 +5,7 @@ describe View, :type => :model do
   let(:master_texts){ create_list(:master_text, 3)}
   def add_reversed
     master_texts.each_with_index do |master_text, i|
-      view.key_placements.create(master_text_id: master_text.id, position: 3-i)
+      view.key_placements.create!(master_text_id: master_text.id, position: 3-i)
     end
   end
     describe "#keys" do

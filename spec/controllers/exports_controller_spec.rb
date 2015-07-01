@@ -3,17 +3,17 @@
 require 'spec_helper'
 
 describe ExportsController, :type => :controller do
-  let!(:languages) { [:es, :ja].map { |code| Language.create(name: code, code: code) } }
+  let!(:languages) { [:es, :ja].map { |code| Language.create!(name: code, code: code) } }
   let(:keys) { %w(title welcome complete) }
   let(:language) { Language.where(code: 'ja').first }
   let(:language_code) { language.code }
   let(:master_text) { MasterText.where(key: 'title').first }
-  let(:master_texts) { keys.map { |key| MasterText.create(key: key, other: key.capitalize) } }
+  let(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize) } }
 
   def ensure_localised_texts(languages, master_texts)
     languages.each do |lang|
       master_texts.each do |mt|
-        LocalizedText.create(master_text: mt, language: lang, other: [mt.key, lang.code].join(":"))
+        LocalizedText.create!(master_text: mt, language: lang, other: [mt.key, lang.code].join(":"))
       end
     end
   end
@@ -54,9 +54,9 @@ describe ExportsController, :type => :controller do
 
       it "should fallback to the english version" do
         # create mt with no localizations
-        mt = MasterText.create(key: "missing", other: "Missing")
+        mt = MasterText.create!(key: "missing", other: "Missing")
         languages.each do |lang|
-          LocalizedText.create(master_text: mt, language: lang, other: "")
+          LocalizedText.create!(master_text: mt, language: lang, other: "")
         end
         get platform, language: language_code
         file = IOS::StringsFile.parse(StringIO.new(body))
@@ -139,9 +139,9 @@ describe ExportsController, :type => :controller do
 
       it "should fallback to the english version" do
         # create mt with no localizations
-        mt = MasterText.create(key: "missing", other: "Missing")
+        mt = MasterText.create!(key: "missing", other: "Missing")
         languages.each do |lang|
-          LocalizedText.create(master_text: mt, language: lang, other: "")
+          LocalizedText.create!(master_text: mt, language: lang, other: "")
         end
         get platform, language: language_code
         file = Android::ResourceFile.parse(response.body)
@@ -207,10 +207,10 @@ describe ExportsController, :type => :controller do
       let(:array_master_texts) { %w(planet[0] planet[1] planet[2] door[0] door[1]) }
       before do
         @array_master_texts = array_master_texts.map do |key|
-          MasterText.create(key: key, other: "#{key}", pluralizable: false)
+          MasterText.create!(key: key, other: "#{key}", pluralizable: false)
         end
         @array_master_texts.each_with_index do |mt, n|
-          LocalizedText.create({
+          LocalizedText.create!({
                   master_text: mt,
                   language: language,
                   other: [mt.key, language.code, "#{n}"].join(":")
@@ -256,8 +256,8 @@ describe ExportsController, :type => :controller do
 
       it "escapes text within string arrays" do
         key = "escape[0]"
-        mt = MasterText.create(key: key, other: "#{key}", pluralizable: false)
-        LocalizedText.create({
+        mt = MasterText.create!(key: key, other: "#{key}", pluralizable: false)
+        LocalizedText.create!({
                 master_text: mt,
                 language: language,
                 other: "escape'd \""
