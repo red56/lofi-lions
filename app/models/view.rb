@@ -6,7 +6,8 @@ class View < ActiveRecord::Base
   has_many :localized_texts, through: :master_texts
 
   validates :project_id, presence: true
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
+  validates_uniqueness_of :name, scope: :project_id
 
   default_scope { order('name asc') }
 

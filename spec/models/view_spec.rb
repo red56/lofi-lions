@@ -42,4 +42,15 @@ describe View, :type => :model do
       expect(view).not_to be_valid
     end
   end
+
+  context "#name" do
+    let(:existing){create :view, project:create(:project)}
+    it "must be unique" do
+      expect(View.new(name: existing.name, project: existing.project)).not_to be_valid
+    end
+    it "only unique in same project" do
+      expect(View.new(name: existing.name, project: create(:project))).to be_valid
+    end
+  end
+
 end

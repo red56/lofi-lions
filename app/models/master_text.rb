@@ -6,7 +6,8 @@ class MasterText < ActiveRecord::Base
   has_many :views, through: :key_placements
 
   validates :project_id, presence: true
-  validates :key, presence: true, uniqueness: true
+  validates :key, presence: true
+  validates_uniqueness_of :key, scope: :project_id
   validates :other, presence: true
 
   def text= text
