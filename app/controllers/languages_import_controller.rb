@@ -25,15 +25,13 @@ class LanguagesImportController < ApplicationController
   protected
 
   def import_response
-    begin
-      yield
-      respond_to do |format|
-        format.html { redirect_to language_texts_path(@language), notice: 'Import was successful.' }
-        format.json { render text: "OK" }
-      end
-    rescue => e
-      render text: "Error #{e}", status: :unprocessable_entity
+    yield
+    respond_to do |format|
+      format.html { redirect_to language_texts_path(@language), notice: 'Import was successful.' }
+      format.json { render text: "OK" }
     end
+    # rescue => e
+    #   render text: "Error #{e}", status: :unprocessable_entity
   end
 
   def import_ios(file)
@@ -61,4 +59,5 @@ class LanguagesImportController < ApplicationController
       return false
     end
   end
+
 end
