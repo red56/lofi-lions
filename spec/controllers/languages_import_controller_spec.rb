@@ -30,7 +30,7 @@ describe LanguagesImportController, :type => :controller do
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :ios, {file: file_upload, code: 'zh', format: 'json'}
+        post :ios, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
     end
 
@@ -67,7 +67,7 @@ describe LanguagesImportController, :type => :controller do
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :android, {file: file_upload, code: 'zh', format: 'json'}
+        post :android, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
     end
 
@@ -104,7 +104,7 @@ describe LanguagesImportController, :type => :controller do
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
+        post :yaml, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
     end
 
