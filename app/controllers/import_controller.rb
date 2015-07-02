@@ -68,6 +68,6 @@ class ImportController < ApplicationController
   end
 
   def find_project
-    (@project = Project.first) || fail("Must have project to add to") # temporary hack
+    @project = Project.find(params[:id])
   end
 end
