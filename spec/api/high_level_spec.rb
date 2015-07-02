@@ -11,11 +11,16 @@ describe "High-level API spec", type: :request do
     }.to change { project.reload.master_texts.count }
   end
 
-  it "can import languages" do
-    pending
-    expect {
-      post "/languages/#{language.code}/import/yaml", file: file_upload
-    }.to change { project.reload.localized_texts.count }
+  context "with some master texts" do
+    before {
+      create(:master_text, project: project, key: 'Adding', other: 'there')
+    }
+
+    it "can import localizations" do
+      expect {
+        post "/projects/#{project.id}/languages/#{language.code}/import/yaml", file: file_upload
+      }.to change { project.reload.localized_texts.count }
+    end
   end
 
   context "with some localized texts" do

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe LanguagesImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
+  let(:selected_project) { create(:project) }
 
   context "without auth token" do
     it "should fail with 401?"
@@ -17,16 +18,14 @@ describe LanguagesImportController, :type => :controller do
     let(:file_path) { "with_no_comment.strings" }
 
     context("mocked") do
-      before do
-        localizations = build_list(:localization, 3)
-      end
 
       it "accepts a android xml upload" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
         expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :ios, {file: file_upload, code: 'zh', format: 'json'}
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
+
+        post :ios, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
@@ -39,12 +38,12 @@ describe LanguagesImportController, :type => :controller do
       before do
         create :language, code: 'zh'
         ["Adding", "Almost done", "Done"].each do |key|
-          create :master_text, key: key
+          create :master_text, key: key, project_id: selected_project.id
         end
       end
 
       it "creates the expected localised texts" do
-        post :ios, {file: file_upload, code: 'zh', format: 'json'}
+        post :ios, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])
@@ -57,16 +56,13 @@ describe LanguagesImportController, :type => :controller do
     let(:file_path) { "simple_strings.xml" }
 
     context("mocked") do
-      before do
-        localizations = build_list(:localization, 3)
-      end
 
       it "accepts a android xml upload" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :android, {file: file_upload, code: 'zh', format: 'json'}
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
+        post :android, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
@@ -79,12 +75,12 @@ describe LanguagesImportController, :type => :controller do
       before {
         create :language, code: 'zh'
         ["Adding", "Almost done", "Done"].each do |key|
-          create :master_text, key: key
+          create :master_text, key: key, project_id: selected_project.id
         end
       }
 
       it "creates the expected master texts" do
-        post :android, {file: file_upload, code: 'zh', format: 'json'}
+        post :android, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])
@@ -97,16 +93,13 @@ describe LanguagesImportController, :type => :controller do
     let(:file_path) { "simple_strings.yml" }
 
     context("mocked") do
-      before do
-        localizations = build_list(:localization, 3)
-      end
 
       it "accepts a yaml upload" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
+        post :yaml, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
@@ -119,16 +112,31 @@ describe LanguagesImportController, :type => :controller do
       before {
         create :language, code: 'zh'
         ["Adding", "Almost done", "Done"].each do |key|
-          create :master_text, key: key
+          create :master_text, key: key, project_id: selected_project.id
         end
       }
 
       it "creates the expected master texts" do
-        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
+        post :yaml, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])
         expect(localized).to include(["Done", "Done!"])
+      end
+    end
+
+    context "with multiple projects" do
+      let(:projects) { build_stubbed_list(:project, 2) }
+      let(:selected_project) { projects.last }
+
+      it "adds texts to the selected projects" do
+        expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+        expect(localizations).to receive(:close)
+        expect(Project).to receive(:find).with(selected_project.id.to_s).and_return(selected_project)
+
+        expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+        expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
+        post :yaml, {file: file_upload, code: 'zh', format: 'json', id: selected_project.id.to_s}
       end
     end
   end

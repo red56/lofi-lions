@@ -29,10 +29,11 @@ class Localization
       LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(localization.key, localization.text, project_id)
     end
   end
-  def self.create_localized_texts(language, localizations)
+
+  def self.create_localized_texts(language, localizations, project_id)
     errors = {}
     localizations.each do |localization|
-      master_text = MasterText.find_by_key(localization.key)
+      master_text = MasterText.where(key: localization.key, project_id: project_id).first
       if master_text.nil?
         errors[localization.key] = "couldn't find master text"
       else

@@ -22,24 +22,26 @@ describe Localization do
 
   describe "create_localized_texts" do
     let(:language) { create :language }
+    let(:project) {create :project}
     context "with master key" do
       before { master_text }
-      let(:master_text) { create :master_text, key: "somekey" }
+      let(:master_text) { create :master_text, key: "somekey", project: project }
       it 'creates' do
         expect {
-          Localization.create_localized_texts(language, [Localization.new("somekey", "something new in sandwiches")])
+          Localization.create_localized_texts(language, [Localization.new("somekey", "something new in sandwiches")], project.id)
         }.to change { LocalizedText.count }.by(1)
         expect(LocalizedText.last.language).to eq(language)
       end
+
       it "returns no errors" do
         result = Localization.create_localized_texts(language, [Localization.new("somekey",
-                    "something new in sandwiches")])
+                    "something new in sandwiches")], project.id)
         expect(result).to be_empty
       end
       it 'creates pluralized forms' do
         expect {
           Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-                      two: "two sandwiches", other: "%d sandwiches")])
+                      two: "two sandwiches", other: "%d sandwiches")], project.id)
         }.to change { LocalizedText.count }.by(1)
         localized_text = LocalizedText.last
         expect(localized_text.one).to eq("one sandwich")
@@ -53,7 +55,7 @@ describe Localization do
         it "updates" do
           expect {
             Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-                        two: "two sandwiches", other: "%d sandwiches")])
+                        two: "two sandwiches", other: "%d sandwiches")], project.id)
           }.not_to change { LocalizedText.count }
           localized_text.reload
           expect(localized_text.one).to eq("one sandwich")
@@ -63,10 +65,22 @@ describe Localization do
       end
     end
     context "without master text" do
-      it 'returns errors' do
+      it "doesn't create but returns errors" do
         expect {
           result = Localization.create_localized_texts(language, [Localization.new("somekey",
-                      "something new in sandwiches")])
+                      "something new in sandwiches")], project.id)
+          expect(result).not_to be_empty
+        }.not_to change { LocalizedText.count }
+
+      end
+    end
+    context "without master text in specified project" do
+      before { master_text }
+      let(:master_text) { create :master_text, key: "somekey", project_id: 1234 }
+      it "doesn't create but returns errors" do
+        expect {
+          result = Localization.create_localized_texts(language, [Localization.new("somekey",
+                      "something new in sandwiches")], project.id)
           expect(result).not_to be_empty
         }.not_to change { LocalizedText.count }
 

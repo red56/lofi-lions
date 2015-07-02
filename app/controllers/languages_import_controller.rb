@@ -3,6 +3,7 @@ class LanguagesImportController < ApplicationController
   # FIXME: this should only be for the API version
   skip_before_action :verify_authenticity_token
   before_action :find_language
+  before_action :find_project
 
   def ios
     import_response do
@@ -47,7 +48,7 @@ class LanguagesImportController < ApplicationController
   end
 
   def create_localized_texts(localizations)
-    Localization.create_localized_texts(@language, localizations)
+    Localization.create_localized_texts(@language, localizations, @project.id)
   ensure
     localizations.close if localizations
   end
@@ -58,6 +59,10 @@ class LanguagesImportController < ApplicationController
       render text: "No such language as #{params[:code]}", status: :unprocessable_entity
       return false
     end
+  end
+
+  def find_project
+    @project = Project.find(params[:id])
   end
 
 end

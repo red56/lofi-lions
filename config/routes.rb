@@ -19,7 +19,7 @@ LofiLions::Application.routes.draw do
 
   post 'projects/:id/import/:action', controller: 'import', defaults: { format: 'html' }
   get 'export/:action/:language', controller: 'exports'
-  post 'languages/:code/import/:action', controller: 'languages_import', defaults: { format: 'html' }
+  post 'projects/:id/languages/:code/import/:action', controller: 'languages_import', defaults: { format: 'html' }
 
   root 'welcome#index'
 
