@@ -26,12 +26,12 @@ describe LanguagesImportController, :type => :controller do
         expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :ios, {file: file_upload, id: 'zh', format: 'json'}
+        post :ios, {file: file_upload, code: 'zh', format: 'json'}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :ios, {file: file_upload, id: 'zh', format: 'json'}
+        post :ios, {file: file_upload, code: 'zh', format: 'json'}
       end
     end
 
@@ -44,7 +44,7 @@ describe LanguagesImportController, :type => :controller do
       end
 
       it "creates the expected localised texts" do
-        post :ios, {file: file_upload, id: 'zh', format: 'json'}
+        post :ios, {file: file_upload, code: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])
@@ -66,12 +66,12 @@ describe LanguagesImportController, :type => :controller do
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :android, {file: file_upload, id: 'zh', format: 'json'}
+        post :android, {file: file_upload, code: 'zh', format: 'json'}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :android, {file: file_upload, id: 'zh', format: 'json'}
+        post :android, {file: file_upload, code: 'zh', format: 'json'}
       end
     end
 
@@ -84,7 +84,7 @@ describe LanguagesImportController, :type => :controller do
       }
 
       it "creates the expected master texts" do
-        post :android, {file: file_upload, id: 'zh', format: 'json'}
+        post :android, {file: file_upload, code: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])
@@ -106,12 +106,12 @@ describe LanguagesImportController, :type => :controller do
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection))
-        post :yaml, {file: file_upload, id: 'zh', format: 'json'}
+        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
       end
       it "should stop if it receives unknown code" do
         expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
         expect(Localization).not_to receive(:create_localized_texts)
-        post :yaml, {file: file_upload, id: 'zh', format: 'json'}
+        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
       end
     end
 
@@ -124,7 +124,7 @@ describe LanguagesImportController, :type => :controller do
       }
 
       it "creates the expected master texts" do
-        post :yaml, {file: file_upload, id: 'zh', format: 'json'}
+        post :yaml, {file: file_upload, code: 'zh', format: 'json'}
         localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
         expect(localized).to include(["Adding", "Adding..."])
         expect(localized).to include(["Almost done", "Almost done..."])

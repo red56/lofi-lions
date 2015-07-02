@@ -55,9 +55,9 @@ class LanguagesImportController < ApplicationController
   end
 
   def find_language
-    @language = Language.find_by_code(params[:id])
+    @language = Language.find_by_code(params[:code])
     if @language.nil?
-      render text: "No such language as #{params[:id]}", status: :unprocessable_entity
+      render text: "No such language as #{params[:code]}", status: :unprocessable_entity
       return false
     end
   end
