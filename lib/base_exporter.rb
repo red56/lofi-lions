@@ -1,10 +1,11 @@
 class BaseExporter
-  def initialize(language)
+  def initialize(language, project)
     @language = language
+    @project = project
   end
 
   def body
-    body_for(@language.localized_texts_with_fallback)
+    body_for(@language.localized_texts_with_fallback(@project))
   end
 
   def self.class_for(platform)

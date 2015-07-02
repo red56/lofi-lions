@@ -29,7 +29,7 @@ describe "High-level API spec", type: :request do
       mt.localized_texts.create!(language: language, text: 'voila')
     }
     it "can export" do
-      get "/export/yaml/#{language.code}"
+      get "/projects/#{project.id}/export/yaml/#{language.code}"
       expect(response.status).to eq(200)
       expect(response.body).to include("voila")
     end
