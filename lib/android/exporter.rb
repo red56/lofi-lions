@@ -1,8 +1,7 @@
-require 'export/platform'
 require 'nokogiri'
 
 module Android
-  class Exporter < ::Export::Platform
+  class Exporter < ::BaseExporter
     class ArrayText
       ARRAY_KEY = /\A(.+)\[(\d+)\]\z/o
 
@@ -41,10 +40,10 @@ module Android
       @arrays ||= Hash.new { |h, k| h[k] = [] }
     end
 
-    def localisation(texts)
+    def body_for(localized_texts)
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.resources do
-          texts.each do |text|
+          localized_texts.each do |text|
             singular_array_plural(xml, text)
           end
           append_arrays(xml)

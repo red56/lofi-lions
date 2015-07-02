@@ -16,6 +16,12 @@ class LanguagesImportController < ApplicationController
     end
   end
 
+  def yaml
+    import_response do
+      import_yaml(params[:file])
+    end
+  end
+
   protected
 
   def import_response
@@ -36,6 +42,10 @@ class LanguagesImportController < ApplicationController
 
   def import_android(file)
     create_localized_texts(Android::ResourceFile.parse(file))
+  end
+
+  def import_yaml(file)
+    create_localized_texts(RailsYamlFormat::YamlFile.parse(file))
   end
 
   def create_localized_texts(localizations)

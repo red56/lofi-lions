@@ -83,7 +83,8 @@ script/runtests
 
 ## Localization File Import API
 
-Supports iOS .strings files and android strings.xml files.
+Supports iOS .strings files, android strings.xml files and a subset of Rails Yaml files (but doesn't support nested
+keys).
 
 for setup:
 
@@ -91,6 +92,7 @@ To upload a strings file using Curl:
 
     curl -F file=@/path/to/iphone-app/Project/en.lproj/Localizable.strings -X POST http://localhost:3010/import/ios
     curl -F file=@/path/to/android-app/Project/res/values-en/strings.xml -X POST http://localhost:3010/import/android
+    curl -F file=@/path/to/rails-app/config/locales/en.yml -X POST http://localhost:3010/import/yaml
 
 where `/path/to/fieldnotes-iphone-app/FieldNotes/en.lproj/Localizable.strings` is the path to the strings file you want to upload.
 Note the `@`, this is important.
@@ -99,6 +101,7 @@ TO put in a localization file
 
      curl -F file=@/path/to/Project/ja.lproj/Localizable.strings -X POST http://localhost:3010/languages/ja/import/ios
      curl -F file=@/path/to/Project/res/values-ja/strings.xml -X POST http://localhost:3010/languages/ja/import/android
+     curl -F file=@/path/to/Project/config/locales/en.yml -X POST http://localhost:3010/languages/ja/import/yaml
      #or
      thor ios:localizations ja < /path/to/Localizable.strings
      thor android:localizations ja < /path/to/strings.xml

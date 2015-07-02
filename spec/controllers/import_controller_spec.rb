@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'android'
-require 'ios'
 
 describe ImportController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
@@ -14,7 +12,6 @@ describe ImportController, :type => :controller do
 
   describe "iOS" do
     let(:file_path) { "with_leading_comment.strings" }
-    let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
 
     it "recognises an ios strings file" do
       expect {
@@ -76,4 +73,36 @@ describe ImportController, :type => :controller do
     end
   end
 
+  describe "Yaml" do
+    let(:file_path) { "simple_strings.yml" }
+
+    context("mocked") do
+      before do
+        localizations = build_list(:localization, 3)
+        expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+        expect(localizations).to receive(:close)
+        expect(Localization).to receive(:create_master_texts).with(localizations)
+      end
+
+      it "recognises a yaml file" do
+        post :auto, {file: file_upload, format: 'json'}
+      end
+
+      it "accepts a yaml file upload" do
+        post :yaml, {file: file_upload, format: 'json'}
+      end
+
+      it "redirects to the master text view" do
+        post :yaml, {file: file_upload, format: 'html'}
+      end
+    end
+
+    context("full-stack") do
+      it "creates the expected master texts" do
+        post :yaml, {file: file_upload, format: 'json'}
+        masters = MasterText.all
+        expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
+      end
+    end
+  end
 end

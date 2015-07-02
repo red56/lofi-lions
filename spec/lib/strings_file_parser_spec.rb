@@ -1,4 +1,3 @@
-require 'ios'
 require "spec_helper"
 
 describe 'Strings file parser' do

@@ -8,7 +8,6 @@ class LocalizedViewsController < ApplicationController
     @active_tab = :view
   end
   def show
-    puts "show"
     @active_tab = :view
     @view = View.find(params[:id])
     @localized_texts = @language.localized_texts.where(master_text_id: @view.master_texts.pluck(:id)).includes(:master_text, :views)

@@ -1,5 +1,3 @@
-require 'export'
-
 class ExportsController < ApplicationController
   before_filter :load_language
 
@@ -11,12 +9,16 @@ class ExportsController < ApplicationController
     export
   end
 
+  def yaml
+    export
+  end
+
   protected
 
   def export(platform = params[:action])
-    data, path, type = Export.create(@language, platform)
-    headers["X-Path"] = path
-    send_data data, type: type, disposition: "inline", filename: ::File.basename(path)
+    exporter = BaseExporter.class_for(platform).new(@language)
+    headers["X-Path"] = exporter.path
+    send_data exporter.body, type: exporter.content_type, disposition: "inline", filename: ::File.basename(exporter.path)
   end
 
   def load_language

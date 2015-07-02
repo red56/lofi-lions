@@ -299,4 +299,16 @@ describe ExportsController, :type => :controller do
       end
     end
   end
+
+  describe "yaml" do
+    let(:platform) { :yaml }
+
+    before do
+      get platform, language: language_code
+    end
+
+    it "should return a yaml file" do
+      expect(response.content_type).to eq("text/yaml; charset=utf-8")
+    end
+  end
 end

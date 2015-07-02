@@ -57,7 +57,7 @@ fi
 # Models and mailers
 echo "rspec models and mailers"
 echo
-command="$RSPEC spec/libraries spec/models $FAILFAST"
+command="$RSPEC spec/lib spec/models $FAILFAST"
 echo $command
 $command
 #actually will exclude ~snapshot by default see .rspec
