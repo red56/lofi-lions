@@ -25,7 +25,7 @@ describe Api::ProjectsController, :type => :controller do
 
     describe "common" do
       it "returns a 404 if the language is uknown" do
-        get :export, platform: :android, code: "xx", id: project.id
+        get :export, platform: :android, code: "xx", id: project.slug
         expect(response.status).to eq(404)
       end
     end
@@ -33,7 +33,7 @@ describe Api::ProjectsController, :type => :controller do
       let(:platform) { :ios }
       let(:body) { response.body[1..-1].encode(Encoding::UTF_8) }
       before do
-        get :export, platform: platform, code: language_code, id: project.id
+        get :export, platform: platform, code: language_code, id: project.slug
       end
 
       describe "translated texts" do
@@ -61,7 +61,7 @@ describe Api::ProjectsController, :type => :controller do
           languages.each do |lang|
             LocalizedText.create!(master_text: mt, language: lang, other: "")
           end
-          get :export, platform: platform, code: language_code, id: project.id
+          get :export, platform: platform, code: language_code, id: project.slug
           file = IOS::StringsFile.parse(StringIO.new(body))
           local = file.localizations.detect { |l| l.key == mt.key }
           expect(local.value).to eq(mt.other)
@@ -77,7 +77,7 @@ describe Api::ProjectsController, :type => :controller do
           before do
             lt = LocalizedText.where(language: language, master_text: master_text).first
             lt.update_attributes(other: text)
-            get :export, platform: platform, code: language.code, id: project.id
+            get :export, platform: platform, code: language.code, id: project.slug
           end
 
           context "double quotes" do
@@ -118,7 +118,7 @@ describe Api::ProjectsController, :type => :controller do
 
       describe "singular" do
         before do
-          get :export, platform: platform, code: language_code, id: project.id
+          get :export, platform: platform, code: language_code, id: project.slug
         end
 
         it "should return a zip file" do
@@ -146,7 +146,7 @@ describe Api::ProjectsController, :type => :controller do
           languages.each do |lang|
             LocalizedText.create!(master_text: mt, language: lang, other: "")
           end
-          get :export, platform: platform, code: language_code, id: project.id
+          get :export, platform: platform, code: language_code, id: project.slug
           file = Android::ResourceFile.parse(response.body)
           local = file.localizations.detect { |l| l.key == mt.key }
           expect(local.value).to eq(mt.other)
@@ -181,7 +181,7 @@ describe Api::ProjectsController, :type => :controller do
         end
 
         it "includes the plural forms in the xml" do
-          get :export, platform: platform, code: @fr.code, id: project.id
+          get :export, platform: platform, code: @fr.code, id: project.slug
           resource = Android::ResourceFile.parse(response.body)
           locals = resource.localizations
           plurals = locals.select { |l| plural_keys.include?(l.key) }
@@ -194,7 +194,7 @@ describe Api::ProjectsController, :type => :controller do
         end
 
         it "uses the master text for the english version" do
-          get :export, platform: platform, code: "en", id: project.id
+          get :export, platform: platform, code: "en", id: project.slug
           resource = Android::ResourceFile.parse(response.body)
           locals = resource.localizations
           plurals = locals.select { |l| plural_keys.include?(l.key) }
@@ -223,7 +223,7 @@ describe Api::ProjectsController, :type => :controller do
         end
 
         it "includes array forms in the xml" do
-          get :export, platform: platform, code: language.code, id: project.id
+          get :export, platform: platform, code: language.code, id: project.slug
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="planet"]')
           expect(array.length).to eq(1)
@@ -241,7 +241,7 @@ describe Api::ProjectsController, :type => :controller do
         end
 
         it "includes master texts of arrays for english" do
-          get :export, platform: platform, code: "en", id: project.id
+          get :export, platform: platform, code: "en", id: project.slug
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="planet"]')
           expect(array.length).to eq(1)
@@ -266,7 +266,7 @@ describe Api::ProjectsController, :type => :controller do
                   language: language,
                   other: "escape'd \""
               })
-          get :export, platform: platform, code: language.code, id: project.id
+          get :export, platform: platform, code: language.code, id: project.slug
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="escape"]')
           item = array.css('item').first
@@ -278,7 +278,7 @@ describe Api::ProjectsController, :type => :controller do
         before do
           lt = LocalizedText.where(language: language, master_text: master_text).first
           lt.update_attributes(other: text)
-          get :export, platform: platform, code: language.code, id: project.id
+          get :export, platform: platform, code: language.code, id: project.slug
           doc = Nokogiri::XML(response.body)
           @string = doc.css("string[name='#{master_text.key}']").first.text
         end
@@ -305,7 +305,7 @@ describe Api::ProjectsController, :type => :controller do
       let(:platform) { :yaml }
 
       before do
-        get :export, platform: platform, code: language_code, id: project.id
+        get :export, platform: platform, code: language_code, id: project.slug
       end
 
       it "should return a yaml file" do

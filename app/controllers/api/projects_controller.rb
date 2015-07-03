@@ -69,7 +69,7 @@ class Api::ProjectsController < ApplicationController
   end
 
   def find_project
-    @project = Project.find(params[:id])
+    @project = Project.find_by_slug(params[:id]) or fail("No such project slug: #{params[:id]}")
   end
 
 end
