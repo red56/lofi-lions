@@ -66,7 +66,6 @@ describe ExportsController, :type => :controller do
       end
 
       it "should order the keys alphabetically" do
-        pending "broke this doing other test"
         keys = body.lines.map { |line| line.split(/ *= */).first }
         sorted = keys.dup.sort
         expect(keys).to eq(sorted)
@@ -326,5 +325,12 @@ describe ExportsController, :type => :controller do
         expect(response.body).not_to include(other_projects_master_text.key)
       end
     end
+
+    it "should order the keys alphabetically" do
+      keys = YAML.load(response.body).values.first.keys
+      sorted = keys.dup.sort
+      expect(keys).to eq(sorted)
+    end
+
   end
 end

@@ -30,7 +30,7 @@ class Language < ActiveRecord::Base
   # -- there should never be a situation (er, except maybe in tests with dodgy fixtures) where there is no
   # LocalizedText# for a given existing MasterText + Language. See LocalizedTextEnforcer# for details
   def localized_texts_with_fallback(project)
-    MasterText.where(project_id: project.id).map { |mt| _localized_text_with_fallback(mt) }
+    MasterText.where(project_id: project.id).order(:key).map { |mt| _localized_text_with_fallback(mt) }
   end
 
   # only used as helper to the above. needs refactoring
