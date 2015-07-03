@@ -5,39 +5,26 @@ class ImportController < ApplicationController
   before_action :find_language
   before_action :find_project
 
-  def auto
-    case File.extname(params[:file].original_filename)
-      when ".strings"
-        ios
-      when ".xml"
-        android
-      when ".yml"
-        yaml
-    end
-  end
-
-  def ios
-    import(:ios)
-  end
-
-  def android
-    import(:android)
-  end
-
-  def yaml
-    import(:yaml)
-  end
-
-  protected
-
-  def import(platform)
-    import_texts(params[:file], platform)
+  def import
+    import_texts(params[:file], params[:platform] || auto_platform())
     respond_to do |format|
       format.html { redirect_to redirect_path, notice: 'Import was successful.' }
       format.json { render text: "OK" }
     end
     # rescue => e
     #   render text: "Error #{e}", status: :unprocessable_entity
+  end
+
+  protected
+  def auto_platform
+    case File.extname(params[:file].original_filename)
+      when ".strings"
+        :ios
+      when ".xml"
+        :android
+      when ".yml"
+        :yaml
+    end
   end
 
   def redirect_path

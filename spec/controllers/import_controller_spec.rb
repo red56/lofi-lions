@@ -16,18 +16,18 @@ describe ImportController, :type => :controller do
 
     it "recognises an ios strings file" do
       expect {
-        post :auto, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.id.to_s}
       }.to change(MasterText, :count).by(3)
     end
 
     it "accepts a strings file upload" do
       expect {
-        post :ios, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.id.to_s}
       }.to change(MasterText, :count).by(3)
     end
 
     it "creates the expected master texts" do
-      post :ios, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+      post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.id.to_s}
       masters = MasterText.all
       pairs = masters.map { |mt| [mt.key, mt.text] }
       expect(pairs).to include(["Adding", "Adding..."])
@@ -36,7 +36,7 @@ describe ImportController, :type => :controller do
     end
 
     it "redirects to the master text view" do
-      post :ios, {file: file_upload, format: 'html', id: selected_project.id.to_s}
+      post :import, {platform: :ios, file: file_upload, format: 'html', id: selected_project.id.to_s}
       expect(response).to redirect_to(master_texts_path)
     end
   end
@@ -53,21 +53,21 @@ describe ImportController, :type => :controller do
       end
 
       it "recognises a android xml" do
-        post :auto, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {file: file_upload, format: 'json', id: selected_project.id.to_s}
       end
 
       it "accepts a android xml upload" do
-        post :android, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {platform: :android, file: file_upload, format: 'json', id: selected_project.id.to_s}
       end
 
       it "redirects to the master text view" do
-        post :android, {file: file_upload, format: 'html', id: selected_project.id.to_s}
+        post :import, {platform: :android, file: file_upload, format: 'html', id: selected_project.id.to_s}
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :android, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {platform: :android, file: file_upload, format: 'json', id: selected_project.id.to_s}
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
@@ -86,21 +86,21 @@ describe ImportController, :type => :controller do
       end
 
       it "recognises a yaml file" do
-        post :auto, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {file: file_upload, format: 'json', id: selected_project.id.to_s}
       end
 
       it "accepts a yaml file upload" do
-        post :yaml, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {file: file_upload, format: 'json', id: selected_project.id.to_s}
       end
 
       it "redirects to the master text view" do
-        post :yaml, {file: file_upload, format: 'html', id: selected_project.id.to_s}
+        post :import, {file: file_upload, format: 'html', id: selected_project.id.to_s}
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :yaml, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {file: file_upload, format: 'json', id: selected_project.id.to_s}
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
@@ -116,7 +116,7 @@ describe ImportController, :type => :controller do
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations, selected_project.id)
         expect(Project).to receive(:find).with(selected_project.id.to_s).and_return(selected_project)
-        post :yaml, {file: file_upload, format: 'json', id: selected_project.id.to_s}
+        post :import, {platform: :yaml, file: file_upload, format: 'json', id: selected_project.id.to_s}
       end
     end
   end
