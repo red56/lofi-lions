@@ -64,6 +64,7 @@ group :development do
   gem 'quiet_assets'
   gem 'guard-rails'
   gem 'thin'
+  gem 'rack-livereload'
   gem 'guard-livereload'
   gem "spring"
   gem "spring-commands-rspec"
