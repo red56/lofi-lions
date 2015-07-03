@@ -15,13 +15,18 @@ class Language < ActiveRecord::Base
   alias_attribute :to_s, :name
 
   # Our canonical "english" text -- used when exporting the master texts to localization files
-  def self.en
-    Language.new(code: "en", name: "English (fallback)", pluralizable_label_one: "One", pluralizable_label_other: "Other")
+  def self.for_master_texts
+    Language.new(code: "en", name: "English (fallback)",
+        pluralizable_label_one: "One", pluralizable_label_other: "Other").tap do |language|
+      def language.is_master_text?
+        true
+      end
+    end
   end
 
   def plural_forms_with_fields
-    @plurals ||=  Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form,
-        field| [form, self[field]] }]
+    @plurals ||= Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form,
+            field| [form, self[field]] }]
   end
 
 
@@ -38,4 +43,7 @@ class Language < ActiveRecord::Base
     master_text.localized_texts.where(language: self).first || MasterTextFallback.new(master_text)
   end
 
+  def is_master_text?
+    false
+  end
 end

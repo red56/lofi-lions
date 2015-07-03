@@ -7,7 +7,7 @@ describe "High-level API spec", type: :request do
 
   it "can import master_texts" do
     expect {
-      post "/projects/#{project.id}/import/yaml", file: file_upload
+      post "/api/projects/#{project.id}/import/yaml", file: file_upload
     }.to change { project.reload.master_texts.count }
   end
 
@@ -18,7 +18,7 @@ describe "High-level API spec", type: :request do
 
     it "can import localizations" do
       expect {
-        post "/projects/#{project.id}/languages/#{language.code}/import/yaml", file: file_upload
+        post "/api/projects/#{project.id}/languages/#{language.code}/import/yaml", file: file_upload
       }.to change { project.reload.localized_texts.count }
     end
   end
@@ -29,7 +29,7 @@ describe "High-level API spec", type: :request do
       mt.localized_texts.create!(language: language, text: 'voila')
     }
     it "can export" do
-      get "/projects/#{project.id}/export/yaml/#{language.code}"
+      get "/api/projects/#{project.id}/export/yaml/#{language.code}"
       expect(response.status).to eq(200)
       expect(response.body).to include("voila")
     end

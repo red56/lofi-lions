@@ -1,9 +1,15 @@
-class ImportController < ApplicationController
+class Api::ProjectsController < ApplicationController
   # FIXME: needs some auth...
   # FIXME: this should only be for the API version
   skip_before_action :verify_authenticity_token
   before_action :find_language
   before_action :find_project
+
+  def export
+    exporter = BaseExporter.class_for(params[:platform]).new(@language, @project)
+    headers["X-Path"] = exporter.path
+    send_data exporter.body, type: exporter.content_type, disposition: "inline", filename: ::File.basename(exporter.path)
+  end
 
   def import
     import_texts(params[:file], params[:platform] || auto_platform())
@@ -28,29 +34,37 @@ class ImportController < ApplicationController
   end
 
   def redirect_path
-    if @language
-      language_texts_path(@language)
-    else
+    if @language.is_master_text?
       master_texts_path
+    else
+      language_texts_path(@language)
     end
   end
 
   def import_texts(file, platform)
     localizations = BaseParsedFile.class_for(platform).parse(file)
-    if @language
-      Localization.create_localized_texts(@language, localizations, @project.id)
-    else
+    if @language.is_master_text?
       Localization.create_master_texts(localizations, @project.id)
+    else
+      Localization.create_localized_texts(@language, localizations, @project.id)
     end
   ensure
     localizations.close if localizations
   end
 
+  def language_code
+    return params[:code] if params[:code] && params[:code] != Language.for_master_texts.code
+    @language = Language.for_master_texts
+    nil
+  end
+
   def find_language
-    @language = Language.find_by_code(params[:code])
-    if params[:code] && @language.nil?
-      render text: "No such language as #{params[:code]}", status: :unprocessable_entity
-      return false
+    if code = language_code
+      @language = Language.find_by_code(code)
+      if @language.nil?
+        render text: "Language #{code} not found", status: 404
+        return false
+      end
     end
   end
 

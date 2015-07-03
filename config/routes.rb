@@ -17,10 +17,14 @@ LofiLions::Application.routes.draw do
 
   resources :users
 
-  scope path: 'projects/:id',defaults: {format: 'html'} do
-    post 'import/(:platform)', controller: 'import', action: 'import'
-    post 'languages/:code/import/(:platform)', controller: 'import', action: 'import'
-    get 'export/:action/:language', controller: 'exports'
+  namespace :api, defaults: {format: 'json'} do
+    resources :projects, only: [] do
+      member do
+        post 'import/(:platform)', action: 'import'
+        post 'languages/:code/import/(:platform)', action: 'import'
+        get 'export/:platform/:code', action: 'export'
+      end
+    end
   end
 
   root 'welcome#index'

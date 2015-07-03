@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ImportController, :type => :controller do
+describe Api::ProjectsController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
   let(:selected_project) { create(:project) }
 
