@@ -36,7 +36,6 @@ gem 'devise'
 gem 'devise-bootstrap-views'
 
 gem 'unicorn'
-gem 'rack-timeout'
 
 gem 'simple_form', github: 'plataformatec/simple_form'
 
