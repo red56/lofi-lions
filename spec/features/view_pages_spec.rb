@@ -60,7 +60,7 @@ describe 'View pages', :type => :feature do
       master_text_in_view.reload
       language.reload
     }
-    let(:view) { create :view }
+    let(:view) { create :view, project: project }
     let(:master_texts) { create_list(:master_text, 3, project: project).tap do |mts|
       mts.each{|mt| create(:localized_text, master_text: mt, language: language)}
     end
@@ -80,6 +80,20 @@ describe 'View pages', :type => :feature do
     it "can look at localized view" do
       visit language_view_path(language, view)
       expect(page).to have_content(master_text_in_view.key)
+    end
+
+    context "with multiple projects" do
+      let!(:projects){ [project]+ [create(:project, name: "Tother One")]}
+      let!(:views){projects.map{|p| p.views.create!(name: "Flong")}}
+      it "lists views by project" do
+        visit language_views_path(language)
+        views.each do |view|
+          expect(page).to have_link_to(language_view_path(language, view))
+        end
+        # views.each do |project|
+        #   expect(page).to have_link_to(language_project_path(language, project))
+        # end
+      end
     end
   end
 end

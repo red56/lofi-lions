@@ -1,18 +1,24 @@
 = render :partial => 'languages/language_tabs'
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Comments
-      %th
 
-  %tbody
-    - views.each do |view|
-      %tr
-        %td
-          = icon('list-alt')
-          = link_to language_view_path(@language, view) do
+- projects.each do |project|
+  %br
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title
+        = project.name
+        Project
+
+    .panel-body
+      .buttons.pull-right
+        = link_to language_texts_path(@language), class: 'btn btn-primary' do
+          Browse all #{@language} localizations
+
+    .list-group
+      - project.views.each do |view|
+        = link_to language_view_path(@language, view), class: "list-group-item clearfix view" do
+          .text-primary
+            %i.fa.fa-list-alt
             = view.name
+          %small.comments= view.comments
 
-        %td= view.comments
