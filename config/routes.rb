@@ -29,6 +29,8 @@ LofiLions::Application.routes.draw do
 
   root 'welcome#index'
 
+  get 'dashboard', to: 'welcome#dashboard', as: 'dashboard'
+
   if Rails.env.development?
     mount MailPreview => 'mail_view'
   end
