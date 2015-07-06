@@ -18,4 +18,8 @@ class Project < ActiveRecord::Base
     s.downcase.parameterize.underscore
   end
 
+  def master_texts_impersonating_localized_texts
+    master_texts.order(:key).map { |master_text| MasterTextImpersonatingLocalizedText.new(master_text) }
+  end
+
 end

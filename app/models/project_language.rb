@@ -25,19 +25,7 @@ class ProjectLanguage < ActiveRecord::Base
 
   # only used as helper to the above. needs refactoring
   def _localized_text_with_fallback(master_text)
-    master_text.localized_texts.where(project_language: self).first || MasterTextFallback.new(master_text)
+    master_text.localized_texts.where(project_language: self).first || MasterTextImpersonatingLocalizedText.new(master_text)
   end
 
-  # Our canonical "english" text -- used when exporting the master texts to localization files
-  def self.for_master_texts(language, project)
-    ProjectLanguage.new(language: language, project: project).tap do |plang|
-      def plang.is_master_text?
-        true
-      end
-    end
-  end
-
-  def is_master_text?
-    false
-  end
 end
