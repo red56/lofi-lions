@@ -21,8 +21,9 @@ describe Localization do
   end
 
   describe "create_localized_texts" do
-    let(:language) { create :language }
+    let(:language) { project_language.language}
     let(:project) {create :project}
+    let(:project_language) {create :project_language, project: project, language: create(:language)}
     context "with master key" do
       before { master_text }
       let(:master_text) { create :master_text, key: "somekey", project: project }
@@ -50,7 +51,7 @@ describe Localization do
       end
       context "when already exists" do
         before { localized_text }
-        let(:localized_text) { create :localized_text, language: language, master_text: master_text,
+        let(:localized_text) { create :localized_text, project_language: project_language, master_text: master_text,
             other: "some value" }
         it "updates" do
           expect {

@@ -51,18 +51,19 @@ describe 'View pages', :type => :feature do
 
   context "when logged in as non-developer" do
     let(:login) { stubbed_login_as_user }
-    let(:language) { create :language }
-    let(:master_text_in_view){master_texts.last}
+    let(:language) { project_language.language }
+    let(:project_language) { create :project_language, language: create(:language), project: project }
+    let(:master_text_in_view) { master_texts.last }
     before {
       language
-      view.key_placements << KeyPlacement.create!(master_text:master_text_in_view)
+      view.key_placements << KeyPlacement.create!(master_text: master_text_in_view)
       view.reload
       master_text_in_view.reload
       language.reload
     }
     let(:view) { create :view, project: project }
     let(:master_texts) { create_list(:master_text, 3, project: project).tap do |mts|
-      mts.each{|mt| create(:localized_text, master_text: mt, language: language)}
+      mts.each { |mt| create(:localized_text, master_text: mt, project_language: project_language) }
     end
     }
     it "language index links to localize views" do
@@ -83,8 +84,8 @@ describe 'View pages', :type => :feature do
     end
 
     context "with multiple projects" do
-      let!(:projects){ [project]+ [create(:project, name: "Tother One")]}
-      let!(:views){projects.map{|p| p.views.create!(name: "Flong")}}
+      let!(:projects) { [project]+ [create(:project, name: "Tother One")] }
+      let!(:views) { projects.map { |p| p.views.create!(name: "Flong") } }
       it "lists views by project" do
         visit language_views_path(language)
         views.each do |view|

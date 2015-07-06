@@ -32,12 +32,15 @@ class Localization
 
   def self.create_localized_texts(language, localizations, project_id)
     errors = {}
+    project_language = ProjectLanguage.where(language_id: language.id, project_id: project_id).first
+    fail "Couldn't find ProjectLanguage" unless project_language
     localizations.each do |localization|
       master_text = MasterText.where(key: localization.key, project_id: project_id).first
       if master_text.nil?
         errors[localization.key] = "couldn't find master text"
       else
-        localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, language_id: language.id)
+        localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, project_language_id:
+                project_language.id)
         if localization.value.is_a?(Hash)
           localized_text.update_attributes!(localization.value)
         else

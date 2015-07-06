@@ -4,6 +4,20 @@ describe Api::ProjectsController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
   let(:selected_project) { create(:project) }
 
+  shared_context "full-stack" do
+    let(:language) { create :language, code: 'zh' }
+    let(:project_language) { create :project_language, language: language, project: selected_project }
+    before do
+      ["Adding", "Almost done", "Done"].each do |key|
+        create :master_text, key: key, project_id: selected_project.id
+      end
+    end
+
+    def request
+      post :import, {platform: platform, file: file_upload, code: project_language.language.code, format: 'json',
+              id: selected_project.slug}
+    end
+  end
   describe "with language specified" do
     context "without auth token" do
       it "should fail with 401?"
@@ -36,15 +50,10 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       context("full-stack") do
-        before do
-          create :language, code: 'zh'
-          ["Adding", "Almost done", "Done"].each do |key|
-            create :master_text, key: key, project_id: selected_project.id
-          end
-        end
-
+        include_context "full-stack"
+        let(:platform) { :ios }
         it "creates the expected localised texts" do
-          post :import, {platform: :ios, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          request
           localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
           expect(localized).to include(["Adding", "Adding..."])
           expect(localized).to include(["Almost done", "Almost done..."])
@@ -73,15 +82,11 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       context("full-stack") do
-        before {
-          create :language, code: 'zh'
-          ["Adding", "Almost done", "Done"].each do |key|
-            create :master_text, key: key, project_id: selected_project.id
-          end
-        }
+        include_context "full-stack"
+        let(:platform) { :android}
 
         it "creates the expected master texts" do
-          post :import, {platform: :android, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          request
           localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
           expect(localized).to include(["Adding", "Adding..."])
           expect(localized).to include(["Almost done", "Almost done..."])
@@ -110,15 +115,12 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       context("full-stack") do
-        before {
-          create :language, code: 'zh'
-          ["Adding", "Almost done", "Done"].each do |key|
-            create :master_text, key: key, project_id: selected_project.id
-          end
-        }
+        include_context "full-stack"
+        let(:platform) { :yaml}
+
 
         it "creates the expected master texts" do
-          post :import, {platform: :yaml, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          request
           localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
           expect(localized).to include(["Adding", "Adding..."])
           expect(localized).to include(["Almost done", "Almost done..."])

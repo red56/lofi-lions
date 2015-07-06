@@ -32,10 +32,13 @@ end
 describe "Exporters" do
   let(:project) {build_stubbed(:project)}
   let(:language) { build_stubbed(:language, code: 'la') }
+  let(:project_language) { build_stubbed(:project_language, project: project, language: language) }
   let(:master_texts){ build_stubbed_list(:master_text, 3, project: project)}
-  let(:localized_texts) { master_texts.map{|mt| build_stubbed(:stubbed_localized_text, master_text: mt, language: language)} }
+  let(:localized_texts) { master_texts.map{|mt| build_stubbed(:stubbed_localized_text, master_text: mt,
+      project_language: project_language)} }
   before {
-    allow(language).to receive(:localized_texts_with_fallback).with(project).and_return(localized_texts)
+    allow(project_language).to receive(:localized_texts_with_fallback).and_return(localized_texts)
+    allow(ProjectLanguage).to receive(:where).with(project_id: project.id, language_id: language.id).and_return([project_language])
   }
   describe Android::Exporter do
     it_behaves_like "a BaseExporter" do

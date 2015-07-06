@@ -6,23 +6,30 @@ describe Api::ProjectsController, :type => :controller do
 
   describe "export" do
     let(:project) { create :project }
-    let!(:languages) { [:es, :ja].map { |code| Language.create!(name: code, code: code) } }
-    let(:keys) { %w(title welcome complete) }
-    let(:language) { Language.where(code: 'ja').first }
-    let(:language_code) { language.code }
-    let(:master_text) { MasterText.where(key: 'title', project_id: project.id).first }
-    let(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize, project: project) } }
+    let(:language) { create :language, code: 'ja' }
+    let(:language_code) { language.code } #ensures that language is in db
+    let!(:project_language) { create :project_language, project: project, language: language }
+    shared_context "with a bunch of precreated stuff" do
+      let!(:languages) { [create(:language, code: 'es'), language] }
+      let!(:project_languages) { languages.map { |lang| create(:project_language, project: project, language: lang) } }
+      let!(:project_language) { project_languages.detect { |plang| plang.project == project && plang.language == language } }
+      let(:keys) { %w(title welcome complete) }
+      let(:master_text) { MasterText.where(key: 'title', project_id: project.id).first }
+      let!(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize, project: project) } }
 
-    def ensure_localised_texts(languages, master_texts)
-      languages.each do |lang|
-        master_texts.each do |mt|
-          LocalizedText.create!(master_text: mt, language: lang, other: [mt.key, lang.code].join(":"))
+      def ensure_localised_texts(project_languages)
+        project_languages.each do |project_language|
+          project_language.project.master_texts.each do |mt|
+            LocalizedText.create!(master_text: mt, project_language: project_language,
+                other: [mt.key, project_language.language.code].join(":"))
+          end
         end
       end
+
+      before { ensure_localised_texts(project_languages) }
     end
 
-    before { ensure_localised_texts(languages, master_texts) }
-
+    let(:request) { get :export, platform: platform, code: language_code, id: project.slug }
     describe "common" do
       it "returns a 404 if the language is uknown" do
         get :export, platform: :android, code: "xx", id: project.slug
@@ -32,11 +39,10 @@ describe Api::ProjectsController, :type => :controller do
     describe "ios" do
       let(:platform) { :ios }
       let(:body) { response.body[1..-1].encode(Encoding::UTF_8) }
-      before do
-        get :export, platform: platform, code: language_code, id: project.slug
-      end
 
       describe "translated texts" do
+        include_context "with a bunch of precreated stuff"
+        before { request }
 
         it "should return a zip file" do
           expect(response.content_type).to eq("application/octet-stream; charset=#{Encoding::UTF_16.name}")
@@ -58,9 +64,7 @@ describe Api::ProjectsController, :type => :controller do
         it "should fallback to the english version" do
           # create mt with no localizations
           mt = MasterText.create!(key: "missing", other: "Missing", project: project)
-          languages.each do |lang|
-            LocalizedText.create!(master_text: mt, language: lang, other: "")
-          end
+          LocalizedText.create!(master_text: mt, project_language: project_language, other: "")
           get :export, platform: platform, code: language_code, id: project.slug
           file = IOS::StringsFile.parse(StringIO.new(body))
           local = file.localizations.detect { |l| l.key == mt.key }
@@ -72,42 +76,51 @@ describe Api::ProjectsController, :type => :controller do
           sorted = keys.dup.sort
           expect(keys).to eq(sorted)
         end
+      end
 
-        describe "escaping" do
-          before do
-            lt = LocalizedText.where(language: language, master_text: master_text).first
-            lt.update_attributes(other: text)
-            get :export, platform: platform, code: language.code, id: project.slug
+      describe "escaping" do
+        let(:master_text) { create :master_text, project: project, key: 'title' }
+        before do
+          create(:localized_text, project_language: project_language, master_text: master_text, other: text)
+          request
+        end
+
+        context "double quotes" do
+          let(:text) { "\"that's\"\ncrazy" }
+
+          it "are escaped correctly" do
+            expect(body).to match(/^"title" *= *"\\"that's\\"\\ncrazy";$/)
           end
 
-          context "double quotes" do
-            let(:text) { "\"that's\"\ncrazy" }
-
-            it "are escaped correctly" do
-              expect(body).to match(/^"title" *= *"\\"that's\\"\\ncrazy";$/)
-            end
-
-            # round trip
-            it "survive re-import" do
-              file = IOS::StringsFile.parse(StringIO.new(body))
-              local = file.localizations.detect { |l| l.key == master_text.key }
-              expect(local.value).to eq(text)
-            end
+          # round trip
+          it "survive re-import" do
+            file = IOS::StringsFile.parse(StringIO.new(body))
+            local = file.localizations.detect { |l| l.key == master_text.key }
+            expect(local.value).to eq(text)
           end
         end
       end
 
       describe "english texts" do
+        before { request }
+
         let(:language_code) { 'en' }
         it "uses fallbacks to produce the english version" do
           expect(response.status).to eq(200)
         end
 
-        it "uses the master text values" do
-          file = IOS::StringsFile.parse(StringIO.new(response.body))
-          master_texts.each do |mt|
-            local = file.localizations.detect { |l| l.key == mt.key }
-            expect(local.value).to eq(mt.other)
+        context "with texts" do
+          include_context "with a bunch of precreated stuff"
+          before { request }
+
+          let(:language_code) { 'en' }
+
+          it "uses the master text values" do
+            file = IOS::StringsFile.parse(StringIO.new(response.body))
+            master_texts.each do |mt|
+              local = file.localizations.detect { |l| l.key == mt.key }
+              expect(local.value).to eq(mt.other)
+            end
           end
         end
       end
@@ -129,23 +142,25 @@ describe Api::ProjectsController, :type => :controller do
           expect(response.header["X-Path"]).to eq("res/values-ja/strings.xml")
         end
 
-        it "returns a valid xml document for a language" do
-          # io = StringIO.new(response.body)
-          resource = Android::ResourceFile.parse(response.body)
-          locals = resource.localizations
-          expect(locals.map(&:key).sort).to eq(keys.sort)
-          keys.each do |key|
-            string = locals.detect { |l| l.key == key }
-            expect(string.text).to eq("#{key}:ja")
+        context "with texts" do
+          include_context "with a bunch of precreated stuff"
+          before { request }
+          it "returns a valid xml document for a language" do
+            # io = StringIO.new(response.body)
+            resource = Android::ResourceFile.parse(response.body)
+            locals = resource.localizations
+            expect(locals.map(&:key).sort).to eq(keys.sort)
+            keys.each do |key|
+              string = locals.detect { |l| l.key == key }
+              expect(string.text).to eq("#{key}:ja")
+            end
           end
         end
 
         it "should fallback to the english version" do
           # create mt with no localizations
           mt = MasterText.create!(key: "missing", other: "Missing", project: project)
-          languages.each do |lang|
-            LocalizedText.create!(master_text: mt, language: lang, other: "")
-          end
+          LocalizedText.create!(master_text: mt, project_language: project_language, other: "")
           get :export, platform: platform, code: language_code, id: project.slug
           file = Android::ResourceFile.parse(response.body)
           local = file.localizations.detect { |l| l.key == mt.key }
@@ -154,6 +169,8 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       describe "plurals" do
+        include_context "with a bunch of precreated stuff"
+
         let(:plural_keys) { %w(cow duck) }
         let(:plural_master_texts) { plural_keys.map do |key|
           MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true,
@@ -161,34 +178,36 @@ describe Api::ProjectsController, :type => :controller do
         end
         }
 
+        let(:french){Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
+            pluralizable_label_one: "one", pluralizable_label_many: "many")}
+        let(:french_project_language){ create(:project_language, language: french, project: project)}
         before do
           master_texts.concat(plural_master_texts)
-          @fr = Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero", pluralizable_label_one: "one", pluralizable_label_many: "many")
           master_texts.each do |mt|
             case mt.pluralizable?
               when true
                 LocalizedText.create!({
                         master_text: mt,
-                        language: @fr,
-                        one: [mt.key, @fr.code, "one"].join(":"),
-                        zero: [mt.key, @fr.code, "zero"].join(":"),
-                        many: [mt.key, @fr.code, "many"].join(":")
+                        project_language: french_project_language,
+                        one: [mt.key, french.code, "one"].join(":"),
+                        zero: [mt.key, french.code, "zero"].join(":"),
+                        many: [mt.key, french.code, "many"].join(":")
                     })
               when false
-                LocalizedText.create!(master_text: mt, language: @fr, other: [mt.key, @fr.code].join(":"))
+                LocalizedText.create!(master_text: mt, project_language: french_project_language, other: [mt.key, french.code].join(":"))
             end
           end
         end
 
         it "includes the plural forms in the xml" do
-          get :export, platform: platform, code: @fr.code, id: project.slug
+          get :export, platform: platform, code: french.code, id: project.slug
           resource = Android::ResourceFile.parse(response.body)
           locals = resource.localizations
           plurals = locals.select { |l| plural_keys.include?(l.key) }
           expect(plurals.length).to eq(plural_keys.length)
           plurals.each do |plur|
             [:one, :zero, :many].each do |amount|
-              expect(plur.value[amount]).to eq([plur.key, @fr.code, amount].join(":"))
+              expect(plur.value[amount]).to eq([plur.key, french.code, amount].join(":"))
             end
           end
         end
@@ -216,7 +235,7 @@ describe Api::ProjectsController, :type => :controller do
           @array_master_texts.each_with_index do |mt, n|
             LocalizedText.create!({
                     master_text: mt,
-                    language: language,
+                    project_language: project_language,
                     other: [mt.key, language.code, "#{n}"].join(":")
                 })
           end
@@ -263,7 +282,7 @@ describe Api::ProjectsController, :type => :controller do
           mt = MasterText.create!(key: key, other: "#{key}", pluralizable: false, project: project)
           LocalizedText.create!({
                   master_text: mt,
-                  language: language,
+                  project_language: project_language,
                   other: "escape'd \""
               })
           get :export, platform: platform, code: language.code, id: project.slug
@@ -275,10 +294,10 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       describe "escaping" do
+        let(:master_text) { create :master_text, project: project, key: 'title' }
         before do
-          lt = LocalizedText.where(language: language, master_text: master_text).first
-          lt.update_attributes(other: text)
-          get :export, platform: platform, code: language.code, id: project.slug
+          create(:localized_text, project_language: project_language, master_text: master_text, other: text)
+          request
           doc = Nokogiri::XML(response.body)
           @string = doc.css("string[name='#{master_text.key}']").first.text
         end
@@ -320,6 +339,9 @@ describe Api::ProjectsController, :type => :controller do
         let(:other_projects_master_text) {
           create :master_text, key: "my-special-key", project: other_project
         }
+        include_context "with a bunch of precreated stuff"
+        before { request }
+
         it "should include keys from selected project" do
           expect(response.body).to include(keys.first)
         end

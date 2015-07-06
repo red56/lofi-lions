@@ -1,16 +1,18 @@
 class LocalizedText < ActiveRecord::Base
   belongs_to :master_text, inverse_of: :localized_texts
-  belongs_to :language, inverse_of: :localized_texts
+  belongs_to :project_language, inverse_of: :localized_texts
   has_many :views, through: :master_text
 
   validates :master_text_id, presence: true
-  validates :language_id, presence: true
+  validates :project_language_id, presence: true
 
   validate do
     self.needs_entry = calculate_needs_entry
   end
+
   delegate :key, :comment, :pluralizable, to: :master_text
   delegate :text, :one, :other, to: :master_text, prefix: 'original'
+  delegate :language, :language_id, to: :project_language
 
   def text= text
     self.other = text

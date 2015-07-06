@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701170625) do
+ActiveRecord::Schema.define(version: 20150704072359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,32 +39,22 @@ ActiveRecord::Schema.define(version: 20150701170625) do
     t.datetime "updated_at"
   end
 
-  create_table "languages_users", id: false, force: :cascade do |t|
-    t.integer "language_id", null: false
-    t.integer "user_id", null: false
-  end
-
-  add_index "languages_users", ["language_id", "user_id"], name: "index_languages_users_on_language_id_and_user_id", using: :btree
-  add_index "languages_users", ["user_id", "language_id"], name: "index_languages_users_on_user_id_and_language_id", using: :btree
-
   create_table "localized_texts", force: :cascade do |t|
     t.text "comment", default: ""
     t.datetime "created_at"
     t.text "few", default: ""
-    t.integer "language_id"
     t.text "many", default: ""
     t.integer "master_text_id"
     t.boolean "needs_entry"
     t.boolean "needs_review", default: false
     t.text "one", default: ""
     t.text "other", default: ""
+    t.integer "project_language_id", null: false
     t.text "two", default: ""
     t.datetime "updated_at"
     t.text "zero", default: ""
   end
 
-  add_index "localized_texts", ["language_id", "master_text_id"], name: "index_language_id_master_text_id_unqiue", unique: true, using: :btree
-  add_index "localized_texts", ["language_id"], name: "index_language_id", using: :btree
   add_index "localized_texts", ["master_text_id"], name: "index_master_text_id", using: :btree
 
   create_table "master_texts", force: :cascade do |t|
@@ -79,6 +69,20 @@ ActiveRecord::Schema.define(version: 20150701170625) do
   end
 
   add_index "master_texts", ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
+
+  create_table "project_languages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "language_id", null: false
+    t.integer "need_entry_count"
+    t.integer "need_review_count"
+    t.integer "project_id", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "project_languages_users", id: false, force: :cascade do |t|
+    t.integer "project_language_id", null: false
+    t.integer "user_id", null: false
+  end
 
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false

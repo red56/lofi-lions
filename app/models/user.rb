@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # Other devise modules available are.
   # :confirmable, :lockable, :timeoutable and :omniauthable and :registerable
 
-  has_and_belongs_to_many :languages
+  has_and_belongs_to_many :project_languages
 
   scope :admins, -> { where(is_administrator: true) }
 
