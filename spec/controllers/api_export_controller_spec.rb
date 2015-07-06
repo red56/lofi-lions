@@ -185,9 +185,9 @@ describe Api::ProjectsController, :type => :controller do
         end
         }
 
-        let(:french){Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
-            pluralizable_label_one: "one", pluralizable_label_many: "many")}
-        let(:french_project_language){ create(:project_language, language: french, project: project)}
+        let(:french) { Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
+            pluralizable_label_one: "one", pluralizable_label_many: "many") }
+        let(:french_project_language) { create(:project_language, language: french, project: project) }
         before do
           master_texts.concat(plural_master_texts)
           master_texts.each do |mt|
