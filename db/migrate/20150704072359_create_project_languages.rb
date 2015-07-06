@@ -26,7 +26,7 @@ class CreateProjectLanguages < ActiveRecord::Migration
     Language.all.each do |language|
       Project.all.each do |project|
         plang = project.project_languages.create!(language: language)
-        LanguageUser.all.each do |luser|
+        LanguageUser.where(language_id: language.id).all.each do |luser|
           plang.users << luser.user
         end
         LocalizedText.joins(:master_text).where(language_id: language.id, master_texts: {project_id: project.id}).
