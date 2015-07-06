@@ -41,18 +41,6 @@ describe 'Language Pages', :type => :feature do
       visit root_path
       expect(page).to have_link_to(languages_path)
     end
-    context "when logged in as administrator" do
-      let(:login) { stubbed_login_as_admin_user }
-      it "shows editors" do
-        langs = build_stubbed_list(:language, 3)
-        user = build_stubbed(:user)
-        allow(Language).to receive_messages(all: langs)
-        allow(langs).to receive_messages(includes: langs)
-        allow(langs.last).to receive_messages(users: [user])
-        visit languages_path
-        expect(page).to have_content(user.email)
-      end
-    end
   end
 
   describe "new" do
