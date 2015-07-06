@@ -32,11 +32,6 @@ describe 'View pages', :type => :feature do
   #   end
   # end
 
-  specify "index is linked from homepage" do
-    visit "/"
-    expect(page).to have_link_to(views_path)
-  end
-
   specify "when creating can write in keys to use" do
     master_texts = create_list(:master_text, 5, project: project)
     visit new_view_path
@@ -66,20 +61,21 @@ describe 'View pages', :type => :feature do
       mts.each { |mt| create(:localized_text, master_text: mt, project_language: project_language) }
     end
     }
-    it "language index links to localize views" do
-      visit languages_path
-      expect(page).to have_link_to(language_views_path(language))
+
+    it "project language show links to localized views" do
+      visit project_language_path(project_language)
+      expect(page).to have_link_to(project_language_views_path(project_language))
     end
-    it "language texts links to localize views" do
-      visit language_texts_path(language)
-      expect(page).to have_link_to(language_views_path(language))
+    it "project language texts links to localize views" do
+      visit project_language_texts_path(project_language)
+      expect(page).to have_link_to(project_language_views_path(project_language))
     end
     it "can list localized views" do
-      visit language_views_path(language)
-      expect(page).to have_link_to(language_view_path(language, view))
+      visit project_language_views_path(project_language)
+      expect(page).to have_link_to(project_language_view_path(project_language, view))
     end
     it "can look at localized view" do
-      visit language_view_path(language, view)
+      visit project_language_view_path(project_language, view)
       expect(page).to have_content(master_text_in_view.key)
     end
 
@@ -87,9 +83,9 @@ describe 'View pages', :type => :feature do
       let!(:projects) { [project]+ [create(:project, name: "Tother One")] }
       let!(:views) { projects.map { |p| p.views.create!(name: "Flong") } }
       it "lists views by project" do
-        visit language_views_path(language)
+        visit project_language_views_path(project_language)
         views.each do |view|
-          expect(page).to have_link_to(language_view_path(language, view))
+          expect(page).to have_link_to(project_language_view_path(project_language, view))
         end
         # views.each do |project|
         #   expect(page).to have_link_to(language_project_path(language, project))

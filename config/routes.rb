@@ -2,7 +2,11 @@ LofiLions::Application.routes.draw do
 
   devise_for :users
 
-  resources :languages do |language|
+  resources :languages
+
+  resources :master_texts
+
+  resources :project_languages do
     resources :texts, controller: 'localized_texts' do
       collection do
         get :entry
@@ -11,8 +15,6 @@ LofiLions::Application.routes.draw do
     end
     resources :views, controller: 'localized_views'
   end
-
-  resources :master_texts
 
   resources :users
 

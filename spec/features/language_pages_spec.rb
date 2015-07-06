@@ -17,14 +17,6 @@ describe 'Language Pages', :type => :feature do
       visit language_path(language)
       expect(current_path).to eq(new_user_session_path)
     end
-    it "review localized text page redirects to login page" do
-      visit review_language_texts_path(language)
-      expect(current_path).to eq(new_user_session_path)
-    end
-    it "all localized text page redirects to login page" do
-      visit language_texts_path(language)
-      expect(current_path).to eq(new_user_session_path)
-    end
   end
 
   describe "index" do

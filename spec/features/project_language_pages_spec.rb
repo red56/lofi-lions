@@ -9,49 +9,29 @@ describe 'Project Language Pages', :type => :feature do
   context "when not logged in" do
     let(:login) { nil }
 
-    it "project_langages index redirects to login page" do
+    it "project_languages index redirects to login page" do
       visit project_languages_path
       expect(current_path).to eq(new_user_session_path)
     end
-    it "project_langage page redirects to login page" do
-      visit project_language_path(project_langage)
+    it "project_language page redirects to login page" do
+      visit project_language_path(project_language)
       expect(current_path).to eq(new_user_session_path)
     end
     it "review localized text page redirects to login page" do
-      visit review_language_texts_path(project_langage)
+      visit review_project_language_texts_path(project_language)
       expect(current_path).to eq(new_user_session_path)
     end
     it "all localized text page redirects to login page" do
-      visit project_langage_texts_path(project_langage)
+      visit project_language_texts_path(project_language)
       expect(current_path).to eq(new_user_session_path)
     end
   end
 
   describe "index" do
     it "can list several" do
-      langs = build_stubbed_list(:project_langage, 3)
+      langs = build_stubbed_list(:project_language, 3)
       allow(Language).to receive_messages(all: langs)
-      visit project_langages_path
-    end
-    it "links to new" do
-      visit project_langages_path
-      expect(page).to have_link_to(new_language_path)
-    end
-    it "is linked from home" do
-      visit root_path
-      expect(page).to have_link_to(project_langages_path)
-    end
-    context "when logged in as administrator" do
-      let(:login) { stubbed_login_as_admin_user }
-      it "shows editors" do
-        langs = build_stubbed_list(:project_langage, 3)
-        user = build_stubbed(:user)
-        allow(Language).to receive_messages(all: langs)
-        allow(langs).to receive_messages(includes: langs)
-        allow(langs.last).to receive_messages(users: [user])
-        visit project_langages_path
-        expect(page).to have_content(user.email)
-      end
+      visit project_languages_path
     end
   end
 
@@ -62,56 +42,56 @@ describe 'Project Language Pages', :type => :feature do
     it "works" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:project_language_created)
       visit new_language_path
-      expect(page).to have_css("form.project_langage")
-      fill_in "project_langage_code", with: 'FR'
-      fill_in "project_langage_name", with: 'Frenchie'
+      expect(page).to have_css("form.project_language")
+      fill_in "project_language_code", with: 'FR'
+      fill_in "project_language_name", with: 'Frenchie'
       click_on "Save"
-      expect(page).not_to have_css("form.project_langage")
+      expect(page).not_to have_css("form.project_language")
     end
     it "displays errors" do
       visit new_language_path
-      expect(page).to have_css("form.project_langage")
-      fill_in "project_langage_name", with: 'fr'
+      expect(page).to have_css("form.project_language")
+      fill_in "project_language_name", with: 'fr'
       click_on "Save"
-      expect(page).to have_css("form.project_langage")
-      expect(page).to have_css("form.project_langage .errors")
+      expect(page).to have_css("form.project_language")
+      expect(page).to have_css("form.project_language .errors")
     end
   end
   describe "edit" do
-    before { visit edit_language_path(project_langage) }
+    before { visit edit_language_path(project_language) }
     it "displays" do
       visit new_language_path
     end
     it "works" do
-      expect(page).to have_css("form.project_langage")
-      fill_in "project_langage_name", with: 'Franglais'
+      expect(page).to have_css("form.project_language")
+      fill_in "project_language_name", with: 'Franglais'
       click_on "Save"
-      expect(page).not_to have_css("form.project_langage")
+      expect(page).not_to have_css("form.project_language")
     end
     it "has labels" do
       %w{zero one two few many other}.each do |plural_form|
-        expect(page).to have_field("project_langage_pluralizable_label_#{plural_form}")
+        expect(page).to have_field("project_language_pluralizable_label_#{plural_form}")
       end
     end
 
     it "displays errors" do
-      expect(page).to have_css("form.project_langage")
-      fill_in "project_langage_name", with: ''
+      expect(page).to have_css("form.project_language")
+      fill_in "project_language_name", with: ''
       click_on "Save"
-      expect(page).to have_css("form.project_langage")
-      expect(page).to have_css("form.project_langage .errors")
+      expect(page).to have_css("form.project_language")
+      expect(page).to have_css("form.project_language .errors")
     end
   end
 
 
   describe "translations" do
-    let(:ok_localized_text) { create(:localized_text, project_langage: project_langage, text: "zongy-bo!") }
-    let(:empty_localized_text) { create(:localized_text, project_langage: project_langage, needs_entry: true) }
-    let(:needs_review_localized_text) { create(:localized_text, project_langage: project_langage,
+    let(:ok_localized_text) { create(:localized_text, project_language: project_language, text: "zongy-bo!") }
+    let(:empty_localized_text) { create(:localized_text, project_language: project_language, needs_entry: true) }
+    let(:needs_review_localized_text) { create(:localized_text, project_language: project_language,
         other: "something new", needs_review: true) }
     let(:localized_texts) { [ok_localized_text, empty_localized_text, needs_review_localized_text] }
 
-    before { project_langage }
+    before { project_language }
 
     shared_examples_for "localized text list" do
       it "displays one" do
@@ -123,9 +103,9 @@ describe 'Project Language Pages', :type => :feature do
       it "updates one" do
         localized_text
         visit path
-        fill_in :project_langage_localized_texts_attributes_0_text, with: "flounce"
+        fill_in :project_language_localized_texts_attributes_0_text, with: "flounce"
         click_on "Save"
-        visit project_langage_texts_path(project_langage)
+        visit project_language_texts_path(project_language)
         expect(page).to have_content("flounce")
       end
 
@@ -140,30 +120,30 @@ describe 'Project Language Pages', :type => :feature do
         it "updates a localized other" do
           localized_text
           visit path
-          fill_in :project_langage_localized_texts_attributes_0_other, with: "flounce"
+          fill_in :project_language_localized_texts_attributes_0_other, with: "flounce"
           click_on "Save"
-          visit project_langage_texts_path(project_langage)
+          visit project_language_texts_path(project_language)
           expect(page).to have_content("flounce")
         end
         it "has correct other fields/labels" do
           pending
-          flunk "need to test this with different project_langage types"
+          flunk "need to test this with different project_language types"
         end
       end
-      it "linked from index" do
-        visit project_langages_path
+      it "linked from show" do
+        visit project_language_path(project_language)
         expect(page).to have_link_to(path)
       end
       it "linked from all" do
-        visit project_langage_texts_path(project_langage)
+        visit project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
       it "linked from entry" do
-        visit entry_language_texts_path(project_langage)
+        visit entry_project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
       it "linked from review" do
-        visit review_language_texts_path(project_langage)
+        visit review_project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
       it "is active" do
@@ -175,7 +155,7 @@ describe 'Project Language Pages', :type => :feature do
     end
     describe "all" do
       let(:localized_text) { ok_localized_text }
-      let(:path) { project_langage_texts_path(project_langage) }
+      let(:path) { project_language_texts_path(project_language) }
       it_behaves_like "localized text list"
 
       it "displays all" do
@@ -189,7 +169,7 @@ describe 'Project Language Pages', :type => :feature do
 
     describe "translations to enter" do
       let(:localized_text) { empty_localized_text }
-      let(:path) { entry_language_texts_path(project_langage) }
+      let(:path) { entry_project_language_texts_path(project_language) }
       it_behaves_like "localized text list"
       it "should be created needing entry" do
         expect(empty_localized_text.needs_entry).to be_truthy
@@ -205,7 +185,7 @@ describe 'Project Language Pages', :type => :feature do
 
     describe "translations to review" do
       let(:localized_text) { needs_review_localized_text }
-      let(:path) { review_language_texts_path(project_langage) }
+      let(:path) { review_project_language_texts_path(project_language) }
       it_behaves_like "localized text list"
       it "displays all" do
         localized_texts
