@@ -60,7 +60,7 @@ describe 'Language Pages', :type => :feature do
       visit new_language_path
     end
     it "works" do
-      expect_any_instance_of(LocalizedTextEnforcer).to receive(:project_language_created)
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:language_created)
       visit new_language_path
       expect(page).to have_css("form.language")
       fill_in "language_code", with: 'FR'
