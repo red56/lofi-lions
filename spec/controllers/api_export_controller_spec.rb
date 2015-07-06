@@ -42,26 +42,30 @@ describe Api::ProjectsController, :type => :controller do
 
       describe "translated texts" do
         include_context "with a bunch of precreated stuff"
-        before { request }
 
         it "should return a zip file" do
+          request
           expect(response.content_type).to eq("application/octet-stream; charset=#{Encoding::UTF_16.name}")
         end
 
         it "has a relative filename in the headers" do
+          request
           expect(response.header["X-Path"]).to eq("ja.lproj/Localizable.strings")
         end
 
         it "should start with a UTF-16LE BOM" do
+          request
           bom = response.body.bytes[0..1]
           expect(bom).to eq("\xFF\xFE".bytes)
         end
 
         it "should have an encoding of UTF16LE" do
+          request
           expect(response.body.encoding).to eq(Encoding::UTF_16LE)
         end
 
         it "should fallback to the english version" do
+          request
           # create mt with no localizations
           mt = MasterText.create!(key: "missing", other: "Missing", project: project)
           LocalizedText.create!(master_text: mt, project_language: project_language, other: "")
@@ -72,6 +76,7 @@ describe Api::ProjectsController, :type => :controller do
         end
 
         it "should order the keys alphabetically" do
+          request
           keys = body.lines.map { |line| line.split(/ *= */).first }
           sorted = keys.dup.sort
           expect(keys).to eq(sorted)
@@ -82,18 +87,19 @@ describe Api::ProjectsController, :type => :controller do
         let(:master_text) { create :master_text, project: project, key: 'title' }
         before do
           create(:localized_text, project_language: project_language, master_text: master_text, other: text)
-          request
         end
 
         context "double quotes" do
           let(:text) { "\"that's\"\ncrazy" }
 
           it "are escaped correctly" do
+            request
             expect(body).to match(/^"title" *= *"\\"that's\\"\\ncrazy";$/)
           end
 
           # round trip
           it "survive re-import" do
+            request
             file = IOS::StringsFile.parse(StringIO.new(body))
             local = file.localizations.detect { |l| l.key == master_text.key }
             expect(local.value).to eq(text)
@@ -102,20 +108,20 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       describe "english texts" do
-        before { request }
 
         let(:language_code) { 'en' }
         it "uses fallbacks to produce the english version" do
+          request
           expect(response.status).to eq(200)
         end
 
         context "with texts" do
           include_context "with a bunch of precreated stuff"
-          before { request }
 
           let(:language_code) { 'en' }
 
           it "uses the master text values" do
+            request
             file = IOS::StringsFile.parse(StringIO.new(response.body))
             master_texts.each do |mt|
               local = file.localizations.detect { |l| l.key == mt.key }
@@ -144,8 +150,9 @@ describe Api::ProjectsController, :type => :controller do
 
         context "with texts" do
           include_context "with a bunch of precreated stuff"
-          before { request }
+
           it "returns a valid xml document for a language" do
+            request
             # io = StringIO.new(response.body)
             resource = Android::ResourceFile.parse(response.body)
             locals = resource.localizations
@@ -340,12 +347,13 @@ describe Api::ProjectsController, :type => :controller do
           create :master_text, key: "my-special-key", project: other_project
         }
         include_context "with a bunch of precreated stuff"
-        before { request }
 
         it "should include keys from selected project" do
+          request
           expect(response.body).to include(keys.first)
         end
         it "shouldn't include text from other project" do
+          request
           expect(response.body).not_to include(other_projects_master_text.key)
         end
       end
