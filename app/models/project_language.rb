@@ -28,4 +28,8 @@ class ProjectLanguage < ActiveRecord::Base
     master_text.localized_texts.where(project_language: self).first || MasterTextImpersonatingLocalizedText.new(master_text)
   end
 
+  def to_s
+    "#{project.name} - #{language.name}"
+  end
+
 end

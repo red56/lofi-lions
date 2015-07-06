@@ -1,6 +1,5 @@
 - if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
   - @projects.each do |project|
     = link_to project.name, project_path(project)
-- else
-  - current_user.project_languages.each do |projectlang|
-    = link_to projectlang.language.name, project_language_path(projectlang)
+- current_user.project_languages.each do |projectlang|
+  = link_to projectlang, project_language_path(projectlang)
