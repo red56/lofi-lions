@@ -27,7 +27,19 @@ describe 'Home page', :type => :feature do
       visit '/'
       click_on "Logout"
     end
-    it "shows projects" do
+    it "links to projects" do
+      visit '/'
+      expect(page).to have_content(project.name)
+      expect(page).to have_link_to(project_path(project))
+    end
+  end
+
+  context "when logged in as admin" do
+    before do
+      stubbed_login_as_admin_user
+    end
+
+    it "links to projects" do
       visit '/'
       expect(page).to have_content(project.name)
       expect(page).to have_link_to(project_path(project))
