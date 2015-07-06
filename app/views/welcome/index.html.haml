@@ -1,0 +1,3 @@
+- if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
+  - @projects.each do |project|
+    = link_to project.name, project_path(project)

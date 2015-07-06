@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe 'Home page', :type => :feature do
 
+  let!(:project) {create(:project, name: "steve" )}
+
   context "when not logged in" do
     it "redirects to login page" do
       visit '/'
@@ -23,6 +25,22 @@ describe 'Home page', :type => :feature do
       visit '/'
       click_on "Logout"
     end
+    it "shows projects" do
+      visit '/'
+      expect(page).to have_content(project.name)
+      expect(page).to have_link_to(project_path(project))
+    end
   end
 
+  context "when logged in as a standard user" do
+    before do
+      stubbed_login_as_user
+    end
+
+    it "doesn't show projects" do
+      visit '/'
+      expect(page).to_not have_content(project.name)
+      expect(page).to_not have_link_to(project_path(project))
+    end
+  end
 end

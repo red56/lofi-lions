@@ -6,6 +6,8 @@ LofiLions::Application.routes.draw do
 
   resources :master_texts
 
+  resources :projects
+
   resources :project_languages, only: [:index, :show, :update] do
     resources :texts, controller: 'localized_texts' do
       collection do

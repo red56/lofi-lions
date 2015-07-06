@@ -6,5 +6,6 @@ class WelcomeController < ApplicationController
   end
 
   def index
+    @projects = Project.all
   end
 end
