@@ -40,7 +40,7 @@ describe 'User management pages', :type => :feature do
     let(:users) { build_stubbed_list(:user, 3) }
     before do
       allow(User).to receive_messages(all: users)
-      allow(users).to receive_messages(includes: users, order:users)
+      allow(users).to receive_messages(includes: users, order: users)
     end
 
     specify "lists users" do
@@ -51,7 +51,9 @@ describe 'User management pages', :type => :feature do
       end
     end
     specify "lists users with editing privileges" do
-      expect(users.last).to receive_messages(languages: [build_stubbed(:language, name: 'fingle')])
+      expect(users.last).to receive_messages(project_languages: [build_stubbed(:project_language,
+                      project: build_stubbed(:project, name: 'projecty'),
+                      language: build_stubbed(:language, name: 'fingle'))])
       visit users_path
       expect(page).to have_content('fingle')
     end
@@ -76,7 +78,9 @@ describe 'User management pages', :type => :feature do
 
   describe "edit" do
     let(:user) { create(:user) }
+    let(:project) {create :project }
     let(:languages) { create_list(:language, 3) }
+    let(:project_languages) { languages.map { |language| create :project_language, language: language, project: project } }
     it "can change details" do
       visit edit_user_path(user)
       nonsense = "flongtibong@example.com"
@@ -89,7 +93,7 @@ describe 'User management pages', :type => :feature do
       let(:login) { stubbed_login_as_user }
 
       it "can't view if not admin" do
-        expect{visit edit_user_path(user)}.to raise_error
+        expect { visit edit_user_path(user) }.to raise_error
       end
     end
 
@@ -107,15 +111,15 @@ describe 'User management pages', :type => :feature do
       end
     end
     it "user to be specific language editor" do
-      languages
+      project_languages
       visit edit_user_path(user)
-      languages.each do |language|
-        find("#user_language_ids_#{language.id}").set(true)
+      project_languages.each do |project_language|
+        find("#user_project_language_ids_#{project_language.id}").set(true)
       end
       click_on "Save"
       expect(current_path).to eq(users_path)
-      languages.each do |language|
-        expect(page).to have_content(language.name)
+      project_languages.each do |project_language|
+        expect(page).to have_content(project_language.language.name)
       end
     end
   end
