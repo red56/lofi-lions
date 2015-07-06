@@ -35,55 +35,6 @@ describe 'Project Language Pages', :type => :feature do
     end
   end
 
-  describe "new" do
-    it "displays" do
-      visit new_language_path
-    end
-    it "works" do
-      expect_any_instance_of(LocalizedTextEnforcer).to receive(:project_language_created)
-      visit new_language_path
-      expect(page).to have_css("form.project_language")
-      fill_in "project_language_code", with: 'FR'
-      fill_in "project_language_name", with: 'Frenchie'
-      click_on "Save"
-      expect(page).not_to have_css("form.project_language")
-    end
-    it "displays errors" do
-      visit new_language_path
-      expect(page).to have_css("form.project_language")
-      fill_in "project_language_name", with: 'fr'
-      click_on "Save"
-      expect(page).to have_css("form.project_language")
-      expect(page).to have_css("form.project_language .errors")
-    end
-  end
-  describe "edit" do
-    before { visit edit_language_path(project_language) }
-    it "displays" do
-      visit new_language_path
-    end
-    it "works" do
-      expect(page).to have_css("form.project_language")
-      fill_in "project_language_name", with: 'Franglais'
-      click_on "Save"
-      expect(page).not_to have_css("form.project_language")
-    end
-    it "has labels" do
-      %w{zero one two few many other}.each do |plural_form|
-        expect(page).to have_field("project_language_pluralizable_label_#{plural_form}")
-      end
-    end
-
-    it "displays errors" do
-      expect(page).to have_css("form.project_language")
-      fill_in "project_language_name", with: ''
-      click_on "Save"
-      expect(page).to have_css("form.project_language")
-      expect(page).to have_css("form.project_language .errors")
-    end
-  end
-
-
   describe "translations" do
     let(:ok_localized_text) { create(:localized_text, project_language: project_language, text: "zongy-bo!") }
     let(:empty_localized_text) { create(:localized_text, project_language: project_language, needs_entry: true) }
