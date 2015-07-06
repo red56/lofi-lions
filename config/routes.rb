@@ -1,5 +1,4 @@
 LofiLions::Application.routes.draw do
-  resources :views
 
   devise_for :users
 
@@ -16,6 +15,8 @@ LofiLions::Application.routes.draw do
   resources :master_texts
 
   resources :users
+
+  resources :views
 
   namespace :api, defaults: {format: 'json'} do
     resources :projects, only: [] do
