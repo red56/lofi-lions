@@ -3,6 +3,8 @@ require 'rails_helper'
 describe 'Home page', :type => :feature do
 
   let!(:project) {create(:project, name: "steve" )}
+  let(:project_language) {create(:project_language, language_id: language.id)}
+  let(:language) {create(:language, name: "French")}
 
   context "when not logged in" do
     it "redirects to login page" do
@@ -35,12 +37,19 @@ describe 'Home page', :type => :feature do
   context "when logged in as a standard user" do
     before do
       stubbed_login_as_user
+      allow(@user).to receive(:project_languages).and_return([project_language])
     end
 
-    it "doesn't show projects" do
+    it "doesn't link to projects" do
       visit '/'
       expect(page).to_not have_content(project.name)
       expect(page).to_not have_link_to(project_path(project))
+    end
+
+    it "links to project languages" do
+      visit '/'
+      expect(page).to have_content(project_language.language.name)
+      expect(page).to have_link_to(project_language_path(project_language))
     end
   end
 end
