@@ -5,7 +5,17 @@
     .text-primary.col-sm-6
       %i.fa.fa-language
       = label
-    .col-sm-3.text-danger
-      43 To enter
-    .col-sm-3.text-warning
-      12 To review
+    .col-sm-3.entry
+      - if project_language.need_entry_count > 0
+        .text-danger
+          = "#{project_language.need_entry_count} to enter"
+      - else
+        .text-success
+          No outstanding entries
+    .col-sm-3.review
+      - if project_language.need_review_count > 0
+        .text-warning
+          = "#{project_language.need_review_count} to review"
+      - else
+        .text-success
+          No outstanding reviews

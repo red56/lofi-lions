@@ -148,5 +148,44 @@ describe 'Project Language Pages', :type => :feature do
     end
   end
 
+  describe "the overview tab" do
 
+    context "with outstanding tasks" do
+
+      let(:project_language) { create(:project_language, need_entry_count: 5, need_review_count: 6) }
+
+      it "has entry count" do
+        visit project_language_path(project_language)
+        within ".entry" do
+          expect(page).to have_content(project_language.need_entry_count)
+        end
+      end
+
+      it "has review count" do
+        visit project_language_path(project_language)
+        within ".review" do
+          expect(page).to have_content(project_language.need_review_count)
+        end
+      end
+    end
+
+    context "wihout outstanding tasks" do
+
+      let(:project_language) { create(:project_language, need_entry_count: 0, need_review_count: 0) }
+
+      it "has entry count" do
+        visit project_language_path(project_language)
+        within ".entry" do
+          expect(page).to have_content("No outstanding entries")
+        end
+      end
+
+      it "has review count" do
+        visit project_language_path(project_language)
+        within ".review" do
+          expect(page).to have_content("No outstanding reviews")
+        end
+      end
+    end
+  end
 end
