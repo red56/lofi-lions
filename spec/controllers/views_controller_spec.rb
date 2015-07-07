@@ -24,7 +24,7 @@ describe ViewsController, :type => :controller do
   describe "GET index" do
     it "assigns all views as @views" do
       view = View.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, {project_id: project.id}, valid_session
       expect(assigns(:views)).to eq([view])
     end
   end
@@ -39,7 +39,7 @@ describe ViewsController, :type => :controller do
 
   describe "GET new" do
     it "assigns a new view as @view" do
-      get :new, {}, valid_session
+      get :new, {project_id: project.id}, valid_session
       expect(assigns(:view)).to be_a_new(View)
     end
   end

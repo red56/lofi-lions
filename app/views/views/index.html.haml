@@ -1,24 +1,12 @@
 = render :partial => 'master_texts/tabs'
 
-- projects.each do |project|
-  .panel.panel-primary
-    .panel-heading
-      %h3.panel-title.clearfix
-        = project.name
-        Project
-    .panel-body
-      .buttons.pull-right
-        = link_to 'Browse all master texts', master_texts_path(project), class: 'btn btn-primary'
-
-    .list-group
-      - project.views.each do |view|
-        = link_to view, class: "list-group-item clearfix view" do
-          .text-primary
-            %i.fa.fa-list-alt
-            = view.name
-          %small.comments= view.comments
-      - if current_user.is_developer?
-        .list-group-item.clearfix
-          = link_to 'New View', new_view_path(project_id: project.id), class: 'btn btn-default pull-right'
-
-  %br
+.list-group
+  - @views.each do |view|
+    = link_to view, class: "list-group-item clearfix view" do
+      .text-primary
+        %i.fa.fa-list-alt
+        = view.name
+      %small.comments= view.comments
+  - if current_user.is_developer?
+    .list-group-item.clearfix
+      = link_to 'New View', new_project_view_path(project_id: @project.id), class: 'btn btn-default pull-right'

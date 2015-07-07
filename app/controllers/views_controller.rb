@@ -3,12 +3,12 @@ class ViewsController < ApplicationController
   before_action :set_view, only: [:show, :edit, :update, :destroy]
   before_action :set_view_tab
   before_action :set_master_texts_section
-  before_action :find_project, only: [:new]
+  before_action :find_project, only: [:new, :index]
 
   # GET /views
   # GET /views.json
   def index
-    @views = View.all
+    @views = @project.views.all
   end
 
   # GET /views/1
@@ -77,6 +77,6 @@ class ViewsController < ApplicationController
     end
 
     def find_project
-      (@project = Project.first) || fail("Must have project to add to") # temporary hack
+      @project = Project.find(params[:project_id])
     end
 end

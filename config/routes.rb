@@ -8,6 +8,7 @@ LofiLions::Application.routes.draw do
 
   resources :projects do
     resources :master_texts, only: [:index, :new]
+    resources :views, only: [:index, :new]
   end
 
   resources :project_languages, only: [:index, :show, :update] do
@@ -22,7 +23,7 @@ LofiLions::Application.routes.draw do
 
   resources :users
 
-  resources :views
+  resources :views, except: [:index, :new]
 
   namespace :api, defaults: {format: 'json'} do
     resources :projects, only: [] do
