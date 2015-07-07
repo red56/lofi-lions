@@ -2,11 +2,11 @@ class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
   before_action :set_master_texts_section
-  before_action :find_project, only: [:new]
+  before_action :find_project, only: [:new, :index]
   # GET /master_texts
   # GET /master_texts.json
   def index
-    @master_texts = MasterText.order("LOWER(key)")
+    @master_texts = @project.master_texts.order("LOWER(key)")
     @active_tab = :all
     # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
@@ -31,7 +31,7 @@ class MasterTextsController < ApplicationController
     @master_text = MasterText.new(master_text_params)
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).save
-        format.html { redirect_to master_texts_path, notice: 'Master text was successfully created.' }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully created.' }
         format.json { render action: 'show', status: :created, location: @master_text }
       else
         format.html { render action: 'new' }
@@ -45,7 +45,7 @@ class MasterTextsController < ApplicationController
   def update
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).update(master_text_params)
-        format.html { redirect_to master_texts_path, notice: 'Master text was successfully updated.' }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -76,6 +76,6 @@ class MasterTextsController < ApplicationController
     end
 
     def find_project
-      (@project = Project.first) || fail("Must have project to add to") # temporary hack
+      @project = Project.find(params[:project_id])
     end
 end

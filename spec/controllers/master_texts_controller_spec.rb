@@ -36,7 +36,7 @@ describe MasterTextsController, :type => :controller do
 
       it "redirects to the created master_text" do
         post :create, {:master_text => master_text_attributes}
-        expect(response).to redirect_to(master_texts_path)
+        expect(response).to redirect_to(project_master_texts_path(project))
       end
 
 
@@ -74,7 +74,7 @@ describe MasterTextsController, :type => :controller do
 
       it "redirects to the master_text" do
         put :update, {:id => master_text.to_param, :master_text => master_text_attributes}
-        expect(response).to redirect_to(master_texts_path)
+        expect(response).to redirect_to(project_master_texts_path(project))
       end
     end
 

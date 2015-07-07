@@ -4,9 +4,11 @@ LofiLions::Application.routes.draw do
 
   resources :languages
 
-  resources :master_texts
+  resources :master_texts, except: [:index, :new]
 
-  resources :projects
+  resources :projects do
+    resources :master_texts, only: [:index, :new]
+  end
 
   resources :project_languages, only: [:index, :show, :update] do
     resources :texts, controller: 'localized_texts' do

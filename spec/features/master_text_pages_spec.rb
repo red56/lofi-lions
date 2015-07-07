@@ -9,7 +9,7 @@ describe 'Master Text Pages', :type => :feature do
   context "when not logged in" do
     let(:login) { nil }
     it "redirects to login page" do
-      visit master_texts_path
+      visit project_master_texts_path(project)
       expect(current_path).to eq(new_user_session_path)
     end
   end
@@ -18,38 +18,51 @@ describe 'Master Text Pages', :type => :feature do
     let(:texts) { build_stubbed_list(:master_text, 3) }
     before { allow(texts).to receive_messages(order: texts, includes: texts) }
     it "can list several" do
-      allow(MasterText).to receive_messages(all: texts)
-      visit master_texts_path
+      allow(project).to receive_messages(master_texts: texts)
+      allow(Project).to receive_messages(find: project)
+      visit project_master_texts_path(project)
+      expect(page).to have_content(texts[0].key)
     end
     context "with plural forms" do
       let(:texts) { build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
       it "can list one" do
-        allow(MasterText).to receive_messages(all: texts)
-        visit master_texts_path
+        allow(project).to receive_messages(master_texts: texts)
+        allow(Project).to receive_messages(find: project)
+        visit project_master_texts_path(project)
         expect(page).to have_content('othery-other')
         expect(page).to have_content('one-one')
       end
     end
     it "links to new" do
-      login
-      expect(@user).to receive_messages(is_developer?: true)
-      visit master_texts_path
-      expect(page).to have_link_to(new_master_text_path)
+      visit project_master_texts_path(project)
+      expect(page).to have_link_to(new_project_master_text_path(project))
     end
-    it "is linked from home" do
-      visit root_path
-      expect(page).to have_link_to(master_texts_path)
+  end
+
+  describe "index - unmocked" do
+    context "with multiple projects" do
+      let!(:other_project) {create(:project)}
+      let!(:master_text) {create :master_text, project: project, key: 'my-project-master-text-key'}
+      let!(:other_projects_master_text) {create :master_text, project: other_project, key:
+              'other-project-master-text-key'}
+
+      it "doesn't show other project's master texts" do
+        visit project_master_texts_path(project)
+        expect(page).not_to have_content(other_projects_master_text.key)
+        visit project_master_texts_path(other_project)
+        expect(page).not_to have_content(master_text.key)
+      end
     end
   end
 
   describe "new" do
     it "displays" do
-      visit new_master_text_path
+      visit new_project_master_text_path(project)
     end
     it "works for developer" do
       expect(@user).to receive_messages(is_developer?: true)
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_created)
-      visit new_master_text_path
+      visit new_project_master_text_path(project)
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       fill_in "master_text_text", with: 'My text'
@@ -58,7 +71,7 @@ describe 'Master Text Pages', :type => :feature do
     end
     it "displays errors" do
       expect(@user).to receive_messages(is_developer?: true)
-      visit new_master_text_path
+      visit new_project_master_text_path(project)
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       click_on "Save"
@@ -71,7 +84,7 @@ describe 'Master Text Pages', :type => :feature do
     let(:login) { stubbed_login_as_developer }
     before { visit edit_master_text_path(master_text) }
     it "displays" do
-      visit new_master_text_path
+      visit new_project_master_text_path(project)
     end
     context "for editor" do
       let(:login) { stubbed_login_as_user }
@@ -118,7 +131,7 @@ describe 'Master Text Pages', :type => :feature do
     end
 
     context "when pluralizable" do
-      let(:master_text) { create(:master_text, pluralizable: true) }
+      let(:master_text) { create(:master_text, project: project, pluralizable: true) }
       it "allows me to change one" do
         fill_in "master_text_one", with: "My one one"
         expect {
