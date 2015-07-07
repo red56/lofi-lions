@@ -1,0 +1,11 @@
+= link_to(project_language_path(project_language),
+  class: "list-group-item clearfix project_language",
+  id: "project_language_#{project_language.id}") do
+  .row
+    .text-primary.col-sm-6
+      %i.fa.fa-language
+      = label
+    .col-sm-3.text-danger
+      43 To enter
+    .col-sm-3.text-warning
+      12 To review

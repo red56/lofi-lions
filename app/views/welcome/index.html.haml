@@ -1,5 +1,27 @@
 - if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
+
   - @projects.each do |project|
-    = link_to project.name, project_path(project)
-- current_user.project_languages.each do |projectlang|
-  = link_to projectlang, project_language_path(projectlang)
+    .panel.panel-primary[project]
+      .panel-heading
+        %h3.panel-title.clearfix
+          = link_to project.name, project_path(project)
+          Project
+      .list-group
+        .list-group-item.clearfix
+          .text-primary
+            = link_to project_path(project) do
+              English (Master texts)
+
+        - project.project_languages.each do |project_language|
+          = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+            label: project_language.language.name}
+
+.panel.panel-primary
+  .panel-heading
+    %h3.panel-title.clearfix
+      Translations
+  .list-group
+    - current_user.project_languages.each do |project_language|
+      = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+        label: project_language}
+
