@@ -1,6 +1,6 @@
 class ViewsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_view, only: [:show, :edit, :update, :destroy]
+  before_action :find_view, only: [:show, :edit, :update, :destroy]
   before_action :set_view_tab
   before_action :set_master_texts_section
   before_action :find_project, only: [:new, :index]
@@ -66,9 +66,9 @@ class ViewsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_view
+    def find_view
       @view = View.find(params[:id])
+      @project = @view.project
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
