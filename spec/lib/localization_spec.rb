@@ -39,6 +39,14 @@ describe Localization do
                     "something new in sandwiches")], project.id)
         expect(result).to be_empty
       end
+
+      it "calls #recalculates_counts!" do
+        expect(ProjectLanguage).to receive(:where).and_return([project_language])
+        expect(project_language).to receive(:recalculate_counts!)
+        Localization.create_localized_texts(language, [Localization.new("somekey", "one sandwich")],
+            project.id)
+      end
+
       it 'creates pluralized forms' do
         expect {
           Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
