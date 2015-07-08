@@ -2,7 +2,6 @@ class ViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_view, only: [:show, :edit, :update, :destroy]
   before_action :set_view_tab
-  before_action :set_master_texts_section
   before_action :find_project, only: [:new, :index]
 
   # GET /views

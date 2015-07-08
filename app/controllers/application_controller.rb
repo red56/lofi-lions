@@ -8,8 +8,8 @@ class ApplicationController < ActionController::Base
     @section = "languages"
   end
 
-  def set_master_texts_section
-    @section = "master-texts"
+  def set_master_text_tab
+    @active_tab = :master_text
   end
 
   def set_users_section

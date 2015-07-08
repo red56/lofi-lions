@@ -1,13 +1,12 @@
 class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
-  before_action :set_master_texts_section
+  before_action :set_master_text_tab
   before_action :find_project, only: [:new, :index]
   # GET /master_texts
   # GET /master_texts.json
   def index
     @master_texts = @project.master_texts.order("LOWER(key)")
-    @active_tab = :all
     # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
 
