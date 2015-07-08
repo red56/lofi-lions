@@ -5,7 +5,6 @@ class LocalizedTextEnforcer
     master_text.project.project_languages.all.each do |project_language|
       master_text.localized_texts.create!(project_language: project_language)
     end
-    master_text.project.recalculate_counts!
   end
 
   #used when a master text is changed. Assume localized texts are all created.
@@ -65,6 +64,7 @@ class LocalizedTextEnforcer
       if (result = @master_text.send(save_method))
         if was_new_record
           LocalizedTextEnforcer.new.master_text_created(@master_text)
+          @master_text.project.recalculate_counts!
         elsif text_changed
           LocalizedTextEnforcer.new.master_text_changed(@master_text)
         end
