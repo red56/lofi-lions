@@ -16,6 +16,7 @@ class LocalizedTextEnforcer
     project_language.project.master_texts.each do |master_text|
       master_text.localized_texts.create!(project_language: project_language)
     end
+    project_language.recalculate_counts!
   end
 
   def language_created(language)

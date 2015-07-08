@@ -51,6 +51,10 @@ describe LocalizedTextEnforcer, :type => :model do
           LocalizedTextEnforcer.new.project_language_created(project_language)
         }.to change { LocalizedText.count }.by(1)
       end
+      it "calls #recalculates_counts!" do
+        expect(project_language).to receive(:recalculate_counts!)
+          LocalizedTextEnforcer.new.project_language_created(project_language)
+      end
     end
   end
 
