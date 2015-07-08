@@ -104,10 +104,6 @@ TO put in a localization file
      curl -F file=@/path/to/Project/ja.lproj/Localizable.strings -X POST http://localhost:3010/api/projects/:slug/languages/ja/import/ios
      curl -F file=@/path/to/Project/res/values-ja/strings.xml -X POST http://localhost:3010/api/projects/:slug/languages/ja/import/android
      curl -F file=@/path/to/Project/config/locales/en.yml -X POST http://localhost:3010/api/projects/:slug/languages/ja/import/yaml
-     #or
-     thor ios:localizations ja < /path/to/Localizable.strings
-     thor android:localizations ja < /path/to/strings.xml
-
 
 where ja is the already created language code. Master texts should be created too
 

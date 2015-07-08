@@ -16,7 +16,10 @@ describe 'Master Text Pages', :type => :feature do
 
   describe "index" do
     let(:texts) { build_stubbed_list(:master_text, 3) }
-    before { allow(texts).to receive_messages(order: texts, includes: texts) }
+
+    before do
+      allow_to_behave_like_scope(texts)
+    end
     it "can list several" do
       allow(project).to receive_messages(master_texts: texts)
       allow(Project).to receive_messages(find: project)
@@ -164,7 +167,7 @@ describe 'Master Text Pages', :type => :feature do
     before do
       allow(MasterText).to receive_messages(find: master_text)
       expect(master_text).to receive_messages(localized_texts: localized_texts)
-      allow(localized_texts).to receive_messages(includes: localized_texts)
+      allow_to_behave_like_scope(localized_texts)
     end
     it "shows multiple languages" do
       visit master_text_path(master_text)

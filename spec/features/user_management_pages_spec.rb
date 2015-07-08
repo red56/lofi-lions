@@ -40,7 +40,7 @@ describe 'User management pages', :type => :feature do
     let(:users) { build_stubbed_list(:user, 3) }
     before do
       allow(User).to receive_messages(all: users)
-      allow(users).to receive_messages(includes: users, order: users)
+      allow_to_behave_like_scope(users)
     end
 
     specify "lists users" do

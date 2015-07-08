@@ -37,6 +37,7 @@ describe Api::ProjectsController, :type => :controller do
         it "accepts a android xml upload" do
           expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
           expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
+          localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
 
@@ -70,6 +71,7 @@ describe Api::ProjectsController, :type => :controller do
         it "accepts a android xml upload" do
           expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
           expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
+          localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
           post :import, {platform: :android, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
@@ -103,6 +105,7 @@ describe Api::ProjectsController, :type => :controller do
         it "accepts a yaml upload" do
           expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
           expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+          localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
           post :import, {platform: :yaml, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
@@ -134,6 +137,7 @@ describe Api::ProjectsController, :type => :controller do
 
         it "adds texts to the selected projects" do
           expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+          localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
 
