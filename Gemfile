@@ -36,7 +36,6 @@ gem 'devise'
 gem 'devise-bootstrap-views'
 
 gem 'unicorn'
-gem 'rack-timeout'
 
 gem 'simple_form', github: 'plataformatec/simple_form'
 
@@ -64,9 +63,11 @@ group :development do
   gem 'quiet_assets'
   gem 'guard-rails'
   gem 'thin'
+  gem 'rack-livereload'
   gem 'guard-livereload'
   gem "spring"
   gem "spring-commands-rspec"
+  gem "fix-db-schema-conflicts"
 end
 
 group :test do

@@ -14,7 +14,7 @@
             = localized_text.other
           - else
             = localized_text.text
-          = link_to language_texts_path(localized_text.language, anchor: "localized_text_#{localized_text.id}") do
+          = link_to project_language_texts_path(localized_text.language, anchor: "localized_text_#{localized_text.id}") do
             [ Edit ]
 
         %td

@@ -1,0 +1,18 @@
+%ul.nav.nav-tabs.localized-texts
+  - if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
+    %li.title= link_to @project_language.project, project_path(@project_language.project)
+  - else
+    %li.title
+      %a= @project_language.project
+  %li.title
+    %a |
+  %li.title
+    %a= @project_language.language.name
+  %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_language_path(@project_language)
+  %li{class: @active_tab == :entry ? 'active':''}= link_to "To enter", entry_project_language_texts_path(@project_language)
+  %li{class: @active_tab == :review ? 'active':''}= link_to "For review", review_project_language_texts_path(@project_language)
+  %li{class: @active_tab == :all ? 'active':''}= link_to "All", project_language_texts_path(@project_language)
+  %li{class: @active_tab == :view ? 'active':''}
+    = link_to project_language_views_path(@project_language) do
+      = icon('list-alt')
+      Views

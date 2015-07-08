@@ -1,8 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ImportController, :type => :controller do
+describe Api::ProjectsController, :type => :controller do
   let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
-
+  let!(:selected_project) { create(:project) }
+  before{bypass_rescue}
   context "without auth token" do
     it "should fail with 401?"
   end
@@ -15,18 +16,18 @@ describe ImportController, :type => :controller do
 
     it "recognises an ios strings file" do
       expect {
-        post :auto, {file: file_upload, format: 'json'}
+        post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.slug}
       }.to change(MasterText, :count).by(3)
     end
 
     it "accepts a strings file upload" do
       expect {
-        post :ios, {file: file_upload, format: 'json'}
+        post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.slug}
       }.to change(MasterText, :count).by(3)
     end
 
     it "creates the expected master texts" do
-      post :ios, {file: file_upload, format: 'json'}
+      post :import, {platform: :ios, file: file_upload, format: 'json', id: selected_project.slug}
       masters = MasterText.all
       pairs = masters.map { |mt| [mt.key, mt.text] }
       expect(pairs).to include(["Adding", "Adding..."])
@@ -35,7 +36,7 @@ describe ImportController, :type => :controller do
     end
 
     it "redirects to the master text view" do
-      post :ios, {file: file_upload, format: 'html'}
+      post :import, {platform: :ios, file: file_upload, format: 'html', id: selected_project.slug}
       expect(response).to redirect_to(master_texts_path)
     end
   end
@@ -47,26 +48,27 @@ describe ImportController, :type => :controller do
       before do
         localizations = build_list(:localization, 3)
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
+        localizations.define_singleton_method(:close){}
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
 
       it "recognises a android xml" do
-        post :auto, {file: file_upload, format: 'json'}
+        post :import, {file: file_upload, format: 'json', id: selected_project.slug}
       end
 
       it "accepts a android xml upload" do
-        post :android, {file: file_upload, format: 'json'}
+        post :import, {platform: :android, file: file_upload, format: 'json', id: selected_project.slug}
       end
 
       it "redirects to the master text view" do
-        post :android, {file: file_upload, format: 'html'}
+        post :import, {platform: :android, file: file_upload, format: 'html', id: selected_project.slug}
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :android, {file: file_upload, format: 'json'}
+        post :import, {platform: :android, file: file_upload, format: 'json', id: selected_project.slug}
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
@@ -80,28 +82,44 @@ describe ImportController, :type => :controller do
       before do
         localizations = build_list(:localization, 3)
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+        localizations.define_singleton_method(:close){}
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
 
       it "recognises a yaml file" do
-        post :auto, {file: file_upload, format: 'json'}
+        post :import, {file: file_upload, format: 'json', id: selected_project.slug}
       end
 
       it "accepts a yaml file upload" do
-        post :yaml, {file: file_upload, format: 'json'}
+        post :import, {file: file_upload, format: 'json', id: selected_project.slug}
       end
 
       it "redirects to the master text view" do
-        post :yaml, {file: file_upload, format: 'html'}
+        post :import, {file: file_upload, format: 'html', id: selected_project.slug}
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :yaml, {file: file_upload, format: 'json'}
+        post :import, {file: file_upload, format: 'json', id: selected_project.slug}
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
+      end
+    end
+
+    context "with multiple projects" do
+      let(:projects) {build_stubbed_list(:project, 2)}
+      let(:selected_project) {projects.last}
+
+      it "can select the last project" do
+        localizations = build_list(:localization, 3)
+        expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
+        localizations.define_singleton_method(:close){}
+        expect(localizations).to receive(:close)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
+        expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
+        post :import, {platform: :yaml, file: file_upload, format: 'json', id: selected_project.slug}
       end
     end
   end

@@ -11,99 +11,114 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140707153829) do
-
+ActiveRecord::Schema.define(version: 20150704072359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "key_placements", force: true do |t|
-    t.integer  "master_text_id"
-    t.integer  "view_id"
-    t.integer  "position"
+  create_table "key_placements", force: :cascade do |t|
     t.datetime "created_at"
+    t.integer "master_text_id"
+    t.integer "position"
     t.datetime "updated_at"
+    t.integer "view_id"
   end
 
   add_index "key_placements", ["master_text_id"], name: "index_key_placements_on_master_text_id", using: :btree
   add_index "key_placements", ["view_id"], name: "index_key_placements_on_view_id", using: :btree
 
-  create_table "languages", force: true do |t|
-    t.string   "name"
-    t.string   "code"
+  create_table "languages", force: :cascade do |t|
+    t.string "code", limit: 255
     t.datetime "created_at"
+    t.string "name", limit: 255
+    t.string "pluralizable_label_few", limit: 255, default: ""
+    t.string "pluralizable_label_many", limit: 255, default: ""
+    t.string "pluralizable_label_one", limit: 255, default: ""
+    t.string "pluralizable_label_other", limit: 255, default: ""
+    t.string "pluralizable_label_two", limit: 255, default: ""
+    t.string "pluralizable_label_zero", limit: 255, default: ""
     t.datetime "updated_at"
-    t.string   "pluralizable_label_zero",  default: ""
-    t.string   "pluralizable_label_one",   default: ""
-    t.string   "pluralizable_label_two",   default: ""
-    t.string   "pluralizable_label_few",   default: ""
-    t.string   "pluralizable_label_many",  default: ""
-    t.string   "pluralizable_label_other", default: ""
   end
 
-  create_table "languages_users", id: false, force: true do |t|
-    t.integer "language_id", null: false
-    t.integer "user_id",     null: false
-  end
-
-  add_index "languages_users", ["language_id", "user_id"], name: "index_languages_users_on_language_id_and_user_id", using: :btree
-  add_index "languages_users", ["user_id", "language_id"], name: "index_languages_users_on_user_id_and_language_id", using: :btree
-
-  create_table "localized_texts", force: true do |t|
-    t.integer  "master_text_id"
-    t.integer  "language_id"
-    t.text     "other",          default: ""
-    t.text     "comment",        default: ""
-    t.boolean  "needs_review",   default: false
+  create_table "localized_texts", force: :cascade do |t|
+    t.text "comment", default: ""
     t.datetime "created_at"
+    t.text "few", default: ""
+    t.text "many", default: ""
+    t.integer "master_text_id"
+    t.boolean "needs_entry"
+    t.boolean "needs_review", default: false
+    t.text "one", default: ""
+    t.text "other", default: ""
+    t.integer "project_language_id", null: false
+    t.text "two", default: ""
     t.datetime "updated_at"
-    t.text     "zero",           default: ""
-    t.text     "one",            default: ""
-    t.text     "two",            default: ""
-    t.text     "few",            default: ""
-    t.text     "many",           default: ""
-    t.boolean  "needs_entry"
+    t.text "zero", default: ""
   end
 
-  add_index "localized_texts", ["language_id", "master_text_id"], name: "index_language_id_master_text_id_unqiue", unique: true, using: :btree
-  add_index "localized_texts", ["language_id"], name: "index_language_id", using: :btree
   add_index "localized_texts", ["master_text_id"], name: "index_master_text_id", using: :btree
 
-  create_table "master_texts", force: true do |t|
-    t.string   "key"
-    t.text     "other"
-    t.text     "comment"
+  create_table "master_texts", force: :cascade do |t|
+    t.text "comment"
     t.datetime "created_at"
+    t.string "key", limit: 255
+    t.text "one", default: ""
+    t.text "other"
+    t.boolean "pluralizable", default: false
+    t.integer "project_id"
     t.datetime "updated_at"
-    t.boolean  "pluralizable", default: false
-    t.text     "one",          default: ""
   end
 
-  create_table "users", force: true do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+  add_index "master_texts", ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
+
+  create_table "project_languages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "language_id", null: false
+    t.integer "need_entry_count"
+    t.integer "need_review_count"
+    t.integer "project_id", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "project_languages_users", id: false, force: :cascade do |t|
+    t.integer "project_language_id", null: false
+    t.integer "user_id", null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "slug"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at"
+    t.datetime "current_sign_in_at"
+    t.string "current_sign_in_ip", limit: 255
+    t.boolean "edits_master_text", default: false
+    t.string "email", limit: 255, default: "", null: false
+    t.string "encrypted_password", limit: 255, default: "", null: false
+    t.boolean "is_administrator", default: false, null: false
+    t.boolean "is_developer", default: false
+    t.datetime "last_sign_in_at"
+    t.string "last_sign_in_ip", limit: 255
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token", limit: 255
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at"
-    t.boolean  "is_administrator",       default: false, null: false
-    t.boolean  "is_developer",           default: false
-    t.boolean  "edits_master_text",      default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "views", force: true do |t|
-    t.string   "name"
-    t.text     "comments"
+  create_table "views", force: :cascade do |t|
+    t.text "comments"
     t.datetime "created_at"
+    t.string "name", limit: 255
+    t.integer "project_id"
     t.datetime "updated_at"
   end
 
+  add_index "views", ["name", "project_id"], name: "index_views_on_name_and_project_id", unique: true, using: :btree
 end

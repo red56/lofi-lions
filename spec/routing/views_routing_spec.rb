@@ -1,14 +1,14 @@
-require "spec_helper"
+require 'rails_helper'
 
 RSpec.describe ViewsController, :type => :routing do
   describe "routing" do
 
     it "routes to #index" do
-      expect(:get => "/views").to route_to("views#index")
+      expect(:get => "/projects/1/views").to route_to("views#index", project_id: "1")
     end
 
     it "routes to #new" do
-      expect(:get => "/views/new").to route_to("views#new")
+      expect(:get => "/projects/1/views/new").to route_to("views#new", project_id: "1")
     end
 
     it "routes to #show" do

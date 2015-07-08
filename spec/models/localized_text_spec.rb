@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe LocalizedText, :type => :model do
   let(:localized_text) { build(:localized_text, text: 'something').tap do |localized_text|
@@ -16,8 +16,8 @@ describe LocalizedText, :type => :model do
       localized_text.master_text_id = nil
       expect(localized_text).not_to be_valid
     end
-    it "requires language id" do
-      localized_text.language_id = nil
+    it "requires project language" do
+      localized_text.project_language_id = nil
       expect(localized_text).not_to be_valid
     end
   end

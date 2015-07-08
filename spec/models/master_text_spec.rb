@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MasterText, :type => :model do
   describe "validations" do
@@ -49,6 +49,10 @@ describe MasterText, :type => :model do
         master_text.other = ''
         expect(master_text).not_to be_valid
       end
+      it "requires a project" do
+        master_text.project_id = nil
+        expect(master_text).not_to be_valid
+      end
     end
   end
 
@@ -97,4 +101,14 @@ describe MasterText, :type => :model do
       include_examples "shared_text_changed"
     end
   end
+  context "#key" do
+    let(:existing){create :master_text, project:create(:project)}
+    it "must be unique" do
+      expect(build(:master_text, key: existing.key, project: existing.project)).not_to be_valid
+    end
+    it "only unique in same project" do
+      expect(build(:master_text, key: existing.key, project: create(:project))).to be_valid
+    end
+  end
+
 end

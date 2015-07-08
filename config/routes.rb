@@ -1,9 +1,17 @@
 LofiLions::Application.routes.draw do
-  resources :views
 
   devise_for :users
 
-  resources :languages do |language|
+  resources :languages
+
+  resources :master_texts, except: [:index, :new]
+
+  resources :projects do
+    resources :master_texts, only: [:index, :new]
+    resources :views, only: [:index, :new]
+  end
+
+  resources :project_languages, only: [:index, :show, :update] do
     resources :texts, controller: 'localized_texts' do
       collection do
         get :entry
@@ -13,15 +21,23 @@ LofiLions::Application.routes.draw do
     resources :views, controller: 'localized_views'
   end
 
-  resources :master_texts
-
   resources :users
 
-  post 'import/:action', controller: 'import', defaults: { format: 'html' }
-  get 'export/:action/:language', controller: 'exports'
-  post 'languages/:id/import/:action', controller: 'languages_import', defaults: { format: 'html' }
+  resources :views, except: [:index, :new]
+
+  namespace :api, defaults: {format: 'json'} do
+    resources :projects, only: [] do
+      member do
+        post 'import/(:platform)', action: 'import'
+        post 'languages/:code/import/(:platform)', action: 'import'
+        get 'export/:platform/:code', action: 'export'
+      end
+    end
+  end
 
   root 'welcome#index'
+
+  get 'docs', to: 'welcome#docs', as: 'docs'
 
   if Rails.env.development?
     mount MailPreview => 'mail_view'

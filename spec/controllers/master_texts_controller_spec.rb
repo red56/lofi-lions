@@ -1,15 +1,18 @@
-require 'spec_helper'
+require 'rails_helper'
 
 
 describe MasterTextsController, :type => :controller do
 
   before { login }
   let(:login) { stubbed_login_as_user }
+  let(:project) { create :project }
+  let(:master_text_attributes) { attributes_for(:master_text, project_id: project.id) }
+
 
   context "not logged in" do
     let(:login) { nil }
     it "redirects to sign in page" do
-      post :create, {:master_text => attributes_for(:master_text)}
+      post :create, {:master_text => master_text_attributes}
       expect(response).to redirect_to(new_user_session_path)
     end
   end
@@ -21,19 +24,19 @@ describe MasterTextsController, :type => :controller do
     describe "with valid params" do
       it "creates a new MasterText" do
         expect {
-          post :create, {:master_text => attributes_for(:master_text)}
+          post :create, {:master_text => master_text_attributes}
         }.to change(MasterText, :count).by(1)
       end
 
       it "assigns a newly created master_text as @master_text" do
-        post :create, {:master_text => attributes_for(:master_text)}
+        post :create, {:master_text => master_text_attributes}
         expect(assigns(:master_text)).to be_a(MasterText)
         expect(assigns(:master_text)).to be_persisted
       end
 
       it "redirects to the created master_text" do
-        post :create, {:master_text => attributes_for(:master_text)}
-        expect(response).to redirect_to(master_texts_path)
+        post :create, {:master_text => master_text_attributes}
+        expect(response).to redirect_to(project_master_texts_path(project))
       end
 
 
@@ -65,13 +68,13 @@ describe MasterTextsController, :type => :controller do
       end
 
       it "assigns the requested master_text as @master_text" do
-        put :update, {:id => master_text.to_param, :master_text => attributes_for(:master_text)}
+        put :update, {:id => master_text.to_param, :master_text => master_text_attributes}
         expect(assigns(:master_text)).to eq(master_text)
       end
 
       it "redirects to the master_text" do
-        put :update, {:id => master_text.to_param, :master_text => attributes_for(:master_text)}
-        expect(response).to redirect_to(master_texts_path)
+        put :update, {:id => master_text.to_param, :master_text => master_text_attributes}
+        expect(response).to redirect_to(project_master_texts_path(project))
       end
     end
 

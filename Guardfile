@@ -6,7 +6,7 @@ guard 'rails', server: :thin, port: 3010 do
   watch(%r{^(config|lib)/.*})
 end
 
-guard 'livereload' do
+guard 'livereload', port: 35740 do
   watch(%r{app/views/.+\.(erb|haml|slim)$})
   watch(%r{app/helpers/.+\.rb})
   watch(%r{public/.+\.(css|js|html)})

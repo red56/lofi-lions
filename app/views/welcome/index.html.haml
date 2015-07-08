@@ -1,55 +1,28 @@
-%h1 Localization Server
+- if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
 
-%p.lead Quick intro to the concepts
+  - @projects.each do |project|
+    .panel.panel-primary[project]
+      .panel-heading
+        %h3.panel-title.clearfix
+          = link_to project.name, project_path(project)
+          Project
+      .list-group
+        .list-group-item.clearfix
+          .text-primary
+            = link_to project_path(project) do
+              English
+              (#{project.master_texts.count} Master texts)
 
-%p.lead= link_to "Master Texts", master_texts_path
-= render :partial => 'master_texts'
+        - project.project_languages.each do |project_language|
+          = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+            label: project_language.language.name}
 
-%p.lead= link_to "Languages / Locales", languages_path
-%p
-  You can define as many locales/languages as you like
+.panel.panel-primary
+  .panel-heading
+    %h3.panel-title.clearfix
+      Translations
+  .list-group
+    - current_user.project_languages.each do |project_language|
+      = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+        label: project_language}
 
-- if language = Language.first
-  %p
-    Localized texts: For each Master Text, there is a localalized text in each of the
-    languages you have defined.
-    These can be edited by Language Editors
-  %p e.g. for for #{language}:
-  %ul
-    %li
-      View all
-      = link_to entry_language_texts_path(language) do
-        empty localized texts
-      (to enter)
-    %li
-      View all
-      = link_to review_language_texts_path(language) do
-        "needing review" localized texts
-      (for review)
-    %li
-      View
-      = link_to language_texts_path(language) do
-        all localized texts
-      (paginated, perhaps)
-
-%p.lead= link_to "Views", views_path
-
-%p
-  You can have arbitrary groupings of Master texts, e.g. as a "page" or a "screen".
-  This is helpful to give context for translators, and also to show how they keys are reused.
-  It would be nice to add screenshots so you can see the texts in context, or the graphics in which the text will be embedded.
-
-%p.lead
-  Import/Output
-
-%p You can import existing locale files for android / iOS and output the current set of texts as local files (per language).
-
-%p.lead= link_to "Users and roles", users_path
-%p
-  There are small number of user roles, giving the most efficient UI (interface).
-  You can have more than one role, giving you access to more than one UI (interface):
-%ul
-  %li Language Editor (for a specific language)
-  %li Master text editor (edit English text)
-  %li Developer (giving access to creating/deleting Master texts, and changing their keys, and assinging to views)
-  %li Admin (control users and languages)

@@ -1,27 +1,12 @@
-= render :partial => 'master_texts/tabs'
+= render :partial => 'projects/tabs'
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Comments
-      %th
-
-  %tbody
-    - @views.each do |view|
-      %tr
-        %td
-          = icon('list-alt')
-          = link_to view do
-            = view.name
-
-        %td= view.comments
-        -if current_user.is_developer?
-          %td
-            = link_to 'Edit', edit_view_path(view), class: 'btn btn-default'
-            = link_to view, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-default' do
-              .text-danger #{icon('times')}
-%br
-
-- if current_user.is_developer?
-  = link_to 'New View', new_view_path, class: 'btn btn-primary'
+.list-group
+  - @views.each do |view|
+    = link_to view, class: "list-group-item clearfix view" do
+      .text-primary
+        %i.fa.fa-list-alt
+        = view.name
+      %small.comments= view.comments
+  - if current_user.is_developer?
+    .list-group-item.clearfix
+      = link_to 'New View', new_project_view_path(project_id: @project.id), class: 'btn btn-default pull-right'

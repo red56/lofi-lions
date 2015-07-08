@@ -1,13 +1,13 @@
 class ViewsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_view, only: [:show, :edit, :update, :destroy]
+  before_action :find_view, only: [:show, :edit, :update, :destroy]
   before_action :set_view_tab
-  before_action :set_master_texts_section
+  before_action :find_project, only: [:new, :index]
 
   # GET /views
   # GET /views.json
   def index
-    @views = View.all
+    @views = @project.views.all
   end
 
   # GET /views/1
@@ -17,7 +17,7 @@ class ViewsController < ApplicationController
 
   # GET /views/new
   def new
-    @view = View.new
+    @view = @project.views.new
   end
 
   # GET /views/1/edit
@@ -65,13 +65,17 @@ class ViewsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_view
+    def find_view
       @view = View.find(params[:id])
+      @project = @view.project
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def view_params
-      params.require(:view).permit(:name, :comments, :keys)
+      params.require(:view).permit(:name, :comments, :keys, :project_id)
+    end
+
+    def find_project
+      @project = Project.find(params[:project_id])
     end
 end

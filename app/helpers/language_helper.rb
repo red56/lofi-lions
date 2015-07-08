@@ -5,4 +5,7 @@ module LanguageHelper
   def views
     @views ||= View.all
   end
+  def projects
+    @projects ||= Project.all
+  end
 end

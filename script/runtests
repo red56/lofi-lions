@@ -67,7 +67,7 @@ echo
 # Rspec integrations
 echo "rspec integration/features (but not snapshots)"
 echo
-command="$RSPEC spec/routing spec/controllers spec/features $FAILFAST"
+command="$RSPEC spec/routing spec/api spec/controllers spec/features $FAILFAST"
 echo $command
 $command
 echo

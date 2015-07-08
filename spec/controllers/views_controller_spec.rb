@@ -1,14 +1,15 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ViewsController, :type => :controller do
   before { login }
+  let!(:project) { create :project }
   let(:login) { stubbed_login_as_developer}
 
   # This should return the minimal set of attributes required to create a valid
   # View. As you add validations to View, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    attributes_for(:view)
+    attributes_for(:view, project_id: project.id)
   }
 
   let(:invalid_attributes) {
@@ -23,7 +24,7 @@ describe ViewsController, :type => :controller do
   describe "GET index" do
     it "assigns all views as @views" do
       view = View.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, {project_id: project.id}, valid_session
       expect(assigns(:views)).to eq([view])
     end
   end
@@ -38,7 +39,7 @@ describe ViewsController, :type => :controller do
 
   describe "GET new" do
     it "assigns a new view as @view" do
-      get :new, {}, valid_session
+      get :new, {project_id: project.id}, valid_session
       expect(assigns(:view)).to be_a_new(View)
     end
   end

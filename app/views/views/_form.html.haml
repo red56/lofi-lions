@@ -9,5 +9,7 @@
       %em Add in keys separated by a paragraph return
       = f.input :keys, as: :text, input_html: {rows: 10}, help_text: 'flong'
 
+  = f.hidden_field :project_id
+
   .form-actions
     = f.button :submit

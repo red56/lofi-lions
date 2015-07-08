@@ -8,7 +8,7 @@
   = f.input :is_developer, label: 'Dev'
   = f.input :edits_master_text, label: 'Masters (English)'
 
-  = f.association :languages,   as: :check_boxes
+  = f.association :project_languages.to_s,   as: :check_boxes
 
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

@@ -1,5 +1,6 @@
 @import "bootstrap";
-@import 'font-awesome';
+@import "font-awesome-sprockets";
+@import "font-awesome";
 
 @import "sticky_styles";
 
@@ -7,3 +8,5 @@
 @import "labels";
 @import "tabs";
 @import "condensable";
+@import "project_languages";
+@import "views";

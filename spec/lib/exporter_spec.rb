@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 shared_examples_for "a BaseExporter" do
 
@@ -10,7 +10,7 @@ shared_examples_for "a BaseExporter" do
 
   end
   describe "instance" do
-    subject { BaseExporter.class_for(platform).new(language) }
+    subject { BaseExporter.class_for(platform).new(language, project) }
 
     it "should respond to path" do
       expect(subject.path).to be_a String
@@ -28,11 +28,17 @@ shared_examples_for "a BaseExporter" do
 
 end
 
+
 describe "Exporters" do
+  let(:project) {build_stubbed(:project)}
   let(:language) { build_stubbed(:language, code: 'la') }
-  let(:localized_texts) { build_stubbed_list(:stubbed_localized_text, 3, language: language) }
+  let(:project_language) { build_stubbed(:project_language, project: project, language: language) }
+  let(:master_texts){ build_stubbed_list(:master_text, 3, project: project)}
+  let(:localized_texts) { master_texts.map{|mt| build_stubbed(:stubbed_localized_text, master_text: mt,
+      project_language: project_language)} }
   before {
-    allow(language).to receive(:localized_texts_with_fallback).and_return(localized_texts)
+    allow(project_language).to receive(:localized_texts_with_fallback).and_return(localized_texts)
+    allow(ProjectLanguage).to receive(:where).with(project_id: project.id, language_id: language.id).and_return([project_language])
   }
   describe Android::Exporter do
     it_behaves_like "a BaseExporter" do
@@ -52,7 +58,7 @@ describe "Exporters" do
     end
 
     describe "body" do
-      subject { RailsYamlFormat::Exporter.new(language).body }
+      subject { RailsYamlFormat::Exporter.new(language, project).body }
 
       it "should be valid yaml that has top level hash only containing the language code" do
         parsed = YAML.load(subject)

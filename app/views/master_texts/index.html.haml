@@ -1,8 +1,9 @@
-= render :partial => 'master_texts/tabs'
+= render :partial => 'projects/tabs'
 
 = render :partial => 'master_texts_table', locals: {master_texts: @master_texts}
 %br/
 
 .well
-  = link_to 'New Master text', new_master_text_path, class: 'btn btn-primary' if current_user.is_developer?
+  = link_to 'New Master text', new_project_master_text_path(@project), class: 'btn btn-primary' if current_user
+  .is_developer?
   = render :partial => 'welcome/master_texts'

@@ -1,13 +1,12 @@
 class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
-  before_action :set_master_texts_section
-
+  before_action :set_master_text_tab
+  before_action :find_project, only: [:new, :index]
   # GET /master_texts
   # GET /master_texts.json
   def index
-    @master_texts = MasterText.order("LOWER(key)")
-    @active_tab = :all
+    @master_texts = @project.master_texts.order("LOWER(key)")
     # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
 
@@ -18,7 +17,7 @@ class MasterTextsController < ApplicationController
 
   # GET /master_texts/new
   def new
-    @master_text = MasterText.new
+    @master_text = @project.master_texts.new
   end
 
   # GET /master_texts/1/edit
@@ -31,7 +30,7 @@ class MasterTextsController < ApplicationController
     @master_text = MasterText.new(master_text_params)
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).save
-        format.html { redirect_to master_texts_path, notice: 'Master text was successfully created.' }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully created.' }
         format.json { render action: 'show', status: :created, location: @master_text }
       else
         format.html { render action: 'new' }
@@ -45,7 +44,7 @@ class MasterTextsController < ApplicationController
   def update
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).update(master_text_params)
-        format.html { redirect_to master_texts_path, notice: 'Master text was successfully updated.' }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -58,6 +57,7 @@ class MasterTextsController < ApplicationController
   # DELETE /master_texts/1.json
   def destroy
     @master_text.destroy
+    @master_text.project.recalculate_counts!
     respond_to do |format|
       format.html { redirect_to master_texts_url }
       format.json { head :no_content }
@@ -72,6 +72,10 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, view_ids: [])
+      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, :project_id, view_ids: [])
+    end
+
+    def find_project
+      @project = Project.find(params[:project_id])
     end
 end

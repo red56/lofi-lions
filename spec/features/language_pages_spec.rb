@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe 'Language Pages', :type => :feature do
   let(:language) { create(:language) }
@@ -17,14 +17,6 @@ describe 'Language Pages', :type => :feature do
       visit language_path(language)
       expect(current_path).to eq(new_user_session_path)
     end
-    it "review localized text page redirects to login page" do
-      visit review_language_texts_path(language)
-      expect(current_path).to eq(new_user_session_path)
-    end
-    it "all localized text page redirects to login page" do
-      visit language_texts_path(language)
-      expect(current_path).to eq(new_user_session_path)
-    end
   end
 
   describe "index" do
@@ -40,18 +32,6 @@ describe 'Language Pages', :type => :feature do
     it "is linked from home" do
       visit root_path
       expect(page).to have_link_to(languages_path)
-    end
-    context "when logged in as administrator" do
-      let(:login) { stubbed_login_as_admin_user }
-      it "shows editors" do
-        langs = build_stubbed_list(:language, 3)
-        user = build_stubbed(:user)
-        allow(Language).to receive_messages(all: langs)
-        allow(langs).to receive_messages(includes: langs)
-        allow(langs.last).to receive_messages(users: [user])
-        visit languages_path
-        expect(page).to have_content(user.email)
-      end
     end
   end
 
@@ -100,120 +80,6 @@ describe 'Language Pages', :type => :feature do
       click_on "Save"
       expect(page).to have_css("form.language")
       expect(page).to have_css("form.language .errors")
-    end
-  end
-
-
-  describe "translations" do
-    let(:ok_localized_text) { create(:localized_text, language: language, text: "zongy-bo!") }
-    let(:empty_localized_text) { create(:localized_text, language: language, needs_entry: true) }
-    let(:needs_review_localized_text) { create(:localized_text, language: language,
-        other: "something new", needs_review: true) }
-    let(:localized_texts) { [ok_localized_text, empty_localized_text, needs_review_localized_text] }
-
-    before { language }
-
-    shared_examples_for "localized text list" do
-      it "displays one" do
-        localized_text
-        visit path
-        expect(page).to have_content(localized_text.master_text.text)
-        expect(page).to have_css("#localized_text_#{localized_text.id}")
-      end
-      it "updates one" do
-        localized_text
-        visit path
-        fill_in :language_localized_texts_attributes_0_text, with: "flounce"
-        click_on "Save"
-        visit language_texts_path(language)
-        expect(page).to have_content("flounce")
-      end
-
-      context 'when pluralizable' do
-        before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true) }
-        it "displays" do
-          localized_text
-          visit path
-          expect(page).to have_content(localized_text.master_text.other)
-          expect(page).to have_css("#localized_text_#{localized_text.id}")
-        end
-        it "updates a localized other" do
-          localized_text
-          visit path
-          fill_in :language_localized_texts_attributes_0_other, with: "flounce"
-          click_on "Save"
-          visit language_texts_path(language)
-          expect(page).to have_content("flounce")
-        end
-        it "has correct other fields/labels" do
-          pending
-          flunk "need to test this with different language types"
-        end
-      end
-      it "linked from index" do
-        visit languages_path
-        expect(page).to have_link_to(path)
-      end
-      it "linked from all" do
-        visit language_texts_path(language)
-        expect(page).to have_link_to(path)
-      end
-      it "linked from entry" do
-        visit entry_language_texts_path(language)
-        expect(page).to have_link_to(path)
-      end
-      it "linked from review" do
-        visit review_language_texts_path(language)
-        expect(page).to have_link_to(path)
-      end
-      it "is active" do
-        visit path
-        within "ul.localized-texts.nav li.active" do
-          expect(page).to have_link_to(path)
-        end
-      end
-    end
-    describe "all" do
-      let(:localized_text) { ok_localized_text }
-      let(:path) { language_texts_path(language) }
-      it_behaves_like "localized text list"
-
-      it "displays all" do
-        localized_texts
-        visit path
-        localized_texts.each do |localized_text|
-          expect(page).to have_css("#localized_text_#{localized_text.id}")
-        end
-      end
-    end
-
-    describe "translations to enter" do
-      let(:localized_text) { empty_localized_text }
-      let(:path) { entry_language_texts_path(language) }
-      it_behaves_like "localized text list"
-      it "should be created needing entry" do
-        expect(empty_localized_text.needs_entry).to be_truthy
-      end
-      it "displays appropriate" do
-        localized_texts
-        visit path
-        expect(page).to have_css("#localized_text_#{empty_localized_text.id}")
-        expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
-        expect(page).not_to have_css("#localized_text_#{needs_review_localized_text.id}")
-      end
-    end
-
-    describe "translations to review" do
-      let(:localized_text) { needs_review_localized_text }
-      let(:path) { review_language_texts_path(language) }
-      it_behaves_like "localized text list"
-      it "displays all" do
-        localized_texts
-        visit path
-        expect(page).to have_css("#localized_text_#{needs_review_localized_text.id}")
-        expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
-        expect(page).not_to have_css("#localized_text_#{empty_localized_text.id}")
-      end
     end
   end
 

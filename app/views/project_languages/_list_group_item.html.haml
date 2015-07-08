@@ -1,0 +1,23 @@
+= link_to(project_language_path(project_language),
+  class: "list-group-item clearfix project_language",
+  id: "project_language_#{project_language.id}") do
+  .row[project_language]
+    .text-primary.col-sm-6
+      %i.fa.fa-language
+      = label
+    .col-sm-3.entry
+      - if project_language.need_entry_count > 0
+        .text-danger
+          = "#{project_language.need_entry_count} to enter"
+      - else
+        .text-muted
+          = icon('check')
+          No outstanding entries
+    .col-sm-3.review
+      - if project_language.need_review_count > 0
+        .text-warning
+          = "#{project_language.need_review_count} to review"
+      - else
+        .text-muted
+          = icon('check')
+          No outstanding reviews

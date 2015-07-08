@@ -1,4 +1,4 @@
-= form_for(@language, html:{class: 'localized-texts', role: 'form'}) do |f|
+= form_for(@project_language, html:{class: 'localized-texts', role: 'form'}) do |f|
   %table.table.table-striped
     %thead
       %tr
@@ -22,7 +22,7 @@
             %div
               .label.label-default.key= ltext_fields.object.key
             - ltext_fields.object.views.each do |view|
-              = link_to language_view_path(@language, view) do
+              = link_to project_language_view_path(@project_language, view) do
                 %span
                   %small
                     = icon('list-alt')
