@@ -1,1 +1,5 @@
 = render partial: 'projects/tabs'
+
+- @project.project_languages.each do |project_language|
+  = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+            label: project_language.language.name}
