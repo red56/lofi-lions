@@ -28,6 +28,7 @@ class Localization
     localizations.each do |localization|
       LocalizedTextEnforcer::MasterTextCrudder.create_or_update!(localization.key, localization.text, project.id)
     end
+    project.recalculate_counts!
   end
 
   def self.create_localized_texts(language, localizations, project_id)

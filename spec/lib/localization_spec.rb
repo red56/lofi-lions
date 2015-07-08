@@ -18,6 +18,10 @@ describe Localization do
       expect(MasterText.last.one).to eq("one sandwich")
       expect(MasterText.last.other).to eq("%d sandwiches")
     end
+    it "invokes recalculate_counts!" do
+      expect(project).to receive(:recalculate_counts!)
+      Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project)
+    end
   end
 
   describe "create_localized_texts" do
