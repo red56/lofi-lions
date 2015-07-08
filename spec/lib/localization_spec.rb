@@ -9,7 +9,7 @@ describe Localization do
         Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project.id)
       }.to change { MasterText.count }.by(1)
     end
-    it 'works with non pluralized' do
+    it 'works with pluralized' do
       expect {
         Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")],
             project.id)
