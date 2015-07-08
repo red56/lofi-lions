@@ -13,6 +13,7 @@ class ProjectLanguagesController < ApplicationController
   def update
     respond_to do |format|
       if @project_language.update(project_language_params)
+        @project_language.recalculate_counts!
         format.html { redirect_to languages_path, notice: 'Language was successfully updated.' }
         format.json { head :no_content }
       else
