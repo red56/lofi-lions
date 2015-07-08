@@ -75,7 +75,10 @@ describe LocalizedTextEnforcer, :type => :model do
           mt_crudder.update(text: "flong")
         }.to change { LocalizedText.count }.by(1)
       end
-
+      it "calls #recalculate_counts!" do
+        expect(project).to receive(:recalculate_counts!)
+        LocalizedTextEnforcer::MasterTextCrudder.new(build :master_text, project: project).save!
+      end
     end
     describe "master text changed" do
       it "it doesnt do anything to blank localized texts" do
