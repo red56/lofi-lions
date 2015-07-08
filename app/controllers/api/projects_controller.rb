@@ -44,7 +44,7 @@ class Api::ProjectsController < ApplicationController
   def import_texts(file, platform)
     localizations = BaseParsedFile.class_for(platform).parse(file)
     if @language.is_master_text?
-      Localization.create_master_texts(localizations, @project.id)
+      Localization.create_master_texts(localizations, @project)
     else
       Localization.create_localized_texts(@language, localizations, @project.id)
     end

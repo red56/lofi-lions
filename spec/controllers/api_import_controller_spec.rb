@@ -50,7 +50,7 @@ describe Api::ProjectsController, :type => :controller do
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
         localizations.define_singleton_method(:close){}
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project.id)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
 
       it "recognises a android xml" do
@@ -84,7 +84,7 @@ describe Api::ProjectsController, :type => :controller do
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         localizations.define_singleton_method(:close){}
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project.id)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
 
       it "recognises a yaml file" do
@@ -117,7 +117,7 @@ describe Api::ProjectsController, :type => :controller do
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
         localizations.define_singleton_method(:close){}
         expect(localizations).to receive(:close)
-        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project.id)
+        expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
         expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
         post :import, {platform: :yaml, file: file_upload, format: 'json', id: selected_project.slug}
       end
