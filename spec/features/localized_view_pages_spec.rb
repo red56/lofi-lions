@@ -49,18 +49,5 @@ describe 'Localized View pages', :type => :feature do
       expect(page).to have_content(master_text_in_view.key)
     end
 
-    context "with multiple projects" do
-      let!(:projects) { [project]+ [create(:project, name: "Tother One")] }
-      let!(:views) { projects.map { |p| p.views.create!(name: "Flong") } }
-      it "lists views by project" do
-        visit project_language_views_path(project_language)
-        views.each do |view|
-          expect(page).to have_link_to(project_language_view_path(project_language, view))
-        end
-        # views.each do |project|
-        #   expect(page).to have_link_to(language_project_path(language, project))
-        # end
-      end
-    end
   end
 end

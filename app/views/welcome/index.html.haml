@@ -10,7 +10,8 @@
         .list-group-item.clearfix
           .text-primary
             = link_to project_path(project) do
-              English (Master texts)
+              English
+              (#{project.master_texts.count} Master texts)
 
         - project.project_languages.each do |project_language|
           = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,

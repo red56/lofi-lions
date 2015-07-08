@@ -1,6 +1,8 @@
 %ul.nav.nav-tabs.projects
   %li.title
-    %a= @project.name
+    %a
+      = @project.name
+      Project
   %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_path(@project)
   %li{class: @active_tab == :master_text ? 'active':''}= link_to "Master Texts", project_master_texts_path(@project)
   %li{class: @active_tab == :view ? 'active':''}= link_to "Views", project_views_path(@project)

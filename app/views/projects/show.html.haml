@@ -1,5 +1,22 @@
 = render partial: 'projects/tabs'
 
-- @project.project_languages.each do |project_language|
-  = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
-            label: project_language.language.name}
+
+%h3
+  = @project
+
+  = link_to project_master_texts_path(@project), class: 'btn btn-default' do
+    = @project.master_texts.count
+    Master texts
+  = link_to project_views_path(@project), class: 'btn btn-default' do
+    = @project.views.count
+    Views
+%br
+.panel.panel-primary
+  .panel-heading
+    %h3.panel-title.clearfix
+      Languages
+
+  .list-group
+    - @project.project_languages.each do |project_language|
+      = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+                label: project_language.language.name}

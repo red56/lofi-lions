@@ -1,24 +1,11 @@
 = render :partial => 'project_languages/tabs'
 
 
-- projects.each do |project|
-  %br
-  .panel.panel-primary
-    .panel-heading
-      %h3.panel-title
-        = project.name
-        Project
-
-    .panel-body
-      .buttons.pull-right
-        = link_to project_language_texts_path(@project_language), class: 'btn btn-primary' do
-          Browse all #{@project_language} localizations
-
-    .list-group
-      - project.views.each do |view|
-        = link_to project_language_view_path(@project_language, view), class: "list-group-item clearfix view" do
-          .text-primary
-            %i.fa.fa-list-alt
-            = view.name
-          %small.comments= view.comments
+.list-group
+  - @views.each do |view|
+    = link_to project_language_view_path(@project_language, view), class: "list-group-item clearfix view" do
+      .text-primary
+        %i.fa.fa-list-alt
+        = view.name
+      %small.comments= view.comments
 

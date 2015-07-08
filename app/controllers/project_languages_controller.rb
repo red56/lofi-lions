@@ -3,11 +3,11 @@ class ProjectLanguagesController < ApplicationController
   before_action :find_project_language, only: [:update, :show]
 
   def index
-    @project_languages = ProjectLanguage.all
-    @project_languages = @project_languages.includes(:users) if current_user.is_administrator?
+    redirect_to root_path
   end
 
   def show
+    @active_tab = :overview
   end
 
   def update
