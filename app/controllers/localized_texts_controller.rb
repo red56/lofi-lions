@@ -1,7 +1,8 @@
 class LocalizedTextsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section
-  before_filter :find_language
+  before_filter :find_language, only: [:index, :entry, :review]
+
 
   def index
     @localized_texts = localized_texts
@@ -21,7 +22,15 @@ class LocalizedTextsController < ApplicationController
   end
 
   def edit
+    @original_url = request.referer
+    @localized_text = LocalizedText.find(params[:id])
+  end
 
+  def update
+    @localized_text = LocalizedText.find(params[:id])
+    @localized_text.update_attributes!(localized_texts_params)
+    @project_language = @localized_text.project_language
+    redirect_to params[:original_url]
   end
 
   protected
@@ -31,5 +40,12 @@ class LocalizedTextsController < ApplicationController
 
   def find_language
     @project_language = ProjectLanguage.find(params[:project_language_id])
+  end
+
+  def localized_texts_params
+    params.require(:localized_text).permit(
+        :comment, :few, :many, :master_text_id, :needs_entry, :needs_review, :one, :other, :two, :zero,
+        :project_language_id
+    )
   end
 end

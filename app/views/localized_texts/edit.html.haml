@@ -1,0 +1,8 @@
+= simple_form_for(@localized_text) do |f|
+  .form-group
+    = f.label :other
+    = f.text_area :other, class: 'form-control'
+    = f.hidden_field :needs_review, value: false
+    %input{type: "hidden", name: "original_url", value: @original_url}
+  = f.submit "Save", class: 'btn btn-default btn-primary'
+  = link_to 'Cancel', :back, class: 'btn btn-link'
