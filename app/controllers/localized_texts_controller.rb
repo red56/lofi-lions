@@ -1,8 +1,8 @@
 class LocalizedTextsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section
-
   before_filter :find_language
+
   def index
     @localized_texts = localized_texts
     @active_tab = :all
@@ -18,6 +18,10 @@ class LocalizedTextsController < ApplicationController
     @localized_texts = localized_texts.where(needs_review: true)
     @active_tab = :review
     render :index
+  end
+
+  def edit
+
   end
 
   protected

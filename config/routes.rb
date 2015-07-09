@@ -4,6 +4,8 @@ LofiLions::Application.routes.draw do
 
   resources :languages
 
+  resources :localized_texts
+
   resources :master_texts, except: [:index, :new]
 
   resources :projects do
