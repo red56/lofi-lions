@@ -29,7 +29,7 @@ class LocalizedTextsController < ApplicationController
   def update
     @localized_text = LocalizedText.find(params[:id])
     @localized_text.update_attributes!(localized_texts_params)
-    @project_language = @localized_text.project_language
+    @localized_text.project_language.recalculate_counts!
     redirect_to params[:original_url]
   end
 
