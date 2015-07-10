@@ -1,8 +1,26 @@
+%h4
+  %small.text-muted
+    %label.label.label-default= @localized_text.master_text.key
+    %p.comment= @localized_text.comment
+
+  - @localized_text.views.each do |view|
+    = link_to project_language_view_path(@project_language, view), class: "pull-right" do
+      %small
+        = icon('list-alt')
+        = view.name
+
 = simple_form_for(@localized_text) do |f|
-  .form-group
-    = f.label :other
-    = f.text_area :other, class: 'form-control'
-    = f.hidden_field :needs_review, value: false
-    %input{type: "hidden", name: "original_url", value: @original_url}
-  = f.submit "Save", class: 'btn btn-default btn-primary'
-  = link_to 'Cancel', :back, class: 'btn btn-link'
+  .row
+    .form-group.col-md-6
+      %label English
+      = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
+    .form-group.col-md-6
+      = f.label :other, @project_language.language.name
+      = f.text_area :other, class: 'form-control', rows: 10
+      = f.hidden_field :needs_review, value: false
+      %input{type: "hidden", name: "original_url", value: @original_url}
+  .row
+    .col-md-6
+    .col-md-6
+      = f.submit "Save", class: 'btn btn-default btn-primary'
+      = link_to 'Cancel', :back, class: 'btn btn-link'

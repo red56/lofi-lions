@@ -34,6 +34,7 @@ class LocalizedTextsController < ApplicationController
   def edit
     @original_url = request.referer
     @localized_text = LocalizedText.find(params[:id])
+    @project_language = @localized_text.project_language
   end
 
   def update
