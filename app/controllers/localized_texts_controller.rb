@@ -11,12 +11,22 @@ class LocalizedTextsController < ApplicationController
 
   def entry
     @localized_texts = localized_texts.where(needs_entry: true)
+    if @project_language.need_entry_count > 0
+      @header = "#{@project_language.need_entry_count} to enter"
+    else
+      @header = "All entered"
+    end
     @active_tab = :entry
     render :index
   end
 
   def review
     @localized_texts = localized_texts.where(needs_review: true)
+    if @project_language.need_review_count > 0
+      @header = "#{@project_language.need_review_count} to review"
+    else
+      @header = "All reviewed"
+    end
     @active_tab = :review
     render :index
   end

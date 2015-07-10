@@ -139,6 +139,11 @@ describe 'Project Language Pages', :type => :feature do
         expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
         expect(page).not_to have_css("#localized_text_#{needs_review_localized_text.id}")
       end
+      it "displays number of of items left to enter" do
+        localized_texts
+        visit path
+        expect(page).to have_content("#{project_language.need_entry_count} to enter")
+      end
     end
 
     describe "translations to review" do
@@ -151,6 +156,24 @@ describe 'Project Language Pages', :type => :feature do
         expect(page).to have_css("#localized_text_#{needs_review_localized_text.id}")
         expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
         expect(page).not_to have_css("#localized_text_#{empty_localized_text.id}")
+      end
+      it "displays number of of items left to review" do
+        localized_texts
+        visit path
+        expect(page).to have_content("#{project_language.need_review_count} to review")
+      end
+    end
+
+    context "with none to enter or review" do
+      let(:empty_project_language) { create(:project_language, need_entry_count: 0, need_review_count: 0) }
+
+      it "displays 'all entered' with none left to enter" do
+        visit entry_project_language_texts_path(empty_project_language)
+        expect(page).to have_content("All entered")
+      end
+      it "displays 'all entered' with none left to enter" do
+        visit review_project_language_texts_path(empty_project_language)
+        expect(page).to have_content("All reviewed")
       end
     end
   end

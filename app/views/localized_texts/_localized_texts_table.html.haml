@@ -2,8 +2,10 @@
   %table.table.table-striped
     %thead
       %tr
-        %th Master Text (English)  / key / comment
-        %th Localized Text (#{@language})
+        %th English / key / comment
+        %th
+          = @project_language.language
+          = @header
         %th Needs review
         %th Edit
     %tbody
