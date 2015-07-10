@@ -59,6 +59,13 @@ describe 'Project Language Pages', :type => :feature do
         visit project_language_texts_path(project_language)
         expect(page).to have_content("flounce")
       end
+      it "remains on page when information edited and saved" do
+        localized_text
+        visit path
+        fill_in :project_language_localized_texts_attributes_0_text, with: "an edit"
+        click_on "Save"
+        expect(current_path).to eq(path)
+      end
 
       context 'when pluralizable' do
         before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true) }

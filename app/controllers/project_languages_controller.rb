@@ -14,7 +14,7 @@ class ProjectLanguagesController < ApplicationController
     respond_to do |format|
       if @project_language.update(project_language_params)
         @project_language.recalculate_counts!
-        format.html { redirect_to languages_path, notice: 'Language was successfully updated.' }
+        format.html { redirect_to next_page_after_update, notice: "#{@project_language} was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -24,6 +24,10 @@ class ProjectLanguagesController < ApplicationController
   end
 
   private
+  def next_page_after_update
+    return request.referer if request.referer
+    project_language_path(@project_language)
+  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def project_language_params
