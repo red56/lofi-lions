@@ -131,5 +131,13 @@ describe LocalizedText, :type => :model do
       localized_text = master_text.reload.localized_texts.first
       expect(localized_text.translated_from).to eq nil
     end
+    context "when pluralizable" do
+      let(:master_text) {create(:master_text, pluralizable: true)}
+      it "saves once localized text reviewed" do
+        expect {
+          localized_text.update_attributes!(needs_review: false)
+        }.to_not change { localized_text.translated_from }
+      end
+    end
   end
 end

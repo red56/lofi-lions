@@ -37,10 +37,9 @@ class LocalizedText < ActiveRecord::Base
   end
 
   def update_translated_from
-    unless needs_review? || needs_entry?
+    unless needs_review? || needs_entry? || pluralizable
       self.translated_from = master_text.text
-      puts Time.now
-      self.translated_at = Time.now
+      self.translated_at = Time.now.utc
     end
   end
 end
