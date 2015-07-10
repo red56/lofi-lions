@@ -199,7 +199,7 @@ describe 'Project Language Pages', :type => :feature do
       end
     end
 
-    context "wihout outstanding tasks" do
+    context "without outstanding tasks" do
 
       let(:project_language) { create(:project_language, need_entry_count: 0, need_review_count: 0) }
 

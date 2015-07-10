@@ -14,6 +14,9 @@ LofiLions::Application.routes.draw do
   end
 
   resources :project_languages, only: [:index, :show, :update] do
+    member do
+      get :next
+    end
     resources :texts, controller: 'localized_texts' do
       collection do
         get :entry

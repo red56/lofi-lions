@@ -24,3 +24,7 @@
         .btn.text-muted.col-md-12
           = icon('check')
           No outstanding reviews
+    .col-md-3
+      - if @project_language.need_entry_count > 0 || @project_language.need_review_count > 0
+        = link_to next_project_language_path(@project_language), class: 'btn btn-success col-md-12' do
+          = "Start"

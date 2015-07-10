@@ -1,6 +1,6 @@
 class ProjectLanguagesController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_project_language, only: [:update, :show]
+  before_action :find_project_language, only: [:update, :show, :next]
 
   def index
     redirect_to root_path
@@ -21,6 +21,10 @@ class ProjectLanguagesController < ApplicationController
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def next
+    redirect_to edit_localized_text_path(@project_language.next_localized_text)
   end
 
   private

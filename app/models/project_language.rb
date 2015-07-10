@@ -32,4 +32,8 @@ class ProjectLanguage < ActiveRecord::Base
     "#{project.name} - #{language.name}"
   end
 
+  def next_localized_text
+    self.localized_texts.first
+  end
+
 end

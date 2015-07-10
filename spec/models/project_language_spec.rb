@@ -44,4 +44,25 @@ RSpec.describe ProjectLanguage, :type => :model do
     end
 
   end
+
+  describe "#next_localized_text" do
+    let!(:project_language) {create(:project_language)}
+
+    context "with no arguments" do
+      subject { project_language.next_localized_text() }
+
+      context "with one existing localized text to enter" do
+        let!(:localized_text){ create(:localized_text, project_language: project_language, needs_entry: true )}
+        it{ is_expected.to eq(localized_text)}
+      end
+      context "with one existing localized text to review" do
+        let!(:localized_text){ create(:localized_text, project_language: project_language, needs_review: true )}
+        it{ is_expected.to eq(localized_text)}
+      end
+      context "with no existing localized text to do" do
+        it{ is_expected.to be_nil }
+      end
+    end
+
+  end
 end
