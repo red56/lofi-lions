@@ -100,4 +100,36 @@ describe LocalizedText, :type => :model do
     end
   end
 
+  describe "adding to the translated_master field" do
+    let(:localized_text) { create(:to_review_localized_text, master_text: master_text).tap do |localized_text|
+      localized_text.translated_from = nil
+    end
+    }
+    let(:master_text) { create(:master_text, text: "some text") }
+
+    it "saves once localized text reviewed" do
+      expect {
+        localized_text.update_attributes!(needs_review: false)
+      }.to change { localized_text.translated_from }.to(master_text.text)
+    end
+
+    it "adds time to translated at" do
+      expect {
+        localized_text.update_attributes!(needs_review: false)
+      }.to change { localized_text.translated_at }
+    end
+
+    it "doesn't save if needs_review is true" do
+      expect {
+        localized_text.save!
+      }.to_not change { localized_text.translated_from }
+    end
+
+    it "is not set when first created" do
+      create :project_language, project: master_text.project;
+      LocalizedTextEnforcer.new.master_text_created(master_text)
+      localized_text = master_text.reload.localized_texts.first
+      expect(localized_text.translated_from).to eq nil
+    end
+  end
 end

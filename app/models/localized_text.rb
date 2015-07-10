@@ -14,6 +14,8 @@ class LocalizedText < ActiveRecord::Base
   delegate :text, :one, :other, to: :master_text, prefix: 'original'
   delegate :language, :language_id, to: :project_language
 
+  before_save :update_translated_from
+
   def text= text
     self.other = text
   end
@@ -31,6 +33,14 @@ class LocalizedText < ActiveRecord::Base
 
   def calculate_needs_entry
     return self.text.blank? unless pluralizable
-    self.language.plural_forms_with_fields.keys.any?{|attr_name| self[attr_name].blank? }
+    self.language.plural_forms_with_fields.keys.any? { |attr_name| self[attr_name].blank? }
+  end
+
+  def update_translated_from
+    unless needs_review? || needs_entry?
+      self.translated_from = master_text.text
+      puts Time.now
+      self.translated_at = Time.now
+    end
   end
 end
