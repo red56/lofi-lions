@@ -39,6 +39,8 @@ gem 'unicorn'
 
 gem 'simple_form', github: 'plataformatec/simple_form'
 
+gem 'bugsnag'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
