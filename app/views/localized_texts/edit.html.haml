@@ -13,7 +13,7 @@
 
 = simple_form_for(@localized_text) do |f|
   .row
-    - if @localized_text.translated_from
+    - if @localized_text.translated_from && @localized_text.needs_review
       .form-group.col-md-6.translated_from
         %label
           Translated from
