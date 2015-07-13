@@ -36,6 +36,7 @@ class LocalizedTextsController < ApplicationController
   end
 
   def flowedit
+    @active_tab = :overview
     render :edit
   end
 

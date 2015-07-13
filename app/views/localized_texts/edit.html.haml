@@ -1,3 +1,5 @@
+= render :partial => 'project_languages/tabs'
+%br
 %div{class: @localized_text.needs_entry? && "alert alert-danger" || @localized_text.needs_review? && "alert alert-warning"}
   .views.pull-right
     - @localized_text.views.each do |view|
