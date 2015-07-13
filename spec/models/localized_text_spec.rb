@@ -44,6 +44,20 @@ describe LocalizedText, :type => :model do
     end
   end
 
+  describe "#markdown?" do
+    let(:localized_text) { build(:localized_text, text: 'something', master_text: master_text) }
+    let(:master_text) { build(:master_text, format: format) }
+    subject{localized_text}
+    context "markdown" do
+      let(:format) { MasterText::MARKDOWN_FORMAT }
+      it { is_expected.to be_markdown }
+    end
+    context "plain" do
+      let(:format) { MasterText::PLAIN_FORMAT }
+      it { is_expected.not_to be_markdown }
+    end
+  end
+
 
   describe "calculate needs_entry" do
     it "is called and set on validate" do

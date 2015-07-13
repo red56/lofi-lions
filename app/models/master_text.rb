@@ -1,5 +1,8 @@
 class MasterText < ActiveRecord::Base
 
+  MARKDOWN_FORMAT = 'markdown'
+  PLAIN_FORMAT = 'plain'
+
   belongs_to :project, inverse_of: :master_texts
   has_many :localized_texts, inverse_of: :master_text, dependent: :destroy
   has_many :key_placements, inverse_of: :master_text
@@ -22,5 +25,8 @@ class MasterText < ActiveRecord::Base
     return true if self.one_changed?
     return true if self.pluralizable_changed?
     false
+  end
+  def markdown?
+    format == MARKDOWN_FORMAT
   end
 end
