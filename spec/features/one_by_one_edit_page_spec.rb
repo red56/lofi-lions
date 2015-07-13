@@ -39,7 +39,6 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
 
       it "shows the original" do
         visit edit_localized_text_path(localized_text)
-        page.save_and_open_page
         expect(page).to have_content(localized_text.translated_from)
       end
     end
