@@ -40,6 +40,38 @@
       = f.hidden_field :needs_review, value: false
       - if @original_url
         %input{type: "hidden", name: "original_url", value: @original_url}
+
+  - if @localized_text.markdown?
+    %br
+    %label.lable Formatted:
+    .row
+      .col-md-6#original_formatted
+        .well
+      .col-md-6#preview
+        .well
+        -#.btn.btn-info#preview-button Preview
+    :javascript
+      function preview(){
+        $('#preview .well').html(markdown.toHTML($("#localized_text_other").val()));
+      };
+      var delay = (function(){
+        var timer = 0;
+        return function(callback, ms){
+          clearTimeout (timer);
+          timer = setTimeout(callback, ms);
+        };
+      })();
+
+      $('#localized_text_other').keyup(function() {
+          delay(function(){
+            preview();
+          }, 400 );
+      });
+      //$("#preview-button").click(function(){ preview(); });
+      $(function(){
+        $('#original_formatted .well').html(markdown.toHTML($("#original").val()));
+      });
+
   .row
     .col-md-6
       - if @original_url
