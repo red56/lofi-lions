@@ -1,8 +1,6 @@
-= link_to(project_language_path(project_language),
-  class: "list-group-item clearfix project_language",
-  id: "project_language_#{project_language.id}") do
-  .row[project_language]
-    .text-primary.col-sm-6
+.list-group-item.clearfix[project_language]
+  = link_to(project_language_path(project_language)) do
+    .text-primary.col-sm-3
       %i.fa.fa-language
       = label
     .col-sm-3.entry
@@ -21,3 +19,6 @@
         .text-muted
           = icon('check')
           No outstanding reviews
+    - if project_language.need_entry_count > 0 || project_language.need_review_count > 0
+      = link_to next_project_language_path(project_language), class: 'btn btn-success' do
+        Start

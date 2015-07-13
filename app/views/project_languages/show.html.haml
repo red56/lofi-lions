@@ -10,7 +10,7 @@
   .row
     .entry.col-md-3
       - if @project_language.need_entry_count > 0
-        .text-danger
+        .btn.text-danger
           = @project_language.need_entry_count
           to enter
       - else
@@ -19,7 +19,7 @@
           No outstanding entries
     .review.col-md-3
       - if @project_language.need_review_count > 0
-        .text-warning
+        .btn.text-warning
           = @project_language.need_review_count
           to review
       - else
