@@ -33,6 +33,25 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       click_on "Save"
       expect(current_path).to eq(review_project_language_texts_path(project_language))
     end
+
+    context "with translated_from" do
+      let(:localized_text) {create(:localized_text, translated_from: "I'm the original yo")}
+
+      it "shows the original" do
+        visit edit_localized_text_path(localized_text)
+        page.save_and_open_page
+        expect(page).to have_content(localized_text.translated_from)
+      end
+    end
+
+    context "when translated_from empty" do
+      let(:localized_text) {create(:localized_text, translated_from: nil)}
+
+      it "doesn't display the original" do
+        visit edit_localized_text_path(localized_text)
+        expect(page).to_not have_css(".translated_from")
+      end
+    end
   end
 
   describe "review" do

@@ -11,6 +11,15 @@
 
 = simple_form_for(@localized_text) do |f|
   .row
+    - if @localized_text.translated_from
+      .form-group.col-md-6.translated_from
+        %label
+          Translated from
+          = surround '(',')' do
+            = @localized_text.translated_at
+        .form-control-static= simple_format(@localized_text.translated_from)
+
+  .row
     .form-group.col-md-6
       %label English
       = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
