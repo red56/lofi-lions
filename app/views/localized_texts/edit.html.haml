@@ -1,13 +1,15 @@
-%h4
-  %small.text-muted
+%h4.row
+  %small.col-md-1.text-muted
     %label.label.label-default= @localized_text.master_text.key
+  %small.col-md-5.text-muted
     %p.comment= @localized_text.comment
 
-  - @localized_text.views.each do |view|
-    = link_to project_language_view_path(@project_language, view), class: "pull-right" do
-      %small
-        = icon('list-alt')
-        = view.name
+  .col-md-6.views
+    - @localized_text.views.each do |view|
+      = link_to project_language_view_path(@project_language, view), class: 'pull-right' do
+        %small
+          = icon('list-alt')
+          = view.name
 
 = simple_form_for(@localized_text) do |f|
   .row
