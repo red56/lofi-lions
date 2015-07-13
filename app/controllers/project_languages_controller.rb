@@ -24,7 +24,7 @@ class ProjectLanguagesController < ApplicationController
   end
 
   def next
-    redirect_to edit_localized_text_path(@project_language.next_localized_text)
+    redirect_to flowedit_localized_text_path(@project_language.next_localized_text(params[:key]))
   end
 
   private

@@ -2,7 +2,10 @@ class ProjectLanguage < ActiveRecord::Base
 
   belongs_to :project, inverse_of: :project_languages
   belongs_to :language, inverse_of: :project_languages
-  has_many :localized_texts, inverse_of: :project_language, dependent: :destroy
+  has_many(:localized_texts,
+      lambda{ joins(:master_text).order('LOWER(master_texts.key)') },
+      inverse_of: :project_language, dependent: :destroy,
+  )
   has_and_belongs_to_many :users
 
   accepts_nested_attributes_for :localized_texts
@@ -32,8 +35,9 @@ class ProjectLanguage < ActiveRecord::Base
     "#{project.name} - #{language.name}"
   end
 
-  def next_localized_text
-    self.localized_texts.first
+  def next_localized_text(after_key='')
+    candidates = localized_texts.needs_review_or_entry.limit(1)
+    candidates.where('key > ?', after_key).first || candidates.first
   end
 
 end

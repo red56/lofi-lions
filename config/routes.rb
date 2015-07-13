@@ -4,7 +4,11 @@ LofiLions::Application.routes.draw do
 
   resources :languages
 
-  resources :localized_texts
+  resources :localized_texts do
+    member do
+      get :flowedit
+    end
+  end
 
   resources :master_texts, except: [:index, :new]
 

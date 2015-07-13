@@ -10,16 +10,18 @@
   .row
     .entry.col-md-3
       - if @project_language.need_entry_count > 0
-        = link_to entry_project_language_texts_path(@project_language), class: 'btn btn-danger col-md-12' do
-          = "#{@project_language.need_entry_count} to enter"
+        .text-danger
+          = @project_language.need_entry_count
+          to enter
       - else
         .btn.text-muted.col-md-12
           = icon('check')
           No outstanding entries
     .review.col-md-3
       - if @project_language.need_review_count > 0
-        = link_to review_project_language_texts_path(@project_language), class: 'btn btn-warning col-md-12' do
-          = "#{@project_language.need_review_count} to review"
+        .text-warning
+          = @project_language.need_review_count
+          to review
       - else
         .btn.text-muted.col-md-12
           = icon('check')

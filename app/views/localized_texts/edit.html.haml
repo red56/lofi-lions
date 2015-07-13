@@ -36,8 +36,12 @@
       = f.label :other, @project_language.language.name
       = f.text_area :other, class: 'form-control', rows: 10
       = f.hidden_field :needs_review, value: false
-      %input{type: "hidden", name: "original_url", value: @original_url}
+      - if @original_url
+        %input{type: "hidden", name: "original_url", value: @original_url}
   .row
     .col-md-6
       = f.submit "Save", class: 'btn btn-default btn-primary'
-      = link_to 'Cancel', :back, class: 'btn btn-link'
+      - if @original_url
+        = link_to 'Cancel', :back, class: 'btn btn-link'
+      - else
+        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-link'
