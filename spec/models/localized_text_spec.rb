@@ -100,7 +100,7 @@ describe LocalizedText, :type => :model do
     end
   end
 
-  describe "adding to the translated_master field" do
+  describe "adding to the translated_from field" do
     let(:localized_text) { create(:to_review_localized_text, master_text: master_text).tap do |localized_text|
       localized_text.translated_from = nil
     end
