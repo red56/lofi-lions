@@ -42,8 +42,9 @@
         %input{type: "hidden", name: "original_url", value: @original_url}
   .row
     .col-md-6
-      = f.submit "Save", class: 'btn btn-default btn-primary'
       - if @original_url
-        = link_to 'Cancel', :back, class: 'btn btn-link'
-      - else
-        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-link'
+        = link_to 'Cancel', :back, class: 'btn btn-link pull-left'
+      - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
+        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
+    .col-md-6
+      = f.submit "Save", class: 'btn btn-primary pull-right'
