@@ -4,6 +4,12 @@ LofiLions::Application.routes.draw do
 
   resources :languages
 
+  resources :localized_texts do
+    member do
+      get :flowedit
+    end
+  end
+
   resources :master_texts, except: [:index, :new]
 
   resources :projects do
@@ -12,6 +18,9 @@ LofiLions::Application.routes.draw do
   end
 
   resources :project_languages, only: [:index, :show, :update] do
+    member do
+      get :next
+    end
     resources :texts, controller: 'localized_texts' do
       collection do
         get :entry

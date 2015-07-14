@@ -1,0 +1,50 @@
+= render :partial => 'project_languages/tabs'
+%br
+%div{class: @localized_text.needs_entry? && "alert alert-danger" || @localized_text.needs_review? && "alert alert-warning"}
+  .views.pull-right
+    - @localized_text.views.each do |view|
+      = link_to project_language_view_path(@project_language, view), class: 'pull-right' do
+        %small
+          = icon('list-alt')
+          = view.name
+  %small.text-muted.clearfix
+    %label.pull-left.label.label-default= @localized_text.master_text.key
+    %p.comment= @localized_text.comment
+
+  - if @localized_text.needs_entry?
+    %i
+      Needs translation
+  - elsif @localized_text.needs_review?
+    %i
+      Needs review
+      - if @localized_text.translated_at
+        since translation at
+        = @localized_text.translated_at.to_s(:short)
+
+= simple_form_for(@localized_text) do |f|
+
+  - if @localized_text.translated_from && @localized_text.needs_review?
+    .row
+      .form-group.col-md-6.translated_from
+        %label
+          Originally translated from
+        .form-control-static= simple_format(@localized_text.translated_from)
+
+  .row
+    .form-group.col-md-6
+      %label English
+      = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
+    .form-group.col-md-6
+      = f.label :other, @project_language.language.name
+      = f.text_area :other, class: 'form-control', rows: 10
+      = f.hidden_field :needs_review, value: false
+      - if @original_url
+        %input{type: "hidden", name: "original_url", value: @original_url}
+  .row
+    .col-md-6
+      - if @original_url
+        = link_to 'Cancel', :back, class: 'btn btn-link pull-left'
+      - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
+        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
+    .col-md-6
+      = f.submit "Save", class: 'btn btn-primary pull-right'

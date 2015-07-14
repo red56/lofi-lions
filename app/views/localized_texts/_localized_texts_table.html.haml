@@ -2,9 +2,12 @@
   %table.table.table-striped
     %thead
       %tr
-        %th Master Text (English)  / key / comment
-        %th Localized Text (#{@language})
+        %th English / key / comment
+        %th
+          = @project_language.language
+          = @header
         %th Needs review
+        %th Edit
     %tbody
       = f.fields_for :localized_texts, localized_texts do |ltext_fields|
         %tr[ltext_fields.object]
@@ -37,6 +40,9 @@
             .checkbox
               %label
                 = ltext_fields.check_box :needs_review
+          %td
+            .edit
+              = link_to "Edit", edit_localized_text_path(ltext_fields.object)
 
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

@@ -8,6 +8,14 @@ FactoryGirl.define do
       project_language { build_stubbed(:project_language, project_id: master_text.project_id) }
     end
 
+    factory :finished_localized_text do
+      other 'Some translation or other'
+      needs_review false
+    end
+    factory :to_review_localized_text do
+      other 'Some translation or other'
+      needs_review true
+    end
   end
 
 end
