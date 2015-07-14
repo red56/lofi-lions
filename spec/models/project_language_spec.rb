@@ -48,38 +48,6 @@ RSpec.describe ProjectLanguage, :type => :model do
   describe "#next_localized_text" do
     let!(:project_language) { create(:project_language) }
 
-    # context "with no arguments" do
-    #   subject { project_language.next_localized_text() }
-    #
-    #   context "with one existing localized text to enter" do
-    #     let!(:localized_text) { create(:localized_text, project_language: project_language, needs_entry: true) }
-    #     it { is_expected.to eq(localized_text) }
-    #   end
-    #   context "with one existing localized text to review" do
-    #     let!(:localized_text) { create(:localized_text, project_language: project_language, needs_review: true) }
-    #     it { is_expected.to eq(localized_text) }
-    #   end
-    #   context "with no existing localized text to do" do
-    #     it { is_expected.to be_nil }
-    #   end
-    # end
-    #
-    # context "with an id" do
-    # let!(:localized_text1){ let!(:localized_text2){ create(:localized_text, project_language: project_language, needs_entry: true)}
-    # }
-    # let!(:localized_text2){ create(:localized_text, project_language: project_language, needs_entry: true,
-    #     needs_review: false)}
-    #
-    # it "will move to the next localized text needing entry" do
-    #   expect(project_language.next_localized_text(localized_text1.id)).to eq(localized_text2.id)
-    # end
-    #
-    # context "if one needs review" do
-    #   let!(:localized_text2){ create(:localized_text, project_language: project_language, needs_entry: false,
-    #       needs_review: true)}
-    #   it "will still show next"
-    # end
-
     let(:mt_able) { create(:master_text, project: project, key: "able") }
     let(:mt_baker) { create(:master_text, project: project, key: "baker") }
     let(:mt_charlie) { create(:master_text, project: project, key: "charlie") }
@@ -91,6 +59,10 @@ RSpec.describe ProjectLanguage, :type => :model do
       before { baker; charlie; able }
       it "if i give it no id it returns able's" do
         expect(project_language.next_localized_text()).to eq(able)
+      end
+      it "if i give it a nil it returns able's" do
+        expect(project_language.next_localized_text(nil)).to eq(able)
+        expect(project_language.next_localized_text('')).to eq(able)
       end
       it "if i give it able's key it returns baker" do
         expect(project_language.next_localized_text(able.key)).to eq(baker)
