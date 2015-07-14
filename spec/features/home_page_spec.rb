@@ -64,4 +64,35 @@ describe 'Home page', :type => :feature do
       expect(page).to have_link_to(project_language_path(project_language))
     end
   end
+
+  describe "workflow edit" do
+    context "with none to enter/review" do
+      let!(:complete_project_language) { create(:project_language, language_id: language.id, need_entry_count: 0,
+          need_review_count: 0) }
+
+      before do
+        stubbed_login_as_developer
+      end
+
+      it "doesn't display the start button" do
+        visit "/"
+        expect(page).to_not have_link_to(next_project_language_path(complete_project_language))
+      end
+    end
+
+    context "with to enter/review" do
+      let!(:project_language) { create(:project_language, language_id: language.id, need_entry_count: 1,
+          need_review_count:
+              3) }
+
+      before do
+        stubbed_login_as_developer
+      end
+
+      it "doesn't display the start button" do
+        visit "/"
+        expect(page).to have_link_to(next_project_language_path(project_language))
+      end
+    end
+  end
 end
