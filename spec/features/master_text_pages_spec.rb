@@ -85,13 +85,13 @@ describe 'Master Text Pages', :type => :feature do
   describe "edit" do
     let(:master_text) { create(:master_text, project: project) }
     let(:login) { stubbed_login_as_developer }
-    before { visit edit_master_text_path(master_text) }
     it "displays" do
-      visit new_project_master_text_path(project)
+      visit edit_master_text_path(master_text)
     end
     context "for editor" do
       let(:login) { stubbed_login_as_user }
       it "works" do
+        visit edit_master_text_path(master_text)
         expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
         expect(page).to have_css("form.master_text")
         fill_in "master_text_text", with: 'My new text'
@@ -100,19 +100,20 @@ describe 'Master Text Pages', :type => :feature do
       end
     end
     it "works for developer to change key" do
+      visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'new.key'
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
     end
+    describe  "edit with views" do
+      let!(:view) { create(:view, project: project, name: "Me") }
+      let(:master_text) {create(:master_text, project: project) }
+      let!(:other_project) { create(:project) }
+      let!(:other_projects_view) { create(:view, project: other_project, name: "Ella") }
 
-    context "with views" do
-      let(:view) { create(:view) }
-      let(:master_text) {
-        view
-        super()
-      }
       it "works for developer to add view" do
+        visit edit_master_text_path(master_text)
         expect(page).to have_css("form.master_text")
         fill_in "master_text_key", with: 'new.key'
         find("#master_text_view_ids_#{view.id}").set(true)
@@ -121,9 +122,18 @@ describe 'Master Text Pages', :type => :feature do
         expect(page).to have_content(view.name)
         expect(page).to have_link_to(view_path(view))
       end
+
+      it "only shows view checkboxes from same project" do
+        visit edit_master_text_path(master_text)
+        expect(page).to have_css("form.master_text")
+        expect(page).to have_content(view.name)
+        expect(page).to_not have_content(other_projects_view.name)
+
+      end
     end
     it "can change pluralizable" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
+      visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
       expect {
         page.check('plural')
@@ -136,6 +146,7 @@ describe 'Master Text Pages', :type => :feature do
     context "when pluralizable" do
       let(:master_text) { create(:master_text, project: project, pluralizable: true) }
       it "allows me to change one" do
+        visit edit_master_text_path(master_text)
         fill_in "master_text_one", with: "My one one"
         expect {
           click_on "Save"
@@ -143,6 +154,7 @@ describe 'Master Text Pages', :type => :feature do
         expect(page).not_to have_css("form.master_text")
       end
       it "allows me to change many" do
+        visit edit_master_text_path(master_text)
         fill_in "master_text_other", with: "My other other"
         expect {
           click_on "Save"
@@ -153,11 +165,20 @@ describe 'Master Text Pages', :type => :feature do
 
     it "displays errors" do
       expect_any_instance_of(LocalizedTextEnforcer).not_to receive(:master_text_changed)
+      visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
       fill_in "master_text_text", with: ''
       click_on "Save"
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
+    end
+
+    it "allows developers to change format" do
+      visit edit_master_text_path(master_text)
+      expect(page).to have_css("form.master_text")
+      select "markdown", from: 'master_text_format'
+      click_on "Save"
+      expect(master_text.reload.format).to eq("markdown")
     end
   end
 

@@ -27,7 +27,10 @@
     = f.label :comment
     = f.text_area :comment, class: 'form-control'
 
-  = f.association :views,   as: :check_boxes
+  .form-group
+    = f.input :format, collection: [MasterText::PLAIN_FORMAT, MasterText::MARKDOWN_FORMAT], class: 'form-control'
+
+  = f.association :views, collection: @master_text.project.views,  as: :check_boxes
   = f.hidden_field :project_id
 
   = f.submit "Save", class: 'btn btn-default btn-primary'

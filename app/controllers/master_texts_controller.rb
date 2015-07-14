@@ -72,7 +72,7 @@ class MasterTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def master_text_params
-      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :pluralizable, :project_id, view_ids: [])
+      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :format, :pluralizable, :project_id, view_ids: [])
     end
 
     def find_project
