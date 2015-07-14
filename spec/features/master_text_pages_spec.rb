@@ -159,6 +159,13 @@ describe 'Master Text Pages', :type => :feature do
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
     end
+
+    it "allows developers to change format" do
+      expect(page).to have_css("form.master_text")
+      fill_in "master_text_format", with: 'not plain'
+      click_on "Save"
+      expect(master_text.reload.format).to eq("not plain")
+    end
   end
 
   describe "show" do
