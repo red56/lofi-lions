@@ -1,6 +1,6 @@
 %ul.nav.nav-tabs.projects
   %li.title
-    %a
+    = link_to project_path(@project) do
       = @project.name
       Project
   %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_path(@project)

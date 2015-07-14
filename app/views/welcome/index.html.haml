@@ -10,7 +10,7 @@
         .list-group-item.clearfix
           .text-primary
             .col-md-3
-              .btn= "#{project.master_texts.count} Master texts"
+              = link_to "#{project.master_texts.count} Master texts", project_path(project), class: 'btn'
             .col-md-3
               = link_to project_path(project), class: "btn btn-primary" do
                 View project
