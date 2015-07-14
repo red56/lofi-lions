@@ -34,7 +34,6 @@ class Localization
   def self.create_localized_texts(language, localizations, project_id)
     errors = {}
     project_language = ProjectLanguage.where(language_id: language.id, project_id: project_id).first
-    project_language.recalculate_counts!
     fail "Couldn't find ProjectLanguage" unless project_language
     localizations.each do |localization|
       master_text = MasterText.where(key: localization.key, project_id: project_id).first
@@ -50,6 +49,7 @@ class Localization
         end
       end
     end
+    project_language.recalculate_counts!
     errors
   end
 
