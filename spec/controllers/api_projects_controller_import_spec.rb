@@ -34,11 +34,6 @@ describe Api::ProjectsController, :type => :controller do
       expect(pairs).to include(["Almost done", "Almost done..."])
       expect(pairs).to include(["Done", "Done!"])
     end
-
-    it "redirects to the master text view" do
-      post :import, {platform: :ios, file: file_upload, format: 'html', id: selected_project.slug}
-      expect(response).to redirect_to(master_texts_path)
-    end
   end
 
   describe "Android" do
@@ -59,10 +54,6 @@ describe Api::ProjectsController, :type => :controller do
 
       it "accepts a android xml upload" do
         post :import, {platform: :android, file: file_upload, format: 'json', id: selected_project.slug}
-      end
-
-      it "redirects to the master text view" do
-        post :import, {platform: :android, file: file_upload, format: 'html', id: selected_project.slug}
       end
     end
 
@@ -93,10 +84,6 @@ describe Api::ProjectsController, :type => :controller do
 
       it "accepts a yaml file upload" do
         post :import, {file: file_upload, format: 'json', id: selected_project.slug}
-      end
-
-      it "redirects to the master text view" do
-        post :import, {file: file_upload, format: 'html', id: selected_project.slug}
       end
     end
 
