@@ -78,7 +78,7 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
 
     it "project_lanaguage # next links through to edit page from overview by calling next_localized_text" do
       expect(ProjectLanguage).to receive(:find).at_least(:once).and_return(project_language)
-      expect(project_language).to receive(:next_localized_text).and_return(first_localized_text)
+      expect(project_language).to receive(:next_localized_text).with(nil).and_return(first_localized_text)
       visit project_language_path(project_language)
       click_on "Start"
       expect(current_path).to eq(flowedit_localized_text_path(first_localized_text))
@@ -104,14 +104,5 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       expect(current_path).to eq(flowedit_localized_text_path(another_localized_text.id))
     end
 
-    it "redirects to the project language page when there are non left" do
-      expect(LocalizedText).to receive(:find).at_least(:once).and_return(first_localized_text)
-      allow(first_localized_text).to receive(:project_language).and_return(project_language)
-      expect(project_language).to receive(:next_localized_text).with(first_localized_text.key).and_return(nil)
-      visit flowedit_localized_text_path(first_localized_text)
-      fill_in "localized_text[other]", with: "Je suis un master text"
-      expect{click_on "Save"}.to change{first_localized_text.reload.other}
-      expect(current_path).to eq(project_language_path(project_language))
-    end
   end
 end

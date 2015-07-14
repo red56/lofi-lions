@@ -138,10 +138,11 @@ describe LocalizedTextEnforcer, :type => :model do
         expect(mt).to be_instance_of MasterText
         expect(mt.key).to eq(key)
         expect(mt.text).to eq(text)
+        expect(mt.format).to eq(MasterText::PLAIN_FORMAT)
       end
 
       it "doesn't touch an existing master text with same value" do
-        original = create(:master_text, key: key, text: text)
+        original = create(:master_text, key: key, text: text, project: project)
         expect {
           LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text, project.id)
         }.not_to change { original.reload.updated_at }
@@ -171,6 +172,25 @@ describe LocalizedTextEnforcer, :type => :model do
           expect(mt.reload.text).to eq(new_text)
         end
       end
+
+      context "with a key ending _md" do
+        let(:key) { "MyText_md" }
+        it "creates a new master text with type markdown for key if none exists" do
+          mt = nil
+          expect {
+            mt = LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text, project.id)
+          }.to change { MasterText.count }.by(1)
+          expect(mt.format).to eq(MasterText::MARKDOWN_FORMAT)
+        end
+        it "doesn't touch an existing master text with same value" do
+          original = create(:master_text, key: key, text: text, project: project)
+          expect {
+            LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, text, project.id)
+          }.not_to change { original.reload.updated_at }
+        end
+      end
+
+
     end
   end
 

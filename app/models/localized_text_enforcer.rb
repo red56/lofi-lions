@@ -37,6 +37,7 @@ class LocalizedTextEnforcer
           master_text.other = text_or_text_hash
           master_text.pluralizable = false
         end
+        master_text.format = MasterText::MARKDOWN_FORMAT if master_text.new_record? && key.ends_with?('_md')
         new(master_text).save_with_exception(raise_exception)
       end
     end

@@ -111,4 +111,17 @@ describe MasterText, :type => :model do
     end
   end
 
+  describe "#markdown?" do
+    let(:master_text) { build(:master_text, format: format) }
+    subject{master_text}
+    context "markdown" do
+      let(:format) { MasterText::MARKDOWN_FORMAT }
+      it { is_expected.to be_markdown }
+    end
+    context "plain" do
+      let(:format) { MasterText::PLAIN_FORMAT }
+      it { is_expected.not_to be_markdown }
+    end
+  end
+
 end
