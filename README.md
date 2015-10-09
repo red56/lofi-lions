@@ -174,6 +174,16 @@ To view mail sent:
 more info: https://github.com/sj26/mailcatcher
 
 
+## Markdown.js
+
+We use a pre-compiled version of https://github.com/evilstreak/markdown-js (Thanks!). For reference we generated it with the following
+
+```
+git clone evilstreak/markdown-js && cd markdown-js && npm install
+./node_modules/.bin/grunt all --force
+cp dist/markdown.js ../lofi-lions/vendor/assets/javascripts/markdown.js
+```
+
 # License
 
 This project is open-sourced under the Apache 2.0 license. See LICENSE.TXT
