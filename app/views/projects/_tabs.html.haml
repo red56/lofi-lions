@@ -6,3 +6,4 @@
   %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_path(@project)
   %li{class: @active_tab == :master_text ? 'active':''}= link_to "Master Texts", project_master_texts_path(@project)
   %li{class: @active_tab == :view ? 'active':''}= link_to "Views", project_views_path(@project)
+  %li{class: @active_tab == :edit ? 'active':''}= link_to "Edit", edit_project_path(@project)
