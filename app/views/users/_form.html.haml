@@ -1,6 +1,4 @@
-= simple_form_for(@user, html: { class: 'form user' },
-    wrapper: :vertical_form,
-    wrapper_mappings:{check_boxes: :horizontal_radio_and_checkboxes}) do |f|
+= simple_form_for(@user, html: { class: 'form-horizontal user form' }) do |f|
   = render partial: '_common/form_errors', locals: {instance: @user}
 
   = f.input :email

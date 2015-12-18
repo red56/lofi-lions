@@ -21,7 +21,7 @@
         since translation at
         = @localized_text.translated_at.to_s(:short)
 
-= simple_form_for(@localized_text) do |f|
+= simple_form_for(@localized_text, html: { class: 'form-horizontal' })  do |f|
 
   - if @localized_text.translated_from && @localized_text.needs_review?
     .row
@@ -70,6 +70,7 @@
       //$("#preview-button").click(function(){ preview(); });
       $(function(){
         $('#original_formatted .well').html(markdown.toHTML($("#original").val()));
+        preview();
       });
 
   .row

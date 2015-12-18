@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/plataformatec/simple_form.git
-  revision: c679153ee99aefa39a7583564f2cd4bf9c0ca00b
-  specs:
-    simple_form (3.1.0)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
-
-GIT
   remote: git://github.com/red56/releasetool.git
   revision: 3e43153dc831eabbda5afc70659928fcc29f2ea2
   branch: master
@@ -159,7 +151,7 @@ GEM
     listen (3.0.1)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    loofah (2.0.2)
+    loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
     mail (2.6.3)
@@ -168,12 +160,12 @@ GEM
       tilt
     method_source (0.8.2)
     mime-types (2.4.3)
-    mini_portile (0.6.2)
-    minitest (5.7.0)
+    mini_portile2 (2.0.0)
+    minitest (5.8.3)
     multi_json (1.11.1)
     nenv (0.2.0)
-    nokogiri (1.6.6.2)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.6.7.1)
+      mini_portile2 (~> 2.0.0.rc2)
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -206,7 +198,7 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.6)
+    rails-dom-testing (1.0.7)
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
@@ -263,6 +255,9 @@ GEM
       rdoc (~> 4.0)
     sexp_processor (4.4.5)
     shellany (0.0.1)
+    simple_form (3.2.0)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
     slop (3.6.0)
     spring (1.2.0)
     spring-commands-rspec (1.0.4)
@@ -328,7 +323,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.0)
   sdoc
-  simple_form!
+  simple_form
   spring
   spring-commands-rspec
   thin
@@ -336,4 +331,4 @@ DEPENDENCIES
   unicorn
 
 BUNDLED WITH
-   1.10.4
+   1.10.5

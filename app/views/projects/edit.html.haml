@@ -1,0 +1,21 @@
+= render partial: 'projects/tabs'
+
+
+%h3
+  = @project
+  %small Edit
+
+= simple_form_for(@project, html: { class: 'form-horizontal project' }) do |f|
+
+  = f.input :name
+
+  %fieldset
+    - if @project.languages.length > 0
+      %label Existing languages
+      %p.hint
+        Already has:
+        = @project.languages.collect{|lang| lang.name}.join(', ')
+    - if new_languages = Language.where.not(id: @project.languages.collect{|l| l.id})
+      = f.association :languages, label: "Add languages:", as: :check_boxes, collection: new_languages
+
+  = f.submit 'Save', class: 'btn btn-primary'

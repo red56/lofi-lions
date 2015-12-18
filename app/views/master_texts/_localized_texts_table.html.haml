@@ -5,7 +5,7 @@
       %th Localized Text
       %th Needs review
   %tbody
-    - localized_texts.includes(:language).each do |localized_text|
+    - localized_texts.includes(:project_language).each do |localized_text|
       %tr[localized_text]
         %td
           %p= localized_text.language
@@ -14,7 +14,7 @@
             = localized_text.other
           - else
             = localized_text.text
-          = link_to project_language_texts_path(localized_text.language, anchor: "localized_text_#{localized_text.id}") do
+          = link_to project_language_texts_path(localized_text.project_language, anchor: "localized_text_#{localized_text.id}") do
             [ Edit ]
 
         %td

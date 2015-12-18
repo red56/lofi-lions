@@ -183,15 +183,12 @@ describe 'Master Text Pages', :type => :feature do
   end
 
   describe "show" do
-    let(:master_text) { build_stubbed :master_text }
-    let(:localized_texts) { build_stubbed_list :localized_text, 3, master_text: master_text }
-    before do
-      allow(MasterText).to receive_messages(find: master_text)
-      expect(master_text).to receive_messages(localized_texts: localized_texts)
-      allow_to_behave_like_scope(localized_texts)
-    end
-    it "shows multiple languages" do
+    let!(:master_text) { create :master_text }
+    let!(:localized_texts) { create_list :localized_text, 3, master_text: master_text }
+
+    it "shows multiple languages (and allo" do
       visit master_text_path(master_text)
+      all(:link, "Edit").first.click
     end
   end
 
