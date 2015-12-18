@@ -1,5 +1,7 @@
 # LoFi  Localization Server
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/red56/lofi-lions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This project will allow you to create a server to help you manage localization of in a very low-fi way. (there are very advanced management software and services for Translation agencies to use. This is much more low maintenance).
 
 Here are the aims of the project:
