@@ -13,6 +13,7 @@ describe HerokuTargets do
     deploy_ref : origin/master
     display_name : My Lovely Staging heroku_app
     staging : true
+    db_color : NAVY
   VALID
   let(:valid_ht) { HerokuTargets.from_string(valid_file) }
 
@@ -48,16 +49,17 @@ describe HerokuTargets do
       expect(valid_ht.targets['whatevs']).to be_nil
       expect(valid_ht.staging_targets['whatevs']).to be_nil
     end
-  end
-
-  specify "template heroku targets should be ok" do
-    HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml.template'))
-  end
-
-  if File.exists?(Rails.root.join('config/heroku_targets.yml'))
-    specify "actual heroku targets should be ok" do
-      HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml'))
+    it "should be able to return db_color " do
+      expect(valid_ht.targets['staging'].db_color).to eq('NAVY')
+      expect(valid_ht.targets['production'].db_color).to eq('DATABASE')
     end
+  end
+  it "our local heroku targets (if exists) should be ok" do
+    targets_file = Rails.root.join('config/heroku_targets.yml')
+    HerokuTargets.from_file(targets_file) if File.exists?(targets_file)
+  end
+  it "our heroku targets template should be ok" do
+    HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml.template'))
   end
 
   describe HerokuTargets::HerokuTarget do
@@ -67,13 +69,13 @@ describe HerokuTargets do
       expect(HerokuTargets::HerokuTarget.new(minimal_values)).to be_a(HerokuTargets::HerokuTarget)
     end
     it "should require heroku_app" do
-      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:heroku_app)) }.to raise_error
+      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:heroku_app)) }.to raise_error ArgumentError
     end
     it "should require deploy_ref" do
-      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:deploy_ref)) }.to raise_error
+      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:deploy_ref)) }.to raise_error ArgumentError
     end
     it "should require git_remote" do
-      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:git_remote)) }.to raise_error
+      expect { HerokuTargets::HerokuTarget.new(minimal_values.except(:git_remote)) }.to raise_error ArgumentError
     end
 
     it "should be not staging by default" do

@@ -5,6 +5,7 @@ class HerokuTargets
     def from_string(heroku_targets_yml)
       HerokuTargets.new(YAML.load(heroku_targets_yml))
     end
+
     def from_file(yaml_file)
       HerokuTargets.new(YAML.load(File.read(yaml_file)))
     end
@@ -14,9 +15,9 @@ class HerokuTargets
 
   def initialize(targets_hash)
     @targets = TargetsContainer[targets_hash.collect do |name, values|
-          heroku_target = HerokuTarget.new(values, name)
-          [heroku_target.heroku_app, heroku_target]
-        end].freeze
+      heroku_target = HerokuTarget.new(values, name)
+      [heroku_target.heroku_app, heroku_target]
+    end].freeze
     @staging_targets = TargetsContainer[@targets.select { |name, target| target.staging? }]
   end
 
@@ -32,6 +33,7 @@ class HerokuTargets
 
   class HerokuTarget
     attr_reader :name
+
     def initialize(values_hash, name=nil)
       @values = values_hash.symbolize_keys.freeze
       @name = name.to_sym if name
@@ -52,12 +54,20 @@ class HerokuTargets
       @values[:heroku_app]
     end
 
+    def database_url
+      @values[:database_url]
+    end
+
     def git_remote
       @values[:git_remote]
     end
 
     def deploy_ref
       @values[:deploy_ref]
+    end
+
+    def db_color
+      @values[:db_color] || 'DATABASE'
     end
 
     def to_s
