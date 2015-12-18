@@ -18,12 +18,13 @@
           = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
             label: project_language.language.name}
 
-.panel.panel-primary
-  .panel-heading
-    %h3.panel-title.clearfix
-      Translations
-  .list-group
-    - current_user.project_languages.each do |project_language|
-      = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
-        label: project_language}
+- if current_user.project_languages.to_a.length > 0
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title.clearfix
+        Translations
+    .list-group
+      - current_user.project_languages.each do |project_language|
+        = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+          label: project_language}
 
