@@ -37,7 +37,7 @@ gem 'devise-bootstrap-views'
 
 gem 'unicorn'
 
-gem 'simple_form', github: 'plataformatec/simple_form'
+gem 'simple_form'
 
 gem 'bugsnag'
 
