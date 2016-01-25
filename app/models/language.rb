@@ -7,7 +7,7 @@ class Language < ActiveRecord::Base
   has_many :localized_texts, through: :project_languages
   has_many :project_languages, inverse_of: :language, dependent: :destroy
   has_many :users, through: :project_languages
-  has_many :projects, through: :project_langauges
+  has_many :projects, through: :project_languages
 
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true

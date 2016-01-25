@@ -1,30 +1,28 @@
-%table.table.table-striped.table-condensed.table-hover
-  %thead
-    %tr
-      %th
-      %th User
-      %th Roles
-  %tbody
-    - @users.each do |user|
-      %tr[user]
-        %td= link_to "Edit", edit_user_path(user), class: 'btn btn-default btn-xs'
-        %td= user.email
-        %td
-          - if user.is_administrator?
-            .label.label-default Admin
-          - if user.is_developer?
-            .label.label-danger
-              %small.language Dev
-          - if user.edits_master_text?
-            = link_to master_texts_path do
+.list-group
+  .row.list-group-item
+    .col-sm-3 User
+    .col-sm-9 Roles / Languages
+  - @users.each do |user|
+    = link_to edit_user_path(user), class: 'row list-group-item', id: dom_id(user) do
+      .col-sm-3
+        = user.email
+      .col-sm-9
+        .btn.btn-default.pull-right
+          Edit
+        - if user.is_administrator?
+          .label.label-default Admin
+        - if user.is_developer?
+          .label.label-danger
+            %small.language Dev
+        - if user.edits_master_text?
+          .label.label-info
+            %small.language English
+        - user.project_languages.includes(:language, :project).order('languages.name asc, projects.name asc').group_by{|pl| pl.language }.each do |lang, pls|
+          %div
+            .label.label-info= lang
+            - pls.each do |project_language|
               .label.label-primary
-                %small.language English
-          - user.project_languages.each do |project_language|
-            = link_to project_language_texts_path(project_language) do
-              .label.label-primary
-                %small.language #{project_language.project.name} #{project_language.language.name}
-
-
+                %small.language #{project_language.project.name}
 .buttons.well
   = link_to "Add", new_user_path, class: 'btn btn-primary'
   %p.text-muted

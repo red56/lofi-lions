@@ -1,32 +1,30 @@
 %h1 Listing languages
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Code
+.list-group
+  .list-group-item.row.hidden-xs
+    .col-sm-2 Language
+    - if current_user.is_administrator
+      .col-sm-8
+        Projects & translators
+
+  - @languages.each do |language|
+    .list-group-item.row
+      .col-sm-2.clearfix
+        .label.label-info= language.code
+        %span.together= language.name
       - if current_user.is_administrator
-        %th Projects & translators
-        %th
-  %tbody
-    - @languages.each do |language|
-      %tr
-        %td= language.name
-        %td= language.code
-        - if current_user.is_administrator
-          %td
-            %ul
-              - language.project_languages.each do |project_language|
-                %li
-                  = project_language.project.name
-                  %ul
-                    - project_language.users.sort_by(&:email).each do |user|
-                      %li
-                        %small= link_to user.email, edit_user_path(user)
-          %td
-            = link_to 'Edit language settings', edit_language_path(language), class: 'btn btn-default'
-            -#= link_to 'Delete language', language, :method => :delete, :data => { :confirm => 'Are you sure?' },
-            -#class: 'btn btn-warning'
+        .col-sm-8
+          .list-group
+            - language.users.uniq.each do |user|
+              = link_to edit_user_path(user), class: 'list-group-item clearfix' do
+                %span.together= user.email
+                %span.together.pull-right
+                  - user.project_languages.includes(:project).where(language_id: language.id).each do |project_language|
+                    .label.label-primary= project_language.project.name
+        .col-sm-2
+          = link_to 'Edit settings', edit_language_path(language), class: 'btn btn-default'
+          -#= link_to 'Delete language', language, :method => :delete, :data => { :confirm => 'Are you sure?' },
+          -#class: 'btn btn-warning'
 
 %br
 

@@ -50,12 +50,15 @@ describe 'User management pages', :type => :feature do
         expect(page).to have_link_to(edit_user_path(user))
       end
     end
-    specify "lists users with editing privileges" do
-      expect(users.last).to receive_messages(project_languages: [build_stubbed(:project_language,
-                      project: build_stubbed(:project, name: 'projecty'),
-                      language: build_stubbed(:language, name: 'fingle'))])
-      visit users_path
-      expect(page).to have_content('fingle')
+    context "with project langaguges" do
+      let(:project_languages) { [build_stubbed(:project_language,
+          project: build_stubbed(:project, name: 'projecty'),
+          language: build_stubbed(:language, name: 'fingle'))]}
+      specify "lists users with editing privileges" do
+        expect(users.last).to receive_messages(project_languages: like_a_scope(project_languages))
+        visit users_path
+        expect(page).to have_content('fingle')
+      end
     end
 
     it "has link to add" do
