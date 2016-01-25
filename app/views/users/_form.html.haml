@@ -10,7 +10,7 @@
   - pls.group_by{|pl| pl.language }.each do |lang, group|
     %fieldset.project-languages
       %div
-        .label.label-primary= lang
+        .label.label-info= lang
       - group.each do |pl|
         = f.collection_check_boxes(:project_language_ids, [pl], :id, :to_s, input_wrapper: nil) do |b|
           .bordered-checkbox
