@@ -6,7 +6,16 @@
   = f.input :is_developer, label: 'Dev'
   = f.input :edits_master_text, label: 'Masters (English)'
 
-  = f.association :project_languages.to_s,   as: :check_boxes
+  - pls = ProjectLanguage.includes(:language, :project).order('languages.name asc, projects.name asc').all
+  - pls.group_by{|pl| pl.language }.each do |lang, group|
+    %fieldset.project-languages
+      %div
+        .label.label-primary= lang
+      - group.each do |pl|
+        = f.collection_check_boxes(:project_language_ids, [pl], :id, :to_s, input_wrapper: nil) do |b|
+          .bordered-checkbox
+            = b.label(class: 'checkbox-inline') { b.check_box + b.object.project.name }
+
 
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

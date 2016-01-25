@@ -3,3 +3,15 @@
     color: #dddddd;
   }
 }
+
+fieldset.project-languages label.checkbox-inline {
+  padding-top: 0px;
+}
+
+fieldset.project-languages .bordered-checkbox {
+    border-radius: 5px;
+    margin: 0 5px;
+    padding: 0 5px;
+    border: 1px solid #dddddd;
+  background-color: #eeeeee;
+  }
