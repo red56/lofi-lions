@@ -13,7 +13,7 @@ describe ViewsController, :type => :controller do
   }
 
   let(:invalid_attributes) {
-    {view: {}}
+    attributes_for(:view, name: '', project_id: '')
   }
 
   # This should return the minimal set of values that should be in the session
@@ -87,7 +87,7 @@ describe ViewsController, :type => :controller do
 
   describe "PUT update" do
     describe "with valid params" do
-      let(:new_attributes) { attributes_for(:view) }
+      let(:new_attributes) { attributes_for(:view, project_id: project.id) }
 
       it "updates the requested view" do
         view = View.create! valid_attributes
