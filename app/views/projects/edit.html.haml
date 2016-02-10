@@ -9,6 +9,8 @@
 
   = f.input :name
 
+  = f.input :description, input_html: { rows: 10}
+
   %fieldset
     - if @project.languages.length > 0
       %label Existing languages

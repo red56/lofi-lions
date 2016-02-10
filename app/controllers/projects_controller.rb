@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name)
+    params.require(:project).except(:language_ids).permit(:name, :description)
   end
 
   def update_project_with_languages

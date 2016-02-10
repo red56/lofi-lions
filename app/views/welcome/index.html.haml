@@ -1,23 +1,7 @@
 - if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
 
   - @projects.each do |project|
-    .panel.panel-primary[project]
-      .panel-heading
-        %h3.panel-title.clearfix
-          = link_to project.name, project_path(project)
-          Project
-      .list-group
-        .list-group-item.clearfix
-          .text-primary
-            .col-md-3
-              = link_to "#{project.master_texts.count} Master texts", project_path(project), class: 'btn'
-            .col-md-3
-              = link_to project_path(project), class: "btn btn-primary" do
-                View project
-        - project.project_languages.each do |project_language|
-          = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
-            label: project_language.language.name}
-
+    = render partial: 'projects/panel', locals: {project: project}
 - if current_user.project_languages.to_a.length > 0
   .panel.panel-primary
     .panel-heading
@@ -26,5 +10,4 @@
     .list-group
       - current_user.project_languages.each do |project_language|
         = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
-          label: project_language}
-
+          label: project_language, with_description: true}

@@ -9,9 +9,18 @@
   %li.title
     %a= @project_language.language.name
   %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_language_path(@project_language)
-  %li{class: @active_tab == :entry ? 'active':''}= link_to "To enter", entry_project_language_texts_path(@project_language)
-  %li{class: @active_tab == :review ? 'active':''}= link_to "For review", review_project_language_texts_path(@project_language)
-  %li{class: @active_tab == :all ? 'active':''}= link_to "All", project_language_texts_path(@project_language)
+  %li{class: @active_tab == :all ? 'active':''}
+    = link_to project_language_texts_path(@project_language) do
+      = @project_language.project.master_texts.count
+      Texts
+  %li{class: @active_tab == :entry ? 'active':''}
+    = link_to entry_project_language_texts_path(@project_language) do
+      = @project_language.need_entry_count
+      To enter
+  %li{class: @active_tab == :review ? 'active':''}
+    = link_to review_project_language_texts_path(@project_language) do
+      = @project_language.need_review_count
+      To review
   %li{class: @active_tab == :view ? 'active':''}
     = link_to project_language_views_path(@project_language) do
       = icon('list-alt')

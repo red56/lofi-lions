@@ -14,6 +14,6 @@ describe LocalizedTextsController, type: :controller do
     allow(localized_text).to receive(:update)
     expect(LocalizedText).to receive(:find).and_return(localized_text)
     expect(project_language).to receive(:recalculate_counts!)
-    put :update, {id: localized_text.id, localized_text: {text: "text"}, original_url: "somewhere"}
+    put :update, {id: localized_text.id, localized_text: {other: "text"}, original_url: "somewhere"}
   end
 end
