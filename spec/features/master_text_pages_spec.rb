@@ -62,25 +62,38 @@ describe 'Master Text Pages', :type => :feature do
     it "displays" do
       visit new_project_master_text_path(project)
     end
-    it "works for developer" do
-      expect(@user).to receive_messages(is_developer?: true)
-      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_created)
-      visit new_project_master_text_path(project)
+    def fill_in_and_save
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       fill_in "master_text_text", with: 'My text'
       click_on "Save"
+    end
+    it "works for developer" do
+      expect(@user).to receive_messages(is_developer?: true)
+      expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_created)
+      visit new_project_master_text_path(project)
+      fill_in_and_save
       expect(page).not_to have_css("form.master_text")
     end
     it "displays errors" do
       expect(@user).to receive_messages(is_developer?: true)
       visit new_project_master_text_path(project)
-      expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: 'my.key'
       click_on "Save"
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
     end
+    context "with a language..." do
+      let!(:project_language) {create(:project_language, project: project, need_entry_count: 0)}
+      it "updates project language need_entry_count" do
+        expect {
+          expect(@user).to receive_messages(is_developer?: true)
+          visit new_project_master_text_path(project)
+          fill_in_and_save
+        }.to change{ project_language.reload.need_entry_count }.from(0).to(1)
+      end
+    end
+
   end
   describe "edit" do
     let(:master_text) { create(:master_text, project: project) }
@@ -179,6 +192,23 @@ describe 'Master Text Pages', :type => :feature do
       select "markdown", from: 'master_text_format'
       click_on "Save"
       expect(master_text.reload.format).to eq("markdown")
+    end
+
+    context "with a language..." do
+      let!(:project_language) {create(:project_language, project: project, need_review_count: 0)}
+      let!(:localized_text) {create(:localized_text, project_language: project_language, master_text: master_text,
+          other: "some original translation")}
+      it "updates project language review_count" do
+        expect {
+          visit edit_master_text_path(master_text)
+          expect(page).to have_css("form.master_text")
+          fill_in "master_text_text", with: 'something new in sandwiches'
+          click_on "Save"
+          expect(page).not_to have_css("form.master_text")
+          expect(localized_text.reload.needs_entry).to be_falsey
+          expect(localized_text.reload.needs_review).to be_truthy
+        }.to change{ project_language.reload.need_review_count }.from(0).to(1)
+      end
     end
   end
 
