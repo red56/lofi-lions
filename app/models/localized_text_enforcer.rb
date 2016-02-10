@@ -65,10 +65,10 @@ class LocalizedTextEnforcer
       if (result = @master_text.send(save_method))
         if was_new_record
           LocalizedTextEnforcer.new.master_text_created(@master_text)
-          @master_text.project.recalculate_counts!
         elsif text_changed
           LocalizedTextEnforcer.new.master_text_changed(@master_text)
         end
+        @master_text.project.recalculate_counts!
       end
       result
     end
