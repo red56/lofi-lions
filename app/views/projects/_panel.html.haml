@@ -1,0 +1,20 @@
+.panel.panel-primary[project]
+  .panel-heading
+    %h3.panel-title.clearfix
+      = link_to "'#{project.name}'", project_path(project)
+      Project
+  - if project.description.present?
+    .panel-body
+      = simple_format(project.description)
+  .list-group
+    .list-group-item.clearfix
+      .text-primary
+        .col-md-3
+          = link_to "#{project.master_texts.count} Master texts", project_path(project), class: 'btn'
+        - unless project == @project
+          .col-md-3
+            = link_to project_path(project), class: "btn btn-primary" do
+              View project
+    - project.project_languages.each do |project_language|
+      = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+          label: project_language.language.name}

@@ -45,6 +45,15 @@ describe 'Project Pages', :type => :feature do
       click_on "Save"
       expect(project.reload.name).to eq "What you like"
     end
+
+    it "can edit description" do
+      visit edit_project_path(project)
+      fill_in "Description", with: "Something you like"
+      click_on "Save"
+      expect(project.reload.description).to eq "Something you like"
+      expect(page).to have_content "Something you like"
+    end
+
     it "can add new project languages" do
       visit edit_project_path(project)
       check("project_language_ids_#{other_language.id}")

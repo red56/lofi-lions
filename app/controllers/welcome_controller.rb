@@ -6,6 +6,6 @@ class WelcomeController < ApplicationController
   end
 
   def index
-    @projects = Project.all.includes(:languages)
+    @projects = Project.all.includes(:languages).order(:id)
   end
 end

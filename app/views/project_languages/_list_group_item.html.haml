@@ -1,3 +1,4 @@
+- with_description ||= with_description
 .list-group-item.clearfix[project_language]
   = link_to(project_language_path(project_language)) do
     .text-primary.col-sm-3
@@ -20,5 +21,8 @@
           = icon('check')
           No outstanding reviews
     - if project_language.need_entry_count > 0 || project_language.need_review_count > 0
-      = link_to next_project_language_path(project_language), class: 'btn btn-success' do
+      = link_to next_project_language_path(project_language), class: 'btn btn-success col-sm-3' do
         Start
+  - if with_description
+    .col-sm-12
+      = simple_format(project_language.project.description)
