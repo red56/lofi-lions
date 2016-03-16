@@ -31,18 +31,19 @@
         .form-control-static= simple_format(@localized_text.translated_from)
 
   .row
-    .form-group.col-md-4
+    .form-group.col-md-6
       %label English
       = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
-    .form-group.col-md-4
+    .form-group.col-md-6
       = f.label :other, @project_language.language.name
       = f.text_area :other, class: 'form-control', rows: 10
       = f.hidden_field :needs_review, value: false
       - if @original_url
         %input{type: "hidden", name: "original_url", value: @original_url}
-    .form-group.col-md-4
+  .row
+    .form-group.col-md-12
       = f.label :comment
-      = f.text_area :comment, class: 'form-control', rows: 10
+      = f.text_area :comment, class: 'form-control', rows: 5
 
   - if @localized_text.markdown?
     %br
