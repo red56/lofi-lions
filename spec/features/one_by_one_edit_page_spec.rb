@@ -29,7 +29,7 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
 
     it "saves the comment" do
       visit edit_localized_text_path(empty_localized_text.id)
-      fill_in "Comment", with: "I am a localized comment"
+      fill_in "localized_text_comment", with: "I am a localized comment"
       click_on "Save"
       expect(empty_localized_text.reload.comment).to eq "I am a localized comment"
     end

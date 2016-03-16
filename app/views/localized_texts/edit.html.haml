@@ -1,25 +1,29 @@
 = render :partial => 'project_languages/tabs'
 %br
-%div{class: @localized_text.needs_entry? && "alert alert-danger" || @localized_text.needs_review? && "alert alert-warning"}
+.well
   .views.pull-right
     - @localized_text.views.each do |view|
       = link_to project_language_view_path(@project_language, view), class: 'pull-right' do
         %small
           = icon('list-alt')
           = view.name
-  %small.text-muted.clearfix
-    %label.pull-left.label.label-default= @localized_text.master_text.key
-    %p.comment= @localized_text.master_text_comment
+  .clearfix
+    %p
+      %label.label.label-default= @localized_text.master_text.key
+    %p
+      %i= @localized_text.master_text_comment
 
+%div{class: @localized_text.needs_entry? && "alert alert-danger" || @localized_text.needs_review? && "alert alert-warning"}
   - if @localized_text.needs_entry?
-    %i
+    %b.pull-right
       Needs translation
   - elsif @localized_text.needs_review?
-    %i
-      Needs review
-      - if @localized_text.translated_at
-        since translation at
-        = @localized_text.translated_at.to_s(:short)
+    %b Needs review
+    - if @localized_text.translated_at
+      since translation at
+      = @localized_text.translated_at.to_s(:short)
+
+
 
 = simple_form_for(@localized_text, html: { class: 'form-horizontal' })  do |f|
 
@@ -42,8 +46,11 @@
         %input{type: "hidden", name: "original_url", value: @original_url}
   .row
     .form-group.col-md-12
-      = f.label :comment
-      = f.text_area :comment, class: 'form-control', rows: 5
+      = f.label :comment, class: 'text-muted' do
+        Translation Notes or Queries
+        %small (Not part of the translation -- just notes to save on this page)
+
+      = f.text_area :comment, class: 'form-control', rows: 3
 
   - if @localized_text.markdown?
     %br
