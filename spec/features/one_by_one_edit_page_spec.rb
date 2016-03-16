@@ -34,8 +34,22 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       expect(current_path).to eq(review_project_language_texts_path(project_language))
     end
 
+    context "when a master text has comments" do
+      before do
+        master_text.update_attributes!(comment: "text comment")
+        master_text.save!
+      end
+
+      it "displays them" do
+        visit edit_localized_text_path(empty_localized_text.id)
+        expect(page).to have_content("text comment")
+      end
+
+    end
+
     context "with translated_from and needs review" do
       let(:localized_text) {create(:localized_text, translated_from: "I'm the original yo", needs_review: true)}
+
 
       it "shows the original" do
         visit edit_localized_text_path(localized_text)

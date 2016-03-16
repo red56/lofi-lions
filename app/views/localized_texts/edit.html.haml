@@ -9,7 +9,7 @@
           = view.name
   %small.text-muted.clearfix
     %label.pull-left.label.label-default= @localized_text.master_text.key
-    %p.comment= @localized_text.comment
+    %p.comment= @localized_text.master_text_comment
 
   - if @localized_text.needs_entry?
     %i
@@ -31,15 +31,18 @@
         .form-control-static= simple_format(@localized_text.translated_from)
 
   .row
-    .form-group.col-md-6
+    .form-group.col-md-4
       %label English
       = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
-    .form-group.col-md-6
+    .form-group.col-md-4
       = f.label :other, @project_language.language.name
       = f.text_area :other, class: 'form-control', rows: 10
       = f.hidden_field :needs_review, value: false
       - if @original_url
         %input{type: "hidden", name: "original_url", value: @original_url}
+    .form-group.col-md-4
+      = f.label :comment
+      = f.text_area :comment, class: 'form-control', rows: 10
 
   - if @localized_text.markdown?
     %br
