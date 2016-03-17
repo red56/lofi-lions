@@ -21,7 +21,7 @@
                 = ltext_fields.object.original_other
             - else
               %p= ltext_fields.object.original_text
-            %p.comment= ltext_fields.object.comment
+            %p.comment= ltext_fields.object.master_text_comment
             %div
               .label.label-default.key= ltext_fields.object.key
             - ltext_fields.object.views.each do |view|
@@ -42,7 +42,9 @@
                 = ltext_fields.check_box :needs_review
           %td
             .edit
-              = link_to "Edit", edit_localized_text_path(ltext_fields.object)
+              = link_to edit_localized_text_path(ltext_fields.object) do
+                Edit
+                =icon('comment') if ltext_fields.object.comment.present?
 
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

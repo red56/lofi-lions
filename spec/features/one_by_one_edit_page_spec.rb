@@ -21,9 +21,17 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
   describe "the page" do
     it "saves updated text" do
       visit edit_localized_text_path(empty_localized_text.id)
+      visit edit_localized_text_path(empty_localized_text.id)
       fill_in "localized_text[other]", with: "Je suis un master text"
       click_on "Save"
       expect(empty_localized_text.reload.needs_entry).to eq false
+    end
+
+    it "saves the comment" do
+      visit edit_localized_text_path(empty_localized_text.id)
+      fill_in "localized_text_comment", with: "I am a localized comment"
+      click_on "Save"
+      expect(empty_localized_text.reload.comment).to eq "I am a localized comment"
     end
 
     it "redirects back to the correct list" do
@@ -34,8 +42,18 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       expect(current_path).to eq(review_project_language_texts_path(project_language))
     end
 
+    context "when a localized text has a comment" do
+      let(:localized_text) {create(:localized_text, comment: "I am a comment, and a localized one at that")}
+
+      it "displays it" do
+        visit edit_localized_text_path(localized_text)
+        expect(page).to have_content(localized_text.comment)
+      end
+    end
+
     context "with translated_from and needs review" do
       let(:localized_text) {create(:localized_text, translated_from: "I'm the original yo", needs_review: true)}
+
 
       it "shows the original" do
         visit edit_localized_text_path(localized_text)
