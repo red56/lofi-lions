@@ -1,0 +1,10 @@
+- if @project_languages.presence
+  - @project_languages.group_by{|pl| pl.language.name }.each do |name, project_languages|
+    .panel.panel-primary
+      .panel-heading
+        %h3.panel-title.clearfix
+          Translations for #{name}
+      .list-group
+        - project_languages.each do |project_language|
+          = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
+            label: project_language.project, with_description: false}

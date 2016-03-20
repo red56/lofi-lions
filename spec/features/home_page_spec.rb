@@ -49,7 +49,7 @@ describe 'Home page', :type => :feature do
   context "when logged in as a standard user" do
     before do
       stubbed_login_as_user
-      allow(@user).to receive(:project_languages).and_return([project_language])
+      allow(@user).to receive(:project_languages).and_return(like_a_scope([project_language]))
     end
 
     it "doesn't link to projects" do

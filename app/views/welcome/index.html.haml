@@ -1,13 +1,12 @@
-- if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
-
+- if @projects.presence
   - @projects.each do |project|
     = render partial: 'projects/panel', locals: {project: project}
-- if current_user.project_languages.to_a.length > 0
+- if @project_languages.presence
   .panel.panel-primary
     .panel-heading
       %h3.panel-title.clearfix
         Translations
     .list-group
-      - current_user.project_languages.each do |project_language|
+      - @project_languages.each do |project_language|
         = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
           label: project_language, with_description: true}
