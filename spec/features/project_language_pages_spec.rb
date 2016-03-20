@@ -28,11 +28,43 @@ describe 'Project Language Pages', :type => :feature do
   end
 
   describe "index" do
-    it "can list several" do
-      langs = build_stubbed_list(:project_language, 3)
-      allow(Language).to receive_messages(all: langs)
-      visit project_languages_path
+    let(:project_languages){like_a_scope([project_language])}
+    let(:project_language){build_stubbed(:project_language, project: project)}
+    let(:project){build_stubbed(:project)}
+
+
+    context "as an admin" do
+      let(:login) { stubbed_login_as_admin_user }
+      before do
+        allow(ProjectLanguage).to receive(:all).and_return(project_languages)
+        allow(login).to receive(:project_languages).and_return(like_a_scope([]))
+      end
+      it "shows project language rows" do
+        visit project_languages_path
+        within "#project_language_#{project_language.id}" do
+          expect(page).to have_content(project.name)
+          expect(page).to have_link_to(project_language_path(project_language))
+        end
+      end
+
     end
+
+    context "as a regular user" do
+      let(:login) { stubbed_login_as_user }
+
+      before do
+        allow(login).to receive(:project_languages).and_return(project_languages)
+      end
+
+      it "shows project language rows" do
+        visit project_languages_path
+        within "#project_language_#{project_language.id}" do
+          expect(page).to have_content(project.name)
+          expect(page).to have_link_to(project_language_path(project_language))
+        end
+      end
+    end
+
   end
 
   describe "translations" do

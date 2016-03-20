@@ -3,7 +3,12 @@ class ProjectLanguagesController < ApplicationController
   before_action :find_project_language, only: [:update, :show, :next]
 
   def index
-    redirect_to root_path
+    if current_user.edits_master_text? || current_user.is_administrator? || current_user.is_developer?
+      @project_languages = ProjectLanguage.all
+    else
+      @project_languages = current_user.project_languages
+    end
+    @project_languages = @project_languages.joins(:project, :language).order('languages.name, projects.id')
   end
 
   def show

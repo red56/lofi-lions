@@ -7,6 +7,7 @@ def like_a_scope(array, type: nil)
   array.tap do |scope|
     scope.define_singleton_method(:includes){|*args| scope}
     scope.define_singleton_method(:where){|*args| scope}
+    scope.define_singleton_method(:joins){|*args| scope}
     scope.define_singleton_method(:limit){|*args| scope}
     scope.define_singleton_method(:order){|*args| scope}
     scope.define_singleton_method(:reorder){|*args| scope}

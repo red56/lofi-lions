@@ -1,5 +1,7 @@
 def _stub_authenticated_user(user)
-  allow_any_instance_of(ApplicationController).to receive_messages(user_signed_in?: true, current_user: user, authenticate_user!: true)
+  user.tap do |user|
+    allow_any_instance_of(ApplicationController).to receive_messages(user_signed_in?: true, current_user: user, authenticate_user!: true)
+  end
 end
 
 def stubbed_login_as_admin_user
