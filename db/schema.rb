@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token", limit: 255
+    t.boolean "send_administrator_emails"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at"
   end

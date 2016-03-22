@@ -9,6 +9,11 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :project_languages
 
   scope :admins, -> { where(is_administrator: true) }
+  scope :send_admininistrator_emails, -> { where(send_admininistrator_emails: true) }
+
+  def self.admin_emails
+    self.send_admininistrator_emails.map(&:email)
+  end
 
   def to_s
     "User(#{email})"

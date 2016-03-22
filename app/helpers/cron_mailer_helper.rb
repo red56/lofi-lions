@@ -1,5 +1,6 @@
 module CronMailerHelper
   def colourize_translation_status(texts, needing)
+    return '' unless texts.length > 0
     percent = ((needing.to_f / texts.length.to_f) * 100.0).round
     (%(<span style="color: #{percentage_colour(percent)}">) << needing.to_s.ljust(4, ' ') << " (" << percent.to_s << "%)" << %(</span>)).html_safe
   end

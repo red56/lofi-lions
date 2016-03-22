@@ -15,4 +15,17 @@ describe CronMailer, type: :mailer do
     end
   end
 
+  describe "translator_update" do
+    let!(:translator){create(:user, project_languages: [project_language])}
+    let!(:project_language){create(:project_language)}
+    let!(:other_project_language){create(:project_language)}
+
+    it "should work" do
+      expect {
+        CronMailer.translator_update(translator).deliver_now
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect(email_doc).to have_link_to(project_language_url(project_language))
+      expect(email_doc).to_not have_link_to(project_language_url(other_project_language))
+    end
+  end
 end
