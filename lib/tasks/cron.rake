@@ -1,6 +1,7 @@
 namespace :cron do
   task translation_status_email: [:environment] do
-    CronMailer.translation_status_report.deliver
+    admin_emails = User.admins.map(&:email)
+    CronMailer.translation_status_report(admin_emails).deliver
   end
 
   WEEKLY_TASKS = [
