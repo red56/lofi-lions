@@ -96,7 +96,7 @@ To upload a strings file using Curl:
     curl -F file=@/path/to/android-app/Project/res/values-en/strings.xml -X POST http://localhost:3010/api/projects/:id_or_slug/import/android
     curl -F file=@/path/to/rails-app/config/locales/en.yml -X POST http://localhost:3010/api/projects/:id_or_slug/import/yaml
 
-where `/path/to/fieldnotes-iphone-app/FieldNotes/en.lproj/Localizable.strings` is the path to the strings file you
+where `/path/to/iphone-app/Project/en.lproj/Localizable.strings` is the path to the strings file you
 want to upload. Note the `@`, this is important.
 
 TO put in a localization file
