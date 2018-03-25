@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 require "spec_helper"
 
 describe HerokuTargets do
-
   valid_file = <<-VALID
   production:
     heroku_app : my-production-heroku_app
@@ -15,8 +15,8 @@ describe HerokuTargets do
     staging : true
     db_color : NAVY
   VALID
-  let(:valid_ht) { HerokuTargets.from_string(valid_file) }
 
+  let(:valid_ht) { HerokuTargets.from_string(valid_file) }
   describe "wrapper class (HerokuTargets)" do
     it "should be able to find display_names" do
       expect(valid_ht.targets).to be_a(Hash)
@@ -34,8 +34,8 @@ describe HerokuTargets do
     end
 
     it "should be able to find a target by heroku ref" do
-      expect(valid_ht.targets['my-production-heroku_app']).to be_a(HerokuTargets::HerokuTarget)
-      expect(valid_ht.staging_targets['my-staging-heroku_app']).to be_a(HerokuTargets::HerokuTarget)
+      expect(valid_ht.targets["my-production-heroku_app"]).to be_a(HerokuTargets::HerokuTarget)
+      expect(valid_ht.staging_targets["my-staging-heroku_app"]).to be_a(HerokuTargets::HerokuTarget)
     end
     it "should be able to find a target by name as well" do
       expect(valid_ht.targets[:production]).to be_a(HerokuTargets::HerokuTarget)
@@ -43,27 +43,57 @@ describe HerokuTargets do
     end
     it "should be able to find a target by string or symbol" do
       expect(valid_ht.targets["production"]).to be_a(HerokuTargets::HerokuTarget)
-      expect(valid_ht.targets['my-production-heroku_app'.to_sym]).to be_a(HerokuTargets::HerokuTarget)
+      expect(valid_ht.targets["my-production-heroku_app".to_sym]).to be_a(HerokuTargets::HerokuTarget)
     end
     it "should be able to return nil if no such target" do
-      expect(valid_ht.targets['whatevs']).to be_nil
-      expect(valid_ht.staging_targets['whatevs']).to be_nil
+      expect(valid_ht.targets["whatevs"]).to be_nil
+      expect(valid_ht.staging_targets["whatevs"]).to be_nil
     end
     it "should be able to return db_color " do
-      expect(valid_ht.targets['staging'].db_color).to eq('NAVY')
-      expect(valid_ht.targets['production'].db_color).to eq('DATABASE')
+      expect(valid_ht.targets["staging"].db_color).to eq("NAVY")
+      expect(valid_ht.targets["production"].db_color).to eq("DATABASE")
+    end
+    it "should raise if repository accessed when unspecified" do
+      [valid_ht.targets["staging"], valid_ht.targets["production"]].each do |target|
+        expect { target.repository }.to raise_error /repository/
+      end
     end
   end
-  it "our local heroku targets (if exists) should be ok" do
-    targets_file = Rails.root.join('config/heroku_targets.yml')
-    HerokuTargets.from_file(targets_file) if File.exists?(targets_file)
+  describe "with defaults" do
+    valid_file_with_defaults = <<-VALID
+    _defaults:
+      repository : https://mygit.hub.com/some/where
+      deploy_ref : origin/master
+    production:
+      heroku_app : my-production-heroku_app
+      git_remote : heroku_production
+    staging:
+      heroku_app : my-staging-heroku_app
+      git_remote : heroku_staging
+      deploy_ref : HEAD
+    VALID
+
+    let(:valid_ht) { HerokuTargets.from_string(valid_file_with_defaults) }
+
+    it "can use defaults for deploy_ref" do
+      expect(valid_ht.targets["production"].deploy_ref).to eq("origin/master")
+    end
+    it "can override defaults for deploy_ref" do
+      expect(valid_ht.targets["staging"].deploy_ref).to eq("HEAD")
+    end
+    it "should use defaults for repository" do
+      [valid_ht.targets["staging"], valid_ht.targets["production"]].each do |target|
+        expect(target.repository).to eq("https://mygit.hub.com/some/where")
+      end
+    end
   end
-  it "our heroku targets template should be ok" do
-    HerokuTargets.from_file(Rails.root.join('config/heroku_targets.yml.template'))
+
+  it "our heroku targets should be ok" do
+    HerokuTargets.from_file(Rails.root.join("config/heroku_targets.yml"))
   end
 
   describe HerokuTargets::HerokuTarget do
-    let(:minimal_values) { {heroku_app: 'my-lovely-app', git_remote: 'heroku_branch', deploy_ref: 'HEAD'} }
+    let(:minimal_values) { { heroku_app: "my-lovely-app", git_remote: "heroku_branch", deploy_ref: "HEAD" } }
 
     it "should work with minimal values" do
       expect(HerokuTargets::HerokuTarget.new(minimal_values)).to be_a(HerokuTargets::HerokuTarget)
@@ -89,7 +119,6 @@ describe HerokuTargets do
     it "should give display_name as heroku_app if not specified" do
       target = HerokuTargets::HerokuTarget.new(minimal_values)
       expect(target.display_name).to eq(target.heroku_app)
-
     end
     it "should give display_name as heroku_app if not specified" do
       target = HerokuTargets::HerokuTarget.new(minimal_values.merge(display_name: "Flarrr"))
@@ -107,6 +136,8 @@ describe HerokuTargets do
       target = HerokuTargets::HerokuTarget.new(minimal_values)
       expect(target.deploy_ref).to eq(minimal_values[:deploy_ref])
     end
+    it "should give repository (from defaults)" do
+      target = HerokuTargets::HerokuTarget.new(minimal_values)
+    end
   end
-
 end
