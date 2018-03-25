@@ -194,6 +194,8 @@ then you can call (one-off, regularly, etc):
 ProjectLanguage.auto_translate_all
 ``` 
 
+This will translate all empty translations, and mark them for review with a note that they have been automatically translated.
+
 
 # License
 
