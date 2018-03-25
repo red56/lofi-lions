@@ -54,7 +54,7 @@ class ProjectLanguage < ActiveRecord::Base
     translations.zip(to_translate) do |translation, localized_text|
       localized_text.google_translated!(translation)
     end
-    return translations.length
+    translations.length
   end
 
   def self.auto_translate_all
