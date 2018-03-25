@@ -185,4 +185,26 @@ describe LocalizedText, :type => :model do
       end
     end
   end
+
+  describe "#google_translated!" do
+    let(:localized_text) {create(:localized_text)}
+    subject {localized_text.google_translated!("new stuff")}
+    it "updates value" do
+      expect {subject}.to change {localized_text.other}.to "new stuff"
+    end
+    it "sets needs review" do
+      expect {subject}.to change {localized_text.needs_review?}.to true
+    end
+    it "adds comment" do
+      expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+    end
+
+    context "if already comment" do
+      let(:localized_text) {create(:localized_text, comment: "Important point...")}
+      it "adds comment" do
+        expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+        expect(localized_text.comment).to start_with("Important point...\n")
+      end
+    end
+  end
 end

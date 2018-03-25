@@ -184,6 +184,17 @@ git clone evilstreak/markdown-js && cd markdown-js && npm install
 cp dist/markdown.js ../lofi-lions/vendor/assets/javascripts/markdown.js
 ```
 
+## Google translate
+
+Put your api key in `GOOGLE_TRANSLATE_API_KEY` environment variable (see https://github.com/glebm/i18n-tasks#google-translate for a how-to generate)
+
+then you can call (one-off, regularly, etc):
+
+```
+ProjectLanguage.auto_translate_all
+``` 
+
+
 # License
 
 This project is open-sourced under the Apache 2.0 license. See LICENSE.TXT
