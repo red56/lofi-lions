@@ -61,6 +61,7 @@ group :development do
   gem "spring"
   gem "spring-commands-rspec"
   gem "fix-db-schema-conflicts"
+  gem "releasetool", github: "red56/releasetool", branch: 'master'
 end
 
 group :test do
@@ -72,5 +73,4 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara', '>=2.2.0'
-  gem "releasetool", github: "red56/releasetool", branch: 'master'
 end
