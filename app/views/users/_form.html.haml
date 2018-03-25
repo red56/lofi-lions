@@ -1,4 +1,4 @@
-= simple_form_for(@user, html: { class: 'form-horizontal user form' }) do |f|
+= simple_form_for(@user, html: { class: 'user form' }) do |f|
   = render partial: '_common/form_errors', locals: {instance: @user}
 
   = f.input :email

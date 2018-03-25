@@ -5,10 +5,11 @@
     = f.label :name
     = f.text_field :name, class: 'form-control'
 
-  .form-group.row
-    .col-xs-2
-      = f.label :code
-      = f.text_field :code, class: 'form-control'
+  .form-group
+    .row
+      .col-xs-2
+        = f.label :code
+        = f.text_field :code, class: 'form-control'
 
   %h3
     Plural form labels
@@ -20,11 +21,12 @@
     and/or
     = link_to nil, 'http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html'
     for reference
-  .form-group.row
-    - Language::PLURAL_FORMS_WITH_FIELDS.each do |plural_form, field|
-      .col-xs-2
-        = f.label field, plural_form.to_s.titleize
-        = f.text_field field, class: 'form-control'
+  .form-group
+    .row
+      - Language::PLURAL_FORMS_WITH_FIELDS.each do |plural_form, field|
+        .col-xs-2
+          = f.label field, plural_form.to_s.titleize
+          = f.text_field field, class: 'form-control'
 
 
 

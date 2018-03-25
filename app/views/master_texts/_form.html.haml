@@ -1,4 +1,4 @@
-= simple_form_for(@master_text, html: { class: 'form-horizontal master_text' }) do |f|
+= simple_form_for(@master_text, html: { class: 'master_text' }) do |f|
   = render partial: '_common/form_errors', locals: {instance: @master_text}
 
   - if current_user.is_developer?
