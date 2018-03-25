@@ -129,6 +129,7 @@ RSpec.describe ProjectLanguage, :type => :model do
     context "with one" do
       let!(:missing_entry) {create(:localized_text, master_text: mt1, other: "", project_language: project_language)}
       it "will send off one to google" do
+        expect(project_language).to receive(:recalculate_counts!).and_call_original
         expect_any_instance_of(LocalizedText).to receive(:google_translated!).and_call_original
         expect(EasyTranslate).to receive(:translate)
           .with(["some mt1 words"], from: 'en', to: 'de', format: 'text')
@@ -144,6 +145,7 @@ RSpec.describe ProjectLanguage, :type => :model do
       let!(:has_entry) {create(:localized_text, master_text: mt1, other: "whoah", project_language: project_language)}
       it "won't" do
         expect(EasyTranslate).not_to receive(:translate)
+        expect(project_language).not_to receive(:recalculate_counts!)
         expect(subject).to eq(0)
       end
     end

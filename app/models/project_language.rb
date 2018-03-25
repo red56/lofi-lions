@@ -54,16 +54,17 @@ class ProjectLanguage < ActiveRecord::Base
     translations.zip(to_translate) do |translation, localized_text|
       localized_text.google_translated!(translation)
     end
+    recalculate_counts!
     translations.length
   end
 
   def self.auto_translate_all
-    puts "Auto translate"
+    report = []
+    report << "Auto translate"
     all.each do |project_language|
       n = project_language.google_translate_missing
-      if n > 0
-        puts "* [%5s] #{project_language}" % [n]
-      end
+      report << "* [%5s] #{project_language}" % [n] if n > 0
     end
+    puts report.join("\n")
   end
 end
