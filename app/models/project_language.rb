@@ -59,7 +59,7 @@ class ProjectLanguage < ActiveRecord::Base
 
   def self.auto_translate_all
     puts "Auto translate"
-    each do |project_language|
+    all.each do |project_language|
       n = project_language.google_translate_missing
       if n > 0
         puts "* [%5s] #{project_language}" % [n]
