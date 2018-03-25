@@ -34,4 +34,8 @@ class Language < ActiveRecord::Base
     false
   end
 
+  def code_for_google
+    return "zh-CN" if code == "zh"
+    code
+  end
 end

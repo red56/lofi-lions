@@ -12,6 +12,8 @@ class ProjectLanguage < ActiveRecord::Base
 
   validates_presence_of :project_id
 
+  delegate :code, :code_for_google, to: :language, prefix: true
+
   def recalculate_counts!
     self.update!(
         need_review_count: self.localized_texts.where(needs_review: true, needs_entry: false).count,
@@ -39,5 +41,4 @@ class ProjectLanguage < ActiveRecord::Base
     candidates = localized_texts.needs_review_or_entry.limit(1)
     candidates.where('key > ?', after_key).first || candidates.first
   end
-
 end

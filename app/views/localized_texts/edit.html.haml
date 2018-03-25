@@ -103,5 +103,8 @@
       - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
         = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
     .col-md-6
+      = link_to "Google translate", @localized_text.google_translate_url, class: 'btn btn-link'
       = f.submit "Save", class: 'btn btn-primary pull-right'
+
+
 

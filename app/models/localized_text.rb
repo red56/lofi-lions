@@ -15,7 +15,7 @@ class LocalizedText < ActiveRecord::Base
   delegate :key, :pluralizable, :markdown?, :format, to: :master_text
   delegate :comment, to: :master_text, prefix: "master_text"
   delegate :text, :one, :other, to: :master_text, prefix: 'original'
-  delegate :language, :language_id, to: :project_language
+  delegate :language, :language_id, :language_code, :language_code_for_google, to: :project_language
 
   before_save :update_translated_from
 
@@ -44,5 +44,9 @@ class LocalizedText < ActiveRecord::Base
       self.translated_from = master_text.text
       self.translated_at = Time.now.utc
     end
+  end
+
+  def google_translate_url
+    "https://translate.google.com/#en/#{language_code_for_google}/#{ERB::Util.url_encode(original_text)}"
   end
 end
