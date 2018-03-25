@@ -13,45 +13,56 @@
     %p
       %i= @localized_text.master_text_comment
 
-%div{class: @localized_text.needs_entry? && "alert alert-danger" || @localized_text.needs_review? && "alert alert-warning"}
-  - if @localized_text.needs_entry?
-    %b.pull-right
-      Needs translation
-  - elsif @localized_text.needs_review?
-    %b Needs review
-    - if @localized_text.translated_at
-      since translation at
-      = @localized_text.translated_at.to_s(:short)
 
 
-
-= simple_form_for(@localized_text, html: { class: 'form-horizontal' })  do |f|
+= simple_form_for(@localized_text)  do |f|
 
   - if @localized_text.translated_from && @localized_text.needs_review?
     .row
-      .form-group.col-md-6.translated_from
-        %label
-          Originally translated from
-        .form-control-static= simple_format(@localized_text.translated_from)
+      .col-md-6
+        .form-group.translated_from
+          %label
+            Originally translated from
+          .form-control-static= simple_format(@localized_text.translated_from)
 
   .row
-    .form-group.col-md-6
-      %label English
-      = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 10
-    .form-group.col-md-6
-      = f.label :other, @project_language.language.name
-      = f.text_area :other, class: 'form-control', rows: 10
-      = f.hidden_field :needs_review, value: false
-      - if @original_url
-        %input{type: "hidden", name: "original_url", value: @original_url}
-  .row
-    .form-group.col-md-12
-      = f.label :comment, class: 'text-muted' do
-        = icon('comment')
-        Translation Notes or Queries
-        %small (Not part of the translation -- just notes to save on this page)
+    .col-md-6
+      .form-group
+        %label English
+        = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 5
+    .col-md-6
+      .form-group
+        = f.label :other, @project_language.language.name
+        - if @localized_text.needs_entry?
+          .label.label-danger
+            Needs translation
+        - elsif @localized_text.needs_review?
+          .label.label-warning
+            Needs review
+            - if @localized_text.translated_at
+              since translation at
+              = @localized_text.translated_at.to_s(:short)
+        - if @localized_text.needs_review?
+          - @localized_text.needs_review = false
+          .pull-right
+            %label
+              = f.check_box :needs_review
+              Still needs review
+        - else
+          .pull-right
+            %label
+              = f.check_box :needs_review
+              Needs review
+        = f.text_area :other, class: 'form-control', rows: 5
+        - if @original_url
+          %input{type: "hidden", name: "original_url", value: @original_url}
 
-      = f.text_area :comment, class: 'form-control', rows: 3
+  .form-group
+    = f.label :comment, class: 'text-muted' do
+      = icon('comment')
+      Translation Notes or Queries
+      %small (Not part of the translation -- just notes to save on this page)
+    = f.text_area :comment, class: 'form-control', rows: 3
 
   - if @localized_text.markdown?
     %br
@@ -92,4 +103,8 @@
       - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
         = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
     .col-md-6
+      = link_to "Google translate", @localized_text.google_translate_url, class: 'btn btn-link'
       = f.submit "Save", class: 'btn btn-primary pull-right'
+
+
+

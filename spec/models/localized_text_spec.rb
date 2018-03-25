@@ -154,4 +154,57 @@ describe LocalizedText, :type => :model do
       end
     end
   end
+
+  describe "#google_translate_url" do
+    let(:localized_text) { create(:localized_text, project_language: project_language, master_text: master_text)}
+    let(:project_language) { create(:project_language, project: project, language: language)}
+    let(:master_text) { create(:master_text, project: project, other: english_text)}
+    let(:project) { create(:project)}
+    let(:language) { create(:language, code: language_code)}
+
+    subject { localized_text.google_translate_url }
+    context "with single word" do
+      let(:english_text) {"text"}
+      let(:language_code) {"fr"}
+      it "makes url" do
+        expect(subject).to eq("https://translate.google.com/#en/fr/text")
+      end
+    end
+    context "with two words in other language" do
+      let(:english_text) {"Some text"}
+      let(:language_code) {"de"}
+      it "makes url" do
+        expect(subject).to eq("https://translate.google.com/#en/de/Some%20text")
+      end
+    end
+    context "with chinese" do
+      let(:english_text) {"Some text"}
+      let(:language_code) {"zh"}
+      it "adjust code" do
+        expect(subject).to eq("https://translate.google.com/#en/zh-CN/Some%20text")
+      end
+    end
+  end
+
+  describe "#google_translated!" do
+    let(:localized_text) {create(:localized_text)}
+    subject {localized_text.google_translated!("new stuff")}
+    it "updates value" do
+      expect {subject}.to change {localized_text.other}.to "new stuff"
+    end
+    it "sets needs review" do
+      expect {subject}.to change {localized_text.needs_review?}.to true
+    end
+    it "adds comment" do
+      expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+    end
+
+    context "if already comment" do
+      let(:localized_text) {create(:localized_text, comment: "Important point...")}
+      it "adds comment" do
+        expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+        expect(localized_text.comment).to start_with("Important point...\n")
+      end
+    end
+  end
 end

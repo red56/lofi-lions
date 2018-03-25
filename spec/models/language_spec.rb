@@ -42,4 +42,15 @@ describe Language, :type => :model do
       end
     end
   end
+
+  describe "code for google" do
+    it "is mostly the same" do
+      expect(build(:language, code: 'de').code_for_google).to eq('de')
+      expect(build(:language, code: 'fr').code_for_google).to eq('fr')
+      expect(build(:language, code: 'pt-BR').code_for_google).to eq('pt-BR')
+    end
+    it "it is normalized for chinese" do
+      expect(build(:language, code: 'zh').code_for_google).to eq('zh-CN')
+    end
+  end
 end

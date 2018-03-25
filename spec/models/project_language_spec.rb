@@ -119,4 +119,49 @@ RSpec.describe ProjectLanguage, :type => :model do
     end
     # end
   end
+
+  describe "google_translate_missing" do
+    let(:mt1) {create(:master_text, key: 'mt1', other: "some mt1 words")}
+    let(:mt2) {create(:master_text, key: 'mt2', other: "some mt2 text")}
+    let(:mt3) {create(:master_text, key: 'mt3', other: "some mt3 sentences")}
+    let(:project_language) {create(:project_language, language: create(:language, code: 'de'))}
+    subject { project_language.google_translate_missing }
+    context "with one" do
+      let!(:missing_entry) {create(:localized_text, master_text: mt1, other: "", project_language: project_language)}
+      it "will send off one to google" do
+        expect(project_language).to receive(:recalculate_counts!).and_call_original
+        expect_any_instance_of(LocalizedText).to receive(:google_translated!).and_call_original
+        expect(EasyTranslate).to receive(:translate)
+          .with(["some mt1 words"], from: 'en', to: 'de', format: 'text')
+          .and_return(["einige mt1 Wörter"])
+        expect {
+          subject
+        }.to change{missing_entry.reload.other}.from("").to("einige mt1 Wörter")
+        expect(subject).to eq(1)
+      end
+    end
+
+    context "with none" do
+      let!(:has_entry) {create(:localized_text, master_text: mt1, other: "whoah", project_language: project_language)}
+      it "won't" do
+        expect(EasyTranslate).not_to receive(:translate)
+        expect(project_language).not_to receive(:recalculate_counts!)
+        expect(subject).to eq(0)
+      end
+    end
+    context "with multiple" do
+      let!(:missing_entry1) {create(:localized_text, master_text: mt1, other: "", project_language: project_language)}
+      let!(:has_entry) {create(:localized_text, master_text: mt2, other: "whoah", project_language: project_language)}
+      let!(:missing_entry3) {create(:localized_text, master_text: mt3, other: "", project_language: project_language)}
+      it "will send off one to google" do
+        expect(EasyTranslate).to receive(:translate)
+          .with(["some mt1 words", "some mt3 sentences"], from: 'en', to: 'de', format: 'text')
+          .and_return(["einige mt1 Wörter", "einige mt3 Sätze"])
+        expect {
+          subject
+        }.to change{missing_entry3.reload.other}.from("").to("einige mt3 Sätze")
+        expect(subject).to eq(2)
+      end
+    end
+  end
 end

@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.2.2"
+ruby "2.3.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
@@ -42,22 +42,12 @@ gem 'simple_form'
 
 gem 'bugsnag'
 
+gem "easy_translate"
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
 
 # needs to be in production because of autoloading... not because it's actually used!
 gem "mail_view", "~> 2.0.4"
@@ -71,6 +61,7 @@ group :development do
   gem "spring"
   gem "spring-commands-rspec"
   gem "fix-db-schema-conflicts"
+  gem "releasetool", github: "red56/releasetool", branch: 'master'
 end
 
 group :test do
@@ -82,5 +73,4 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara', '>=2.2.0'
-  gem "releasetool", github: "red56/releasetool", branch: 'master'
 end

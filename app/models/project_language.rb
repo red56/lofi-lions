@@ -12,6 +12,8 @@ class ProjectLanguage < ActiveRecord::Base
 
   validates_presence_of :project_id
 
+  delegate :code, :code_for_google, to: :language, prefix: true
+
   def recalculate_counts!
     self.update!(
         need_review_count: self.localized_texts.where(needs_review: true, needs_entry: false).count,
@@ -40,4 +42,29 @@ class ProjectLanguage < ActiveRecord::Base
     candidates.where('key > ?', after_key).first || candidates.first
   end
 
+  def google_translate_missing
+    to_translate = localized_texts.needing_entry.includes(:master_text)
+    return 0 unless to_translate.to_a.present?
+    translations = EasyTranslate.translate(
+      to_translate.map(&:original_text),
+      from: "en",
+      to: language_code_for_google,
+      format: 'text'
+    )
+    translations.zip(to_translate) do |translation, localized_text|
+      localized_text.google_translated!(translation)
+    end
+    recalculate_counts!
+    translations.length
+  end
+
+  def self.auto_translate_all
+    report = []
+    report << "Auto translate"
+    all.each do |project_language|
+      n = project_language.google_translate_missing
+      report << "* [%5s] #{project_language}" % [n] if n > 0
+    end
+    puts report.join("\n")
+  end
 end
