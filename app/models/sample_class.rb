@@ -10,13 +10,13 @@ class SampleClass
     end
   end
 
-  def for_double_command_click
+  def double_ctrl_space
     raise Extern
     # place cursor at end of previous line "raise Extern|".
     # ctrl-space for code completion basic
     # --> No responses.
     # ctrl-space again...
-    # --> get expected code completion ("ExternalLibraries")
+    # --> get expected code completion ("ExternalLibraries" etc)
   end
 
   def for_strange_error
@@ -35,16 +35,5 @@ class SampleClass
       # I get no navigation suggestions
     end
   end
-
-  def overconfident
-    File.open(url) do |tempfile|
-      file_type = correct_mimetype(entry.file_content_type)
-      api_client.start(file_type)
-    end
-  end
-
-  # def api_client
-  #   @api_client ||= ApiClient.new("flong")
-  # end
 
 end
