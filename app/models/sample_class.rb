@@ -17,6 +17,7 @@ class SampleClass
     # --> No responses.
     # ctrl-space again...
     # --> get expected code completion ("ExternalLibraries" etc)
+    # Seems similar to the behaviour in https://youtrack.jetbrains.com/issue/RUBY-19385#comment=27-2836602
   end
 
   def for_strange_error
