@@ -32,8 +32,8 @@
 
         %td
           = master_text.comment
-          = link_to master_text_path(master_text) do
-            [ Review ]
+          = link_to master_text_path(master_text), class: 'btn btn-default btn-xs' do
+            Review
         %td.together
           - if current_user.is_developer? || current_user.edits_master_text?
             = link_to 'Edit', edit_master_text_path(master_text), class: 'btn btn-default'
