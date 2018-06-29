@@ -1,0 +1,9 @@
+@media print {
+  a[href]:after {
+    content: none;
+  }
+  .label.label-default {
+    border-color: white;
+    font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+  }
+}
