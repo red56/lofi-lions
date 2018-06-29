@@ -29,4 +29,19 @@ class MasterText < ActiveRecord::Base
   def markdown?
     format == MARKDOWN_FORMAT
   end
+
+  def word_count
+    if pluralizable?
+      count_words(one) + count_words(other)
+    else
+      count_words(text)
+    end
+  end
+
+  private
+
+  def count_words(target_text)
+    return 0 unless target_text.present?
+    target_text.strip.split(/\s+/).length
+  end
 end

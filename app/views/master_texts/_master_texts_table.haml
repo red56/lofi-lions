@@ -1,8 +1,10 @@
+- @word_count = 0
 %table.table.table-striped
   %thead
     %tr
       %th Key (unique reference in the code)
       %th Master Text (English)
+      %th Word count
       %th Comment
       %th
   %tbody
@@ -29,7 +31,9 @@
               = master_text.other
         - else
           %td= master_text.text
-
+        %td
+          = master_text.word_count
+          - @word_count += master_text.word_count
         %td
           = master_text.comment
           = link_to master_text_path(master_text), class: 'btn btn-default btn-xs' do
@@ -41,3 +45,10 @@
             = link_to master_text, method: :delete, data: { confirm: 'Are you sure?' },
               class: 'btn btn-default' do
               %span.text-danger #{icon('times')}
+  %tfoot
+    %tr
+      %th
+      %th
+      %th= @word_count
+      %th
+      %th
