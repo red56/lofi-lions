@@ -68,10 +68,11 @@ group :test do
   gem 'launchy'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'rspec_junit_formatter'
+  gem 'rspec_junit_formatter' # circleci
 end
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara', '>=2.2.0'
+  gem 'bundler-audit', '~> 0.5'
 end

@@ -65,7 +65,7 @@ jobs:
         name: Database setup
         command: |
           cp config/database.circle.yml config/database.yml
-          bin/rake db:schema:load --trace
+          bundle exec rake db:schema:load --trace
 
     - run:
         name: Run rspec in parallel
@@ -75,6 +75,13 @@ jobs:
                             --out test_results/rspec.xml \
                             --format progress \
                             $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+    - run:
+        name: Bundle audit
+        command: |
+          bundle exec bundle-audit update
+          bundle exec bundle-audit -v
+
       # Save test results for timing analysis
     - store_test_results:
         path: test_results
