@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/red56/releasetool.git
-  revision: 6fb465d1b218524a95ad873643792ecf113d1315
+  revision: 7661eeb63e5aff04193720e4a19646fbf4daa8c9
   branch: master
   specs:
-    releasetool (0.1.0)
+    releasetool (0.1.1)
       thor (~> 0.18)
 
 GEM
