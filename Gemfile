@@ -68,6 +68,7 @@ group :test do
   gem 'launchy'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'rspec_junit_formatter'
 end
 
 group :development, :test do
