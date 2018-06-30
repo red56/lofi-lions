@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "High-level API spec", type: :request do
-  let(:file_upload) { fixture_file_upload(Rails.root.join("spec/fixtures/simple_strings.yml"), 'application/octet-stream') }
+  let(:file_upload) { fixture_file_upload("simple_strings.yml", 'application/octet-stream') }
   let!(:project) { create(:project, name: 'Proj') }
   let(:language) { create(:language) }
   let!(:project_language) { create(:project_language, project: project, language: language) }
