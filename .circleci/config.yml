@@ -65,6 +65,7 @@ jobs:
         name: Database setup
         command: |
           cp config/database.circle.yml config/database.yml
+          bin/rake db:schema:load --trace
 
     - run:
         name: Run rspec in parallel
