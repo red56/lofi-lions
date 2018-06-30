@@ -12,7 +12,6 @@ class SampleClass2
 
   def overconfident
     File.open(url) do |tempfile|
-      file_type = correct_mimetype(entry.file_content_type)
       api_client.start(file_type)
       # Command-click "start" to navigate
       # I would expect a list including ApiClient#start and ApiClientMock#start
@@ -24,4 +23,7 @@ class SampleClass2
     @api_client ||= ApiClient.new("flong")
   end
 
+  def file_type
+    "image/png"
+  end
 end
