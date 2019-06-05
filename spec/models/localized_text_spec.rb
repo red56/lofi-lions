@@ -37,7 +37,7 @@ describe LocalizedText, :type => :model do
     it "can't get text" do
       expect {
         localized_text.text
-      }.to raise_error
+      }.to raise_error(/when pluralizable/)
     end
     it "can set text" do
       localized_text.text = 'something'
