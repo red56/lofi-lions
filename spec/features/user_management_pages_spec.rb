@@ -96,7 +96,7 @@ describe 'User management pages', :type => :feature do
       let(:login) { stubbed_login_as_user }
 
       it "can't view if not admin" do
-        expect { visit edit_user_path(user) }.to raise_error
+        expect { visit edit_user_path(user) }.to raise_error(ActionController::RoutingError)
       end
     end
 

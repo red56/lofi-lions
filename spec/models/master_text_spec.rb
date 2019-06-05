@@ -61,7 +61,7 @@ describe MasterText, :type => :model do
     it "can't return text" do
       expect {
         master_text.text
-      }.to raise_error
+      }.to raise_error(/when pluralizable/)
     end
 
   end
