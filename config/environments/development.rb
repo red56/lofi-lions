@@ -26,6 +26,8 @@ LofiLions::Application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+  config.log_level = :info
+
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   # Raise an error on page load if there are pending migrations

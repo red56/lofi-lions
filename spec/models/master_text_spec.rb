@@ -127,17 +127,17 @@ describe MasterText, :type => :model do
   describe "word count" do
     it "counts nothing" do
       master_text = build(:master_text, text: nil)
-      expect(master_text.word_count).to eq(0)
+      expect(master_text.send(:calculate_word_count)).to eq(0)
       master_text = build(:master_text, text: '')
-      expect(master_text.word_count).to eq(0)
+      expect(master_text.send(:calculate_word_count)).to eq(0)
     end
     it "counts a word" do
       master_text = build(:master_text, text: "Oh.")
-      expect(master_text.word_count).to eq(1)
+      expect(master_text.send(:calculate_word_count)).to eq(1)
     end
     it "counts some words" do
       master_text = build(:master_text, text: "Oh, so there you are Mr Jones.")
-      expect(master_text.word_count).to eq(7)
+      expect(master_text.send(:calculate_word_count)).to eq(7)
     end
     it "counts some words in paragraphs or weird spacing" do
       text = <<-TEXT
@@ -146,23 +146,27 @@ We have been expecting you
 \t\tFor some time!
       TEXT
       master_text = build(:master_text, text: text)
-      expect(master_text.word_count).to eq(15)
+      expect(master_text.send(:calculate_word_count)).to eq(15)
     end
 
     context "when pluralizable" do
       it "counts nothing" do
         master_text = build(:master_text, one: nil, other: nil, pluralizable: true)
-        expect(master_text.word_count).to eq(0)
+        expect(master_text.send(:calculate_word_count)).to eq(0)
       end
 
       it "counts one" do
         master_text = build(:master_text, one: "a dog", other: "many dogs", pluralizable: true)
-        expect(master_text.word_count).to eq(4)
+        expect(master_text.send(:calculate_word_count)).to eq(4)
       end
       it "counts several" do
         master_text = build(:master_text, one: "this is a carrot", other: "these are some carrots", pluralizable: true)
-        expect(master_text.word_count).to eq(8)
+        expect(master_text.send(:calculate_word_count)).to eq(8)
       end
+    end
+    it "is stored on save" do
+      master_text = create(:master_text, text: "many")
+      expect { master_text.update(text: "many dogs are lovely.") }.to change {master_text.reload[:word_count]}.from(1).to(4)
     end
   end
 end

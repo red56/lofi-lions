@@ -16,8 +16,11 @@ class ProjectLanguage < ActiveRecord::Base
 
   def recalculate_counts!
     self.update!(
-        need_review_count: self.localized_texts.where(needs_review: true, needs_entry: false).count,
-        need_entry_count: self.localized_texts.where(needs_entry: true).count,)
+        need_review_count: self.localized_texts.needing_review.count,
+        need_entry_count: self.localized_texts.needing_entry.count,
+        need_review_word_count: self.localized_texts.needing_review.sum('master_texts.word_count'),
+        need_entry_word_count: self.localized_texts.needing_entry.sum('master_texts.word_count'),
+    )
   end
 
   # could be improved -- needs specific tests
