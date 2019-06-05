@@ -26,7 +26,14 @@ LofiLions::Application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.log_level = :info
+  # See everything in the log (default is :info)
+  config.log_level = ENV['RAILS_LOG_LEVEL'].presence&.to_sym || :info
+
+  # Print deprecation notices to the Rails logger
+  config.active_support.deprecation = :log
+  # config.logger = Logger.new(STDOUT) # comment out or we get double logging
+  ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
+  ActiveRecord::Base.logger.level = ENV["ACTIVE_RECORD_LOGGING"]&.to_sym || :debug
 
   config.action_controller.action_on_unpermitted_parameters = :raise
 
