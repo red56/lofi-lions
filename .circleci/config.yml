@@ -79,8 +79,7 @@ jobs:
     - run:
         name: Bundle audit
         command: |
-          bundle exec bundle-audit update
-          bundle exec bundle-audit -v
+          bundle exec bundle-audit check --verbose --update --ignore CVE-2019-5421
 
       # Save test results for timing analysis
     - store_test_results:
