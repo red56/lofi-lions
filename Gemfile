@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-ruby "2.3.4"
+ruby "2.4.6"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
 
 gem 'nokogiri',  '>= 1.8.2'
@@ -14,9 +13,6 @@ gem 'sass-rails', '~> 4.0.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -38,11 +34,13 @@ gem 'devise-bootstrap-views'
 
 gem 'unicorn'
 
-gem 'simple_form'
+gem 'simple_form', '~> 3.2'
 
 gem 'bugsnag'
 
 gem "easy_translate"
+
+gem 'rails_12factor'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

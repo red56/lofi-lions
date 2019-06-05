@@ -3,7 +3,7 @@ jobs:
   build:
     parallelism: 1
     docker:
-    - image: circleci/ruby:2.3.4-node-browsers
+    - image: circleci/ruby:2.4.6-node-browsers
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
@@ -12,7 +12,7 @@ jobs:
         PGUSER: lofilions-user
         RAILS_ENV: test
         TZ: "Europe/London"
-    - image: circleci/postgres:9.5-alpine
+    - image: circleci/postgres:10.8-alpine
       environment:
         POSTGRES_USER: lofilions-user
         POSTGRES_DB: lofilions_test
@@ -28,16 +28,18 @@ jobs:
       # Restore bundle cache
     - restore_cache:
         keys:
-        - lofilions-bundle-v1-{{ checksum "Gemfile.lock" }}
+        - lofilions-bundle-v2-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - lofilions-bundle-v2-{{ .Branch }}-
+        - lofilions-bundle-v2-master-
+        - lofilions-bundle-v2-
         - lofilions-bundle-v1-
-
     - run:
         name: Bundle Install
         command: bundle check || bundle install
 
       # Store bundle cache
     - save_cache:
-        key: lofilions-bundle-v1-{{ checksum "Gemfile.lock" }}
+        key: lofilions-bundle-v2-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
         - vendor/bundle
 
@@ -79,8 +81,7 @@ jobs:
     - run:
         name: Bundle audit
         command: |
-          bundle exec bundle-audit update
-          bundle exec bundle-audit -v
+          bundle exec bundle-audit check --verbose --update --ignore CVE-2019-5421
 
       # Save test results for timing analysis
     - store_test_results:
