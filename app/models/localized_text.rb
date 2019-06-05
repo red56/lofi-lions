@@ -3,7 +3,8 @@ class LocalizedText < ActiveRecord::Base
   belongs_to :project_language, inverse_of: :localized_texts
   has_many :views, through: :master_text
 
-  scope :needing_entry,  -> {where('needs_entry')}
+  scope :needing_entry,  -> {where(needs_entry: true)}
+  scope :needing_review,  -> {where(needs_entry: false, needs_review: true)}
   scope :needs_review_or_entry,  -> {where('needs_entry or needs_review')}
 
   validates :master_text_id, presence: true

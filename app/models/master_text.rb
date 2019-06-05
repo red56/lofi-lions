@@ -13,6 +13,10 @@ class MasterText < ActiveRecord::Base
   validates_uniqueness_of :key, scope: :project_id
   validates :other, presence: true
 
+  before_save do
+    self.word_count = calculate_word_count
+  end
+
   def text= text
     self.other= text
   end
@@ -30,15 +34,15 @@ class MasterText < ActiveRecord::Base
     format == MARKDOWN_FORMAT
   end
 
-  def word_count
+  private
+
+  def calculate_word_count
     if pluralizable?
       count_words(one) + count_words(other)
     else
       count_words(text)
     end
   end
-
-  private
 
   def count_words(target_text)
     return 0 unless target_text.present?

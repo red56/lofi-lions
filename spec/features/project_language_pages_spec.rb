@@ -100,7 +100,7 @@ describe 'Project Language Pages', :type => :feature do
       end
 
       context 'when pluralizable' do
-        before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true) }
+        before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true, pluralizable?: true) }
         it "displays" do
           localized_text
           visit path

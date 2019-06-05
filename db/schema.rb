@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210130152) do
+ActiveRecord::Schema.define(version: 20190605191227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20160210130152) do
     t.boolean "pluralizable", default: false
     t.integer "project_id"
     t.datetime "updated_at"
+    t.integer "word_count"
   end
 
   add_index "master_texts", ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
@@ -77,7 +78,9 @@ ActiveRecord::Schema.define(version: 20160210130152) do
     t.datetime "created_at", null: false
     t.integer "language_id", null: false
     t.integer "need_entry_count"
+    t.integer "need_entry_word_count"
     t.integer "need_review_count"
+    t.integer "need_review_word_count"
     t.integer "project_id", null: false
     t.datetime "updated_at", null: false
   end

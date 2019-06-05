@@ -15,6 +15,6 @@
           .col-md-3
             = link_to project_path(project), class: "btn btn-primary" do
               View project
-    - project.project_languages.each do |project_language|
+    - project.project_languages.includes(:language).each do |project_language|
       = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
           label: project_language.language.name}

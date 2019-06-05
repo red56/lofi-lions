@@ -8,7 +8,7 @@ class ProjectLanguagesController < ApplicationController
     else
       @project_languages = current_user.project_languages
     end
-    @project_languages = @project_languages.joins(:project, :language).order('languages.name, projects.id')
+    @project_languages = @project_languages.includes(:project, :language).order('languages.name, projects.id')
   end
 
   def show

@@ -7,7 +7,7 @@
     .col-sm-3.entry
       - if project_language.need_entry_count > 0
         .text-danger
-          = "#{project_language.need_entry_count} to enter"
+          = "#{project_language.need_entry_count} to enter (#{project_language.need_entry_word_count} words)"
       - else
         .text-muted
           = icon('check')
@@ -15,7 +15,7 @@
     .col-sm-3.review
       - if project_language.need_review_count > 0
         .text-warning
-          = "#{project_language.need_review_count} to review"
+          = "#{project_language.need_review_count} to review (#{project_language.need_review_word_count} words)"
       - else
         .text-muted
           = icon('check')
