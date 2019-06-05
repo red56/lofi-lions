@@ -17,7 +17,7 @@ describe MasterTextsController, :type => :controller do
     end
   end
 
-  let(:master_text) { create(:master_text) }
+  let(:master_text) { create(:master_text, project: project) }
 
   describe "POST create" do
 
@@ -105,7 +105,7 @@ describe MasterTextsController, :type => :controller do
 
     it "redirects to the master_texts list" do
       delete :destroy, {:id => master_text.to_param}
-      expect(response).to redirect_to(master_texts_url)
+      expect(response).to redirect_to(project_master_texts_path(project))
     end
   end
 

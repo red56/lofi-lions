@@ -59,7 +59,7 @@ class MasterTextsController < ApplicationController
     @master_text.destroy
     @master_text.project.recalculate_counts!
     respond_to do |format|
-      format.html { redirect_to master_texts_url }
+      format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully deleted.' }
       format.json { head :no_content }
     end
   end
