@@ -1,6 +1,8 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
+interactor :off
+
 guard 'rails', server: :thin, port: 3010 do
   watch('Gemfile.lock')
   watch(%r{^(config|lib)/.*})
