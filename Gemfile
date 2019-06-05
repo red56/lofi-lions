@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.3.4"
+ruby "2.4.6"
 
 gem 'rails', '~> 4.2.0'
 
@@ -13,9 +13,6 @@ gem 'sass-rails', '~> 4.0.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -37,7 +34,7 @@ gem 'devise-bootstrap-views'
 
 gem 'unicorn'
 
-gem 'simple_form'
+gem 'simple_form', '~> 3.2'
 
 gem 'bugsnag'
 
