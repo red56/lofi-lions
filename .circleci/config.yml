@@ -28,16 +28,18 @@ jobs:
       # Restore bundle cache
     - restore_cache:
         keys:
-        - lofilions-bundle-v1-{{ checksum "Gemfile.lock" }}
+        - lofilions-bundle-v2-{{ branch }}-{{ checksum "Gemfile.lock" }}
+        - lofilions-bundle-v2-{{ branch }}-
+        - lofilions-bundle-v2-master-
+        - lofilions-bundle-v2-
         - lofilions-bundle-v1-
-
     - run:
         name: Bundle Install
         command: bundle check || bundle install
 
       # Store bundle cache
     - save_cache:
-        key: lofilions-bundle-v1-{{ checksum "Gemfile.lock" }}
+        key: lofilions-bundle-v2-{{ branch }}-{{ checksum "Gemfile.lock" }}
         paths:
         - vendor/bundle
 
