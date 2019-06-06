@@ -235,18 +235,9 @@ describe 'Project Language Pages', :type => :feature do
 
       let(:project_language) { create(:project_language, need_entry_count: 0, need_review_count: 0) }
 
-      it "has entry count" do
+      it "has no outstanding" do
         visit project_language_path(project_language)
-        within ".entry" do
-          expect(page).to have_content("No outstanding entries")
-        end
-      end
-
-      it "has review count" do
-        visit project_language_path(project_language)
-        within ".review" do
-          expect(page).to have_content("No outstanding reviews")
-        end
+        expect(page).to have_content("No outstanding entries or reviews")
       end
     end
   end

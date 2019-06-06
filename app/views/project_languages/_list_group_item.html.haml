@@ -1,27 +1,25 @@
 - with_description ||= with_description
 .list-group-item.clearfix[project_language]
-  = link_to(project_language_path(project_language)) do
-    .text-primary.col-sm-3
+  .text-primary.col-sm-3
+    = link_to(project_language_path(project_language), class: "btn btn-link") do
       %i.fa.fa-language
       = label
-    .col-sm-3.entry
-      - if project_language.need_entry_count > 0
-        .text-danger
-          = "#{project_language.need_entry_count} to enter (#{project_language.need_entry_word_count} words)"
-      - else
-        .text-muted
-          = icon('check')
-          No outstanding entries
-    .col-sm-3.review
-      - if project_language.need_review_count > 0
-        .text-warning
-          = "#{project_language.need_review_count} to review (#{project_language.need_review_word_count} words)"
-      - else
-        .text-muted
-          = icon('check')
-          No outstanding reviews
-    - if project_language.need_entry_count > 0 || project_language.need_review_count > 0
-      = link_to next_project_language_path(project_language), class: 'btn btn-success col-sm-3' do
+  - if project_language.need_entry_count == 0 && project_language.need_review_count == 0
+    .col-sm-3
+      = link_to(project_language_path(project_language), class: "btn text-muted") do
+        = icon('check')
+        No outstanding entries or reviews
+  - else
+    = link_to next_project_language_path(project_language) do
+      .col-sm-3.entry
+        - if project_language.need_entry_count > 0
+          .text-danger.btn
+            = "#{project_language.need_entry_count} to enter (#{project_language.need_entry_word_count} words)"
+      .col-sm-3.review
+        - if project_language.need_review_count > 0
+          .text-warning.btn
+            = "#{project_language.need_review_count} to review (#{project_language.need_review_word_count} words)"
+      .btn.btn-success.col-sm-3
         Start
   - if with_description && project_language.project.description.present?
     .col-sm-12
