@@ -3,9 +3,10 @@
 
 .list-group
   - @views.each do |view|
-    = link_to project_language_view_path(@project_language, view), class: "list-group-item clearfix view" do
-      .text-primary
-        %i.fa.fa-list-alt
-        = view.name
-      %small.comments= view.comments
+    .list-group-item.clearfix.view
+      = link_to project_language_view_path(@project_language, view), class: "btn btn-link" do
+        .text-primary
+          %i.fa.fa-list-alt
+          = view.name
+      %small.comments= render "views/comments", view: view
 
