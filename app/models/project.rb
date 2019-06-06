@@ -30,4 +30,8 @@ class Project < ActiveRecord::Base
       project_language.recalculate_counts!
     end
   end
+
+  def word_count
+    master_texts.sum('word_count')
+  end
 end

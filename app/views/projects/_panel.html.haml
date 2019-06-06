@@ -3,18 +3,26 @@
     %h3.panel-title.clearfix
       = link_to "'#{project.name}'", project_path(project)
       Project
-  - if project.description.present?
+  - if show_description && project.description.present?
     .panel-body
-      = Kramdown::Document.new(project.description).to_html.html_safe
+      = Kramdown::Document.new(project.description, input: 'GFM').to_html.html_safe
   .list-group
-    .list-group-item.clearfix
-      .text-primary
-        .col-md-3
-          = link_to "#{project.master_texts.count} Master texts", project_master_texts_path(project), class: 'btn'
-        - unless project == @project
-          .col-md-3
-            = link_to project_path(project), class: "btn btn-primary" do
-              View project
+    - if project == @project
+      - link_target = project_master_texts_path(project)
+    - else
+      - link_target = project_path(project)
+    = link_to link_target, class: "list-group-item clearfix" do
+      .col-md-6.text-primary
+        .btn
+          = project.master_texts.count
+          Master texts
+          = surround("(", ")") do
+            = project.word_count
+            words
+      .col-md-3
+      - unless project == @project
+        .btn.btn-primary.col-md-3
+          View project
     - project.project_languages.includes(:language).each do |project_language|
       = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
           label: project_language.language.name}

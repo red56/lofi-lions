@@ -3,8 +3,6 @@
 %h2
   = icon('list-alt')
   = @view.name
-%p
-  %em
-    = @view.comments
+%p= render "views/comments", view: @view
 
 = render :partial => 'localized_texts/localized_texts_table', locals: {localized_texts: @localized_texts.includes(:views)}

@@ -1,0 +1,3 @@
+- if view.comments.present?
+  %em
+    = Kramdown::Document.new(view.comments, input: 'GFM').to_html.html_safe
