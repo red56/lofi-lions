@@ -1,6 +1,6 @@
 - if @projects.presence
   - @projects.each do |project|
-    = render partial: 'projects/panel', locals: {project: project}
+    = render 'projects/panel', project: project, show_description: false
 - if @project_languages.presence
   .panel.panel-primary
     .panel-heading

@@ -1,3 +1,3 @@
 = render partial: 'projects/tabs'
 
-= render partial: 'projects/panel', locals: {project: @project}
+= render 'projects/panel', project: @project, show_description: true

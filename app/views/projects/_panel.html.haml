@@ -3,7 +3,7 @@
     %h3.panel-title.clearfix
       = link_to "'#{project.name}'", project_path(project)
       Project
-  - if project.description.present?
+  - if show_description && project.description.present?
     .panel-body
       = Kramdown::Document.new(project.description, input: 'GFM').to_html.html_safe
   .list-group
