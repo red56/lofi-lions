@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/red56/releasetool.git
+  remote: git://github.com/red56/releasetool.git
   revision: 7661eeb63e5aff04193720e4a19646fbf4daa8c9
   branch: master
   specs:
@@ -172,7 +172,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     nenv (0.2.0)
-    nokogiri (1.10.3)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     notiffany (0.0.6)
       nenv (~> 0.1)
