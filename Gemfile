@@ -43,11 +43,6 @@ gem "easy_translate"
 gem 'rails_12factor'
 gem 'lograge'
 
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
-
 # needs to be in production because of autoloading... not because it's actually used!
 gem "mail_view", "~> 2.0.4"
 
