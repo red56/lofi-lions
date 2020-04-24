@@ -29,7 +29,7 @@ gem 'haml'
 gem 'haml-rails'
 gem 'kramdown'
 
-gem 'devise', '~> 4.0.0'
+gem 'devise'
 gem 'devise-bootstrap-views'
 
 gem 'unicorn'
