@@ -1,9 +1,9 @@
 version: 2
-jobs:
-  build:
-    parallelism: 1
-    docker:
-    - image: circleci/ruby:2.4.9-node-browsers
+
+references:
+  references:
+    default_docker_ruby_executor: &default_docker_ruby_executor
+      image: circleci/ruby:2.4.9-node-browsers
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
@@ -12,11 +12,18 @@ jobs:
         PGUSER: lofilions-user
         RAILS_ENV: test
         TZ: "Europe/London"
-    - image: circleci/postgres:10.8-alpine
+    postgres: &postgres
+      image: circleci/postgres:10.8-alpine
       environment:
         POSTGRES_USER: lofilions-user
         POSTGRES_DB: lofilions_test
         POSTGRES_PASSWORD: ""
+
+jobs:
+  build:
+    docker:
+      - *default_docker_ruby_executor
+      - *postgres
     steps:
     - checkout
 
