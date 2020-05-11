@@ -1,4 +1,3 @@
-require Rails.root.join('lib/db_configuration')
 namespace :dev do
   task :dev_data => :environment do
     fail('Should only do in development!') unless (Rails.env.development?)

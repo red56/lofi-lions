@@ -69,4 +69,5 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara', '>=2.2.0'
   gem 'bundler-audit', '~> 0.5'
+  gem "heroku_tool", github: "red56/heroku_tool", branch: 'master'
 end
