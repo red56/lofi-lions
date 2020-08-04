@@ -4,3 +4,5 @@
 require File.expand_path('../config/application', __FILE__)
 
 LofiLions::Application.load_tasks
+
+load "heroku_tool/tasks/db_drop_all_tables.rake"

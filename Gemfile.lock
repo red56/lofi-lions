@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/red56/heroku_tool.git
+  revision: a5d17ac14429255981b6509a18ff17f1b21fd8d8
+  branch: master
+  specs:
+    heroku_tool (0.1.0)
+      activesupport
+      thor (~> 0.18)
+
+GIT
   remote: https://github.com/red56/releasetool.git
   revision: 7661eeb63e5aff04193720e4a19646fbf4daa8c9
   branch: master
@@ -331,6 +340,7 @@ DEPENDENCIES
   guard-rails
   haml
   haml-rails
+  heroku_tool!
   jbuilder (~> 1.2)
   jquery-rails
   kramdown

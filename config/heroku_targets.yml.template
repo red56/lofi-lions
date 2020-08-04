@@ -1,12 +1,10 @@
 production:
   heroku_app : PRODUCTION HEROKU APP
-  database_url: DATABASE_URL
   git_remote : heroku-production
   deploy_ref : origin/master
   display_name : Lofi PRODUCTION
 staging:
   heroku_app : PRODUCTION HEROKU APP
-  database_url: DATABASE_URL
   git_remote : heroku-staging
   deploy_ref : HEAD
   display_name : Lofi STAGING
