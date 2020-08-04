@@ -2,11 +2,12 @@
   - @projects.each do |project|
     = render 'projects/panel', project: project, show_description: false
 - if @project_languages.presence
-  .panel.panel-primary
-    .panel-heading
-      %h3.panel-title.clearfix
-        Translations
-    .list-group
-      - @project_languages.each do |project_language|
+  - @project_languages.each do |project_language|
+    .panel.panel-primary
+      .panel-heading
+        %h3.panel-title.clearfix
+          %small Project
+          = project_language
+      .list-group
         = render partial: 'project_languages/list_group_item', locals: {project_language: project_language,
           label: project_language, with_description: true}
