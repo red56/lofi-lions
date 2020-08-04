@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-bundle exec bundle-audit check --ignore CVE-2019-5421 CVE-2019-16676 CVE-2020-5267 !*
+bundle exec bundle-audit check --ignore CVE-2019-5421 CVE-2019-16676 CVE-2020-5267 CVE-2020-8166 CVE-2020-8164 CVE-2020-8167 CVE-2020-8165 CVE-2020-8184 CVE-2020-8161 !*
+
+ruby -e "require 'date'; raise 'Really time to address CVEs' if Date.today > Date.parse('2020-09-01')"
