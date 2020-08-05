@@ -15,6 +15,10 @@ form {
 
 }
 
+.old-text-translated-from .well {
+  // #f0ad4e is teh colour of the label "needs review"
+  text-decoration: solid line-through #f0ad4e;
+}
 form.localized-texts tr td p {
   margin-bottom: 0;
 
