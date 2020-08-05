@@ -19,18 +19,24 @@
 
   - if @localized_text.translated_from && @localized_text.needs_review?
     .row
-      .col-md-6
-        .form-group.translated_from
+      .col-sm-6
+        .form-group.old-text-translated-from
           %label
-            Originally translated from
-          .form-control-static= simple_format(@localized_text.translated_from)
+            English - Old version (what #{@project_language.language.name} was translated from)
+          .well
+            %p.form-control-static= simple_format(@localized_text.translated_from)
 
   .row
-    .col-md-6
+    .col-sm-6
       .form-group
-        %label English
-        = text_area_tag 'original',  @localized_text.original_other, class: 'form-control', disabled: true, rows: 5
-    .col-md-6
+        %label
+          English
+          - if @localized_text.translated_from && @localized_text.needs_review?
+            (New version to translate)
+        = hidden_field_tag 'original',  @localized_text.original_other
+        .well
+          %p= simple_format(@localized_text.original_other)
+    .col-sm-6.textarea-localized
       .form-group
         = f.label :other, @project_language.language.name
         - if @localized_text.needs_entry?
@@ -53,7 +59,7 @@
             %label
               = f.check_box :needs_review
               Needs review
-        = f.text_area :other, class: 'form-control', rows: 5
+        = f.text_area :other, class: 'form-control', rows: 10
         - if @original_url
           %input{type: "hidden", name: "original_url", value: @original_url}
 
@@ -68,9 +74,9 @@
     %br
     %label.lable Formatted:
     .row
-      .col-md-6#original_formatted
+      .col-sm-6#original_formatted
         .well
-      .col-md-6#preview
+      .col-sm-6#preview
         .well
         -#.btn.btn-info#preview-button Preview
     :javascript
@@ -97,12 +103,12 @@
       });
 
   .row
-    .col-md-6
+    .col-sm-6
       - if @original_url
         = link_to 'Cancel', :back, class: 'btn btn-link pull-left'
       - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
         = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
-    .col-md-6
+    .col-sm-6
       = link_to "Google translate", @localized_text.google_translate_url, class: 'btn btn-link'
       = f.submit "Save", class: 'btn btn-primary pull-right'
 
