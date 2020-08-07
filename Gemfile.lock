@@ -1,6 +1,6 @@
 GIT
-  remote: https://github.com/red56/heroku_tool.git
-  revision: a5d17ac14429255981b6509a18ff17f1b21fd8d8
+  remote: git://github.com/red56/heroku_tool.git
+  revision: f7bbc7ad2392f60a576f2fce4464ba907d971413
   branch: master
   specs:
     heroku_tool (0.1.0)
@@ -8,11 +8,11 @@ GIT
       thor (~> 0.18)
 
 GIT
-  remote: https://github.com/red56/releasetool.git
-  revision: 7661eeb63e5aff04193720e4a19646fbf4daa8c9
+  remote: git://github.com/red56/releasetool.git
+  revision: 1001ca9097acbc2da5b8a1f2243a52dc52c72674
   branch: master
   specs:
-    releasetool (0.1.1)
+    releasetool (0.2.0)
       thor (~> 0.18)
 
 GEM
@@ -152,7 +152,8 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     kgio (2.11.2)
-    kramdown (1.9.0)
+    kramdown (2.3.0)
+      rexml
     launchy (2.4.3)
       addressable (~> 2.3)
     listen (3.0.1)
@@ -243,6 +244,7 @@ GEM
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
+    rexml (3.2.4)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
