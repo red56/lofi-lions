@@ -11,15 +11,15 @@
           Has plural forms
 
   - if @master_text.pluralizable
-    .form-group
+    .form-group.js-autoexpand-textarea
       = f.label :one, 'Singular'
       = f.text_area :one, class: 'form-control'
-    .form-group
+    .form-group.js-autoexpand-textarea
       = f.label :other, 'Plural'
       = f.text_area :other, class: 'form-control'
 
   - else
-    .form-group
+    .form-group.js-autoexpand-textarea
       = f.label :text
       = f.text_area :text, class: 'form-control'
 

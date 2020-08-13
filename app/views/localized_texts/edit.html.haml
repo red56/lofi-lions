@@ -36,7 +36,7 @@
         = hidden_field_tag 'original',  @localized_text.original_other
         .well
           %p= simple_format(@localized_text.original_other)
-    .col-sm-6.textarea-localized
+    .col-sm-6.textarea-localized.js-autoexpand-textarea
       .form-group
         = f.label :other, @project_language.language.name
         - if @localized_text.needs_entry?
