@@ -31,7 +31,7 @@
                     = icon('list-alt')
                     = view.name
               %span.divider
-          %td
+          %td.js-autoexpand-textarea
             - if ltext_fields.object.pluralizable
               = ltext_fields.text_area :other, cols: 100
             - else
