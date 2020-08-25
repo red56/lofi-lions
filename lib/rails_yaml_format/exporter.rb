@@ -13,7 +13,7 @@ module RailsYamlFormat
 
       lower_level_hash = Hash[localized_texts.map {|text|[text.key, text.other_export] }]
 
-      top_level_hash[@language.code.to_sym] = lower_level_hash
+      top_level_hash[@language.code] = lower_level_hash
       top_level_hash.to_yaml
     end
   end

@@ -60,21 +60,29 @@ describe "Exporters" do
     describe "body" do
       subject { RailsYamlFormat::Exporter.new(language, project).body }
 
+      it "the file should start with expected beginning" do
+        expect(subject).to be_a String
+        lines = subject.split("\n")
+        expect(lines[0]).to eq("---")
+        expect(lines[1]).to eq("la:")
+      end
+
       it "should be valid yaml that has top level hash only containing the language code" do
         parsed = YAML.load(subject)
         expect(parsed).to be_a Hash
-        expect(parsed).to have_key(language.code.to_sym)
+        expect(parsed).to have_key(language.code)
       end
+
 
       context "with a different language" do
         let(:language) { build_stubbed(:language, code: 'fr') }
         it "has different language code as top level key" do
-          expect(YAML.load(subject)).to have_key(:fr)
+          expect(YAML.load(subject)).to have_key("fr")
         end
       end
 
       describe "the lower level hash" do
-        subject { YAML.load(super())[language.code.to_sym] }
+        subject { YAML.load(super())[language.code] }
 
         it "should have relevant number of keys" do
           expect(subject).to be_a Hash
