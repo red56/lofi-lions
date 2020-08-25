@@ -117,5 +117,21 @@ describe "Exporters" do
         end
       end
     end
+
+    describe "with an (encoded) nested hash" do
+      let(:master_text1) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/user/email") }
+      let(:master_text2) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/user/password") }
+      let(:master_text3) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/project/name") }
+      let(:master_texts) { [master_text1, master_text2, master_text3] }
+      let(:localized_texts) { master_texts.map { |mt| build_stubbed(:stubbed_localized_text, master_text: mt,
+        project_language: project_language) } }
+      subject { YAML.load(body)[language.code] }
+      it "produces actual nested output" do
+        expect(subject.keys).to contain_exactly("activerecord")
+        expect(subject["activerecord"]["attributes"].keys).to contain_exactly("user", "project")
+        expect(subject["activerecord"]["attributes"]["user"].keys).to contain_exactly("email", "password")
+      end
+
+    end
   end
 end
