@@ -17,11 +17,22 @@ module RailsYamlFormat
       localizations = []
       hash = YAML::load(@file)
       # the top level of this will always be a language name with a set of keys
-      # for now, we are only worrying about the top-level of keys (ignoring nested stuff)
-      hash.values.first.each do |key, value|
-        localizations << Localization.new(key, value) unless key.nil?
-      end
+      add_hash_to_localizations(hash.values.first, localizations: localizations)
       localizations
+    end
+
+    private
+
+    def add_hash_to_localizations(hash,  localizations: , keys: [])
+      hash.each_pair do |key, value|
+        if key.nil?
+          next
+        elsif(value.respond_to?(:each_pair))
+          add_hash_to_localizations(value, localizations: localizations, keys: keys + [key])
+        else
+          localizations << Localization.new((keys + [key]).join("/"), value)
+        end
+      end
     end
   end
 end
