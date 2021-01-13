@@ -39,6 +39,7 @@ LofiLions::Application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   ENV['DEVISE_KEY'] = 'not-so-random'
+  ENV['CANONICAL_HOST'] = 'www.example.com'
   config.action_mailer.default_url_options = { host: 'www.example.com' }
 
   # Explicitly express test ordering.

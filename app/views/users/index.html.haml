@@ -11,6 +11,8 @@
           Edit
         - if user.is_administrator?
           .label.label-default Admin
+        - if user.send_administrator_emails?
+          .label.label-default Admin emails
         - if user.is_developer?
           .label.label-danger
             %small.language Dev

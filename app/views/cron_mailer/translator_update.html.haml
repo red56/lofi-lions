@@ -1,0 +1,19 @@
+%h3
+  Localisation status report for
+  = link_to project_languages_url, project_languages_url
+%table
+  %thead
+    %tr
+      %th{:style => "text-align: left; padding: 0 20px;"} Language
+      %th{:style => "text-align: left; padding: 0 20px;"} Needing translation
+      %th{:style => "text-align: left; padding: 0 20px;"} Needing review
+  %tbody
+
+    - @project_languages.each_with_index do |project_language, i|
+      - total_texts =
+      - needing_translation = project_language.localized_texts.select { |t| t.needs_entry? }.length
+      - needing_review = project_language.localized_texts.select { |t| t.needs_review? }.length
+      %tr{:style => "background-color: #{(i % 2) == 0 ? '#eee' : 'transparent'}"}
+        %td{:style => "text-align: left; padding: 4px 20px;"}= link_to project_language, project_language_url(project_language)
+        %td{:style => "font-family: monospace; text-align: left; padding: 4px 20px; white-space: pre;"}= colourize_translation_status(project_language.localized_texts, needing_translation)
+        %td{:style => "font-family: monospace; text-align: left; padding: 4px 20px; white-space: pre;"}= colourize_translation_status(project_language.localized_texts, needing_review)

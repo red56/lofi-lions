@@ -1,18 +1,15 @@
 class CronMailer < ActionMailer::Base
+  layout 'mailer'
   default from: ENV["CRON_EMAIL_FROM"] || "cron@example.com"
 
-  def translation_status_report
+  def translation_status_report(admin_emails)
     @languages = Language.includes(:localized_texts).order(:name)
-    mail(to: admins, subject: "Translation status #{Date.today.to_s(:long)}")
+    mail(to: admin_emails, subject: "Translation status #{Date.today.to_s(:long)}")
   end
 
-  protected
-
-  def admins
-    admin_users.map(&:email)
+  def translator_update(translator, admin_emails=[])
+    @project_languages = translator.project_languages
+    mail(to: translator.email, cc: admin_emails)
   end
 
-  def admin_users
-    User.admins
-  end
 end

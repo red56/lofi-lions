@@ -35,7 +35,8 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(
-        :email, :is_administrator, :is_developer, :edits_master_text, project_language_ids: []
+        :email, :is_administrator, :send_administrator_emails, :is_developer, :edits_master_text,
+        project_language_ids: []
     )
 
   end
