@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/red56/heroku_tool.git
-  revision: a5d17ac14429255981b6509a18ff17f1b21fd8d8
+  revision: 7f183947d8f7ea1c99a62e1f3690d962ba35251b
   branch: master
   specs:
     heroku_tool (0.1.0)
@@ -74,7 +74,7 @@ GEM
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
     coderay (1.1.0)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
     daemons (1.3.1)
     devise (4.7.1)
@@ -180,7 +180,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.14.3)
     multi_json (1.15.0)
     nenv (0.2.0)
     nokogiri (1.10.10)
@@ -312,7 +312,7 @@ GEM
     thread (0.2.2)
     thread_safe (0.3.6)
     tilt (1.4.1)
-    tzinfo (1.2.7)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uglifier (4.1.12)
       execjs (>= 0.3.0, < 3)
