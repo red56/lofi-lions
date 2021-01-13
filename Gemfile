@@ -27,7 +27,8 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'haml'
 gem 'haml-rails'
-gem 'kramdown'
+gem 'kramdown', ">= 2.3.0"
+gem "kramdown-parser-gfm"
 
 gem 'devise'
 gem 'devise-bootstrap-views'
