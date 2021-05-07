@@ -34,8 +34,14 @@
           - if @localized_text.translated_from && @localized_text.needs_review?
             (New version to translate)
         = hidden_field_tag 'original',  @localized_text.original_other
-        .well
+        .well.well--without-bottom-margin
           %p= simple_format(@localized_text.original_other)
+        .text-last-updated
+          Last updated
+          = time_ago_in_words(f.object.updated_at)
+          ago
+          (#{f.object.updated_at})
+
     .col-sm-6.textarea-localized.js-autoexpand-textarea
       .form-group
         = f.label :other, @project_language.language.name
@@ -60,6 +66,12 @@
               = f.check_box :needs_review
               Needs review
         = f.text_area :other, class: 'form-control', rows: 10
+        .text-last-updated
+          Last updated
+          = time_ago_in_words(f.object.updated_at)
+          ago
+          (#{f.object.updated_at})
+
         - if @original_url
           %input{type: "hidden", name: "original_url", value: @original_url}
 

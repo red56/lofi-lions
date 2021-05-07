@@ -35,3 +35,12 @@ form.localized-texts tr td p {
     font-size: 0.75em;
   }
 }
+.text-last-updated {
+  text-align: right;
+  font-size: 0.8em;
+  color: #BBBBBB;
+  margin-top: 4px;
+}
+.well.well--without-bottom-margin {
+  margin-bottom: 0px;
+}
