@@ -4,13 +4,17 @@
     = link_to(project_language_path(project_language), class: "btn btn-link") do
       %i.fa.fa-language
       = label
-  - if project_language.need_entry_count == 0 && project_language.need_review_count == 0
-    .col-sm-3
-      = link_to(project_language_path(project_language), class: "btn text-muted") do
-        = icon('check')
-        No outstanding entries or reviews
+  - if project_language.needs_review_or_entry_count == 0
+    = link_to next_project_language_path(project_language, flow: "all") do
+      .col-sm-6
+        .text-muted
+          = icon('check')
+          No outstanding entries or reviews
+      .btn.btn-default.col-sm-3
+        Review all one by one
+
   - else
-    = link_to next_project_language_path(project_language) do
+    = link_to next_project_language_path(project_language, flow: "needing") do
       .col-sm-3.entry
         - if project_language.need_entry_count > 0
           .text-danger.btn

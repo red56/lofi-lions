@@ -6,7 +6,7 @@ LofiLions::Application.routes.draw do
 
   resources :localized_texts do
     member do
-      get :flowedit
+      get "flow/:flow", action: :flow, as: :flow
     end
   end
 

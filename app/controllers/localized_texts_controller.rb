@@ -1,7 +1,8 @@
 class LocalizedTextsController < ApplicationController
+  include NextLocalizedText
   before_action :authenticate_user!
   before_action :set_languages_section
-  before_action :find_localized_text, only: [:update, :flowedit, :edit]
+  before_action :find_localized_text, only: [:update, :flow, :edit]
   before_filter :find_language, only: [:index, :entry, :review]
 
   def index
@@ -35,7 +36,7 @@ class LocalizedTextsController < ApplicationController
     @original_url = request.referer
   end
 
-  def flowedit
+  def flow
     @active_tab = :overview
     render :edit
   end
@@ -47,13 +48,12 @@ class LocalizedTextsController < ApplicationController
   end
 
   protected
+
+  attr_reader :project_language
+
   def next_path_after_update
     return params[:original_url] if params[:original_url]
-    if next_text = @localized_text.project_language.next_localized_text(@localized_text.key)
-      flowedit_localized_text_path(next_text)
-    else
-      project_language_path(@localized_text.project_language)
-    end
+    next_localized_text_or_project_language_path(@localized_text.key)
   end
 
   def localized_texts
@@ -66,8 +66,8 @@ class LocalizedTextsController < ApplicationController
 
   def localized_texts_params
     params.require(:localized_text).permit(
-        :comment, :few, :many, :master_text_id, :needs_entry, :needs_review, :one, :other, :two, :zero,
-        :project_language_id
+      :comment, :few, :many, :master_text_id, :needs_entry, :needs_review, :one, :other, :two, :zero,
+      :project_language_id
     )
   end
 

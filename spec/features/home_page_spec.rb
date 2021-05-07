@@ -74,9 +74,10 @@ describe 'Home page', :type => :feature do
         stubbed_login_as_developer
       end
 
-      it "doesn't display the start button" do
+      it "doesn't display the start button but does display review all" do
         visit "/"
-        expect(page).to_not have_link_to(next_project_language_path(complete_project_language))
+        expect(page).to_not have_link_to(next_project_language_path(complete_project_language,flow: "needing"))
+        expect(page).to have_link_to(next_project_language_path(complete_project_language,flow: "all"))
       end
     end
 
@@ -89,9 +90,10 @@ describe 'Home page', :type => :feature do
         stubbed_login_as_developer
       end
 
-      it "doesn't display the start button" do
+      it "does display the start button but not the review all" do
         visit "/"
-        expect(page).to have_link_to(next_project_language_path(project_language))
+        expect(page).to have_link_to(next_project_language_path(project_language, flow: "needing"))
+        expect(page).not_to have_link_to(next_project_language_path(project_language,flow: "all"))
       end
     end
   end

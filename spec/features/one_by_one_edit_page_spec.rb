@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 describe 'Localized Text One by One Edit Page', :type => :feature do
-  let!(:project_language) { create(:project_language) }
+  let!(:project) { create(:project) }
+  let!(:project_language) { create(:project_language, project: project) }
   let!(:empty_localized_text) { create(:localized_text, project_language: project_language,
       master_text_id: master_text.id, needs_entry: true) }
   let!(:needs_review_localized_text) { create(:localized_text, project_language: project_language,
       other: "something new", master_text_id: master_text.id, needs_review: true) }
-  let!(:master_text) { create(:master_text, key: "I am a master text") }
+  let!(:master_text) { create(:master_text, key: "I am a master text", project: project) }
   before { login }
   let(:login) { stubbed_login_as_user }
 
@@ -96,31 +97,68 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
 
     it "project_lanaguage # next links through to edit page from overview by calling next_localized_text" do
       expect(ProjectLanguage).to receive(:find).at_least(:once).and_return(project_language)
-      expect(project_language).to receive(:next_localized_text).with(nil).and_return(first_localized_text)
+      expect(project_language).to receive(:next_localized_text).with(nil, all: false).and_return(first_localized_text)
       visit project_language_path(project_language)
       click_on "Start"
-      expect(current_path).to eq(flowedit_localized_text_path(first_localized_text))
+      save_and_open_page
+      expect(page).to have_current_path(flow_localized_text_path(first_localized_text, flow: "needing"))
     end
 
     it "redirects to the next master text on save" do
       expect(LocalizedText).to receive(:find).at_least(:once).and_return(first_localized_text)
       allow(first_localized_text).to receive(:project_language).and_return(project_language)
       expect(project_language).to receive(:next_localized_text).
-              with(first_localized_text.key).and_return(another_localized_text)
-      visit flowedit_localized_text_path(first_localized_text)
+              with(first_localized_text.key, all: false).and_return(another_localized_text)
+      visit flow_localized_text_path(first_localized_text, flow: "needing")
       fill_in "localized_text[other]", with: "Je suis un master text"
       expect{click_on "Save"}.to change{first_localized_text.reload.other}
-      expect(current_path).to eq(flowedit_localized_text_path(another_localized_text.id))
+      expect(page).to have_current_path(flow_localized_text_path(another_localized_text.id, flow: "needing"))
     end
 
     it "redirects to the next master text on skip" do
       expect(ProjectLanguage).to receive(:find).and_return(project_language)
-      expect(project_language).to receive(:next_localized_text).with(first_localized_text.key).
+      expect(project_language).to receive(:next_localized_text).with(first_localized_text.key, all: false).
               and_return(another_localized_text)
-      visit flowedit_localized_text_path(first_localized_text)
+      visit flow_localized_text_path(first_localized_text, flow: "needing")
       click_on "Skip"
-      expect(current_path).to eq(flowedit_localized_text_path(another_localized_text.id))
+      expect(page).to have_current_path(flow_localized_text_path(another_localized_text.id, flow: "needing"))
     end
 
+  end
+
+  describe "workflow when all reviewed" do
+    let!(:project_language) { create(:project_language, project: project, need_entry_count: 0, need_review_count: 0) }
+    let!(:empty_localized_text) { create(:finished_localized_text, project_language: project_language,
+      master_text_id: master_text.id, needs_entry: true) }
+    let!(:needs_review_localized_text) { nil }
+    let!(:alpha_localized) {create :finished_localized_text, project_language: project_language, master_text: alpha}
+    let!(:ziggurat_localized){create :finished_localized_text, project_language: project_language, master_text: ziggurat}
+    let(:alpha) { create(:master_text, key: "alpha", project: project)}
+    let(:ziggurat) { create(:master_text, key: "ziggurat", project: project)}
+    it "project_lanaguage # next links through to edit page from overview by calling next_localized_text" do
+      visit project_language_path(project_language)
+      click_on "Review all"
+      expect(page).to have_current_path(flow_localized_text_path(alpha_localized, flow: "all"))
+    end
+
+    it "redirects to the next master text on save" do
+      visit flow_localized_text_path(alpha_localized, flow: "all")
+      fill_in "localized_text[other]", with: "Je suis un master text"
+      expect{click_on "Save"}.to change{alpha_localized.reload.other}
+      expect(page).to have_current_path(flow_localized_text_path(ziggurat_localized.id, flow: "all"))
+    end
+
+    it "redirects to the next master text on next" do
+      visit flow_localized_text_path(alpha_localized, flow: "all")
+      click_on "Next"
+      expect(page).to have_current_path(flow_localized_text_path(ziggurat_localized.id, flow: "all"))
+    end
+
+    it "redirects to the first master text on the last one" do
+      visit flow_localized_text_path(ziggurat_localized, flow: "all")
+      click_on "Next"
+      expect(page).to have_current_path(flow_localized_text_path(alpha_localized.id, flow: "all"))
+      expect(page).to have_content(/last text.*beginning/i)
+    end
   end
 end

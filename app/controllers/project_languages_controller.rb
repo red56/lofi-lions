@@ -1,4 +1,5 @@
 class ProjectLanguagesController < ApplicationController
+  include NextLocalizedText
   before_action :authenticate_user!
   before_action :find_project_language, only: [:update, :show, :next]
 
@@ -29,10 +30,14 @@ class ProjectLanguagesController < ApplicationController
   end
 
   def next
-    redirect_to flowedit_localized_text_path(@project_language.next_localized_text(params[:key]))
+    raise "missing params[:flow]" if params[:flow].blank?
+    redirect_to next_localized_text_or_project_language_path(params[:key])
   end
 
   private
+
+  attr_reader :project_language
+
   def next_page_after_update
     return request.referer if request.referer
     project_language_path(@project_language)

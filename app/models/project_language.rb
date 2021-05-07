@@ -23,6 +23,10 @@ class ProjectLanguage < ActiveRecord::Base
     )
   end
 
+  def needs_review_or_entry_count
+    need_review_count + need_entry_count
+  end
+
   # could be improved -- needs specific tests
   # should return an arry of localized texts ordered by key. It's not obvious to me right now why you need a fallback
   # -- there should never be a situation (er, except maybe in tests with dodgy fixtures) where there is no
@@ -40,9 +44,13 @@ class ProjectLanguage < ActiveRecord::Base
     "#{project.name} - #{language.name}"
   end
 
-  def next_localized_text(after_key='')
-    candidates = localized_texts.needs_review_or_entry.limit(1)
-    candidates.where('key > ?', after_key).first || candidates.first
+  def next_localized_text(after_key = '', all: false)
+    candidates = all ? localized_texts.limit(1) : localized_texts.needs_review_or_entry.limit(1)
+    if after_key.present?
+      candidates.where('key > ?', after_key).first
+    else
+      candidates.first
+    end
   end
 
   def google_translate_missing
