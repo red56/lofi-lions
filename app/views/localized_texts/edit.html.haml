@@ -106,10 +106,13 @@
     .col-sm-6
       - if @original_url
         = link_to 'Cancel', :back, class: 'btn btn-link pull-left'
-      - elsif @project_language.localized_texts.needs_review_or_entry.count > 1
-        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key),  class: 'btn btn-default pull-left'
+      - elsif params[:flow] == "needing"
+        = link_to 'Skip', next_project_language_path(@project_language, key: @localized_text.key, flow: "needing"),  class: 'btn btn-default pull-left'
+      - elsif params[:flow] == "all"
+        = link_to 'Next (skip)', next_project_language_path(@project_language, key: @localized_text.key, flow: "all"),  class: 'btn btn-default pull-left'
     .col-sm-6
       = link_to "Google translate", @localized_text.google_translate_url, class: 'btn btn-link'
+      = hidden_field_tag("flow", params[:flow])
       = f.submit "Save", class: 'btn btn-primary pull-right'
 
 

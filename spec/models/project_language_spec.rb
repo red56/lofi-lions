@@ -84,10 +84,9 @@ RSpec.describe ProjectLanguage, :type => :model do
         expect(project_language.next_localized_text('baa')).to eq(baker)
       end
 
-      it "if i give it charlies's key it returns able" do
-        expect(project_language.next_localized_text(charlie.key)).to eq(able)
+      it "if i give it last one it returns nil" do
+        expect(project_language.next_localized_text(charlie.key)).to be_nil
       end
-
 
       context "if baker just requires review" do
         let(:baker) { create(:localized_text, project_language: project_language, master_text: mt_baker,
@@ -121,11 +120,55 @@ RSpec.describe ProjectLanguage, :type => :model do
       it "given no key returns the localized text" do
         expect(project_language.next_localized_text()).to eq baker
       end
-      it "given key returns the localized text" do
-        expect(project_language.next_localized_text(baker.key)).to eq baker
+      it "given key returns nil" do
+        expect(project_language.next_localized_text(baker.key)).to be_nil
       end
     end
     # end
+  end
+  describe "#next_localized_text(all: true)" do
+    let!(:project_language) { create(:project_language) }
+
+    let(:mt_able) { create(:master_text, project: project, key: "able") }
+    let(:mt_baker) { create(:master_text, project: project, key: "baker") }
+    let(:mt_charlie) { create(:master_text, project: project, key: "charlie") }
+    context "with several needing entry" do
+      let(:able) { create(:localized_text, project_language: project_language, master_text: mt_able, needs_entry: false, needs_review: false) }
+      let(:baker) { create(:localized_text, project_language: project_language, master_text: mt_baker, needs_entry: true, needs_review: false) }
+      let(:charlie) { create(:localized_text, project_language: project_language, master_text: mt_charlie, needs_entry: false, needs_review: false) }
+
+      before { baker; charlie; able }
+      it "if i give it empty it returns able's" do
+        expect(project_language.next_localized_text('', all: true)).to eq(able)
+      end
+      it "if i give it a nil it returns able's" do
+        expect(project_language.next_localized_text(nil, all: true)).to eq(able)
+      end
+      it "if i give it able's key it returns baker" do
+        expect(project_language.next_localized_text(able.key, all: true)).to eq(baker)
+      end
+
+      it "if i give it baker's key it returns charlie" do
+        expect(project_language.next_localized_text(baker.key, all: true)).to eq(charlie)
+      end
+
+      it "if i give a non-existant key before baker it returns baker" do
+        expect(project_language.next_localized_text('baa', all: true)).to eq(baker)
+      end
+
+      it "if i give it charlies's key it returns *nil*" do
+        expect(project_language.next_localized_text(charlie.key, all: true)).to be_nil
+      end
+    end
+
+    context "with no localized texts" do
+      it "given no key returns nil" do
+        expect(project_language.next_localized_text(nil, all: true)).to be_nil
+      end
+      it "given key returns nil" do
+        expect(project_language.next_localized_text('some-key', all: true)).to be_nil
+      end
+    end
   end
 
   describe "google_translate_missing" do
