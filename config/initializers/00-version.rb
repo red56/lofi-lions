@@ -1,2 +1,2 @@
 # The web app version
-VERSION = "0.6.10"
+VERSION = "0.6.11"
