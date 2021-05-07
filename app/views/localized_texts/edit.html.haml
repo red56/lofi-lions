@@ -38,7 +38,7 @@
           %p= simple_format(@localized_text.original_other)
         .text-last-updated
           Last updated
-          = time_ago_in_words(f.object.updated_at)
+          = time_ago_in_words(@localized_text.master_text.updated_at)
           ago
           (#{f.object.updated_at})
 
