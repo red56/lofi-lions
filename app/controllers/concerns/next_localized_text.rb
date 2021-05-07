@@ -4,15 +4,15 @@
 module NextLocalizedText
   protected
   def next_localized_text_or_project_language_path(key)
-    if (next_text = next_localized_text(key))
-      flowedit_localized_text_path(next_text, flow: params[:flow])
+    if params[:flow].present? && (next_text = next_localized_text(key))
+      flow_localized_text_path(next_text, flow: params[:flow])
     else
       project_language_path(project_language)
     end
   end
 
   def next_localized_text(key)
-    return nil unless params[:flow]
+    return nil unless params[:flow].present?
     if (next_localized_text = next_localized_text_after(key))
       next_localized_text
     else

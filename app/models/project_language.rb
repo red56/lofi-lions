@@ -23,6 +23,10 @@ class ProjectLanguage < ActiveRecord::Base
     )
   end
 
+  def needs_review_or_entry_count
+    need_review_count + need_entry_count
+  end
+
   # could be improved -- needs specific tests
   # should return an arry of localized texts ordered by key. It's not obvious to me right now why you need a fallback
   # -- there should never be a situation (er, except maybe in tests with dodgy fixtures) where there is no

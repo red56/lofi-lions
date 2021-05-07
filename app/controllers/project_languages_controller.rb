@@ -30,7 +30,7 @@ class ProjectLanguagesController < ApplicationController
   end
 
   def next
-    params[:flow] ||= "needing"
+    raise "missing params[:flow]" if params[:flow].blank?
     redirect_to next_localized_text_or_project_language_path(params[:key])
   end
 

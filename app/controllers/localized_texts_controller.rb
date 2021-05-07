@@ -2,7 +2,7 @@ class LocalizedTextsController < ApplicationController
   include NextLocalizedText
   before_action :authenticate_user!
   before_action :set_languages_section
-  before_action :find_localized_text, only: [:update, :flowedit, :edit]
+  before_action :find_localized_text, only: [:update, :flow, :edit]
   before_filter :find_language, only: [:index, :entry, :review]
 
   def index
@@ -36,7 +36,7 @@ class LocalizedTextsController < ApplicationController
     @original_url = request.referer
   end
 
-  def flowedit
+  def flow
     @active_tab = :overview
     render :edit
   end

@@ -100,7 +100,8 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       expect(project_language).to receive(:next_localized_text).with(nil, all: false).and_return(first_localized_text)
       visit project_language_path(project_language)
       click_on "Start"
-      expect(page).to have_current_path(flowedit_localized_text_path(first_localized_text, flow: "needing"))
+      save_and_open_page
+      expect(page).to have_current_path(flow_localized_text_path(first_localized_text, flow: "needing"))
     end
 
     it "redirects to the next master text on save" do
@@ -108,19 +109,19 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       allow(first_localized_text).to receive(:project_language).and_return(project_language)
       expect(project_language).to receive(:next_localized_text).
               with(first_localized_text.key, all: false).and_return(another_localized_text)
-      visit flowedit_localized_text_path(first_localized_text, flow: "needing")
+      visit flow_localized_text_path(first_localized_text, flow: "needing")
       fill_in "localized_text[other]", with: "Je suis un master text"
       expect{click_on "Save"}.to change{first_localized_text.reload.other}
-      expect(page).to have_current_path(flowedit_localized_text_path(another_localized_text.id, flow: "needing"))
+      expect(page).to have_current_path(flow_localized_text_path(another_localized_text.id, flow: "needing"))
     end
 
     it "redirects to the next master text on skip" do
       expect(ProjectLanguage).to receive(:find).and_return(project_language)
       expect(project_language).to receive(:next_localized_text).with(first_localized_text.key, all: false).
               and_return(another_localized_text)
-      visit flowedit_localized_text_path(first_localized_text, flow: "needing")
+      visit flow_localized_text_path(first_localized_text, flow: "needing")
       click_on "Skip"
-      expect(page).to have_current_path(flowedit_localized_text_path(another_localized_text.id, flow: "needing"))
+      expect(page).to have_current_path(flow_localized_text_path(another_localized_text.id, flow: "needing"))
     end
 
   end
@@ -137,26 +138,26 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
     it "project_lanaguage # next links through to edit page from overview by calling next_localized_text" do
       visit project_language_path(project_language)
       click_on "Review all"
-      expect(page).to have_current_path(flowedit_localized_text_path(alpha_localized, flow: "all"))
+      expect(page).to have_current_path(flow_localized_text_path(alpha_localized, flow: "all"))
     end
 
     it "redirects to the next master text on save" do
-      visit flowedit_localized_text_path(alpha_localized, flow: "all")
+      visit flow_localized_text_path(alpha_localized, flow: "all")
       fill_in "localized_text[other]", with: "Je suis un master text"
       expect{click_on "Save"}.to change{alpha_localized.reload.other}
-      expect(page).to have_current_path(flowedit_localized_text_path(ziggurat_localized.id, flow: "all"))
+      expect(page).to have_current_path(flow_localized_text_path(ziggurat_localized.id, flow: "all"))
     end
 
     it "redirects to the next master text on next" do
-      visit flowedit_localized_text_path(alpha_localized, flow: "all")
+      visit flow_localized_text_path(alpha_localized, flow: "all")
       click_on "Next"
-      expect(page).to have_current_path(flowedit_localized_text_path(ziggurat_localized.id, flow: "all"))
+      expect(page).to have_current_path(flow_localized_text_path(ziggurat_localized.id, flow: "all"))
     end
 
     it "redirects to the first master text on the last one" do
-      visit flowedit_localized_text_path(ziggurat_localized, flow: "all")
+      visit flow_localized_text_path(ziggurat_localized, flow: "all")
       click_on "Next"
-      expect(page).to have_current_path(flowedit_localized_text_path(alpha_localized.id, flow: "all"))
+      expect(page).to have_current_path(flow_localized_text_path(alpha_localized.id, flow: "all"))
       expect(page).to have_content(/last text.*beginning/i)
     end
   end
