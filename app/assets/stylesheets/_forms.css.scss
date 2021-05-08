@@ -21,7 +21,9 @@ form {
 }
 form.localized-texts tr td p {
   margin-bottom: 0;
-
+  &.p--simple-formatted {
+    margin-bottom: 10px;
+  }
   &.key {
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
     color: #ffffff;

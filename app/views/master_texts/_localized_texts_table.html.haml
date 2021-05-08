@@ -4,18 +4,19 @@
       %th Language
       %th Localized Text
       %th Needs review
+      %th
   %tbody
     - localized_texts.includes(project_language: :language).order('languages.name asc').references('languages').each do |localized_text|
       %tr[localized_text]
         %td
           %p= localized_text.language
         %td
+          = link_to edit_localized_text_path(localized_text), class: "btn btn-default pull-right" do
+            Edit
           - if localized_text.pluralizable
-            = localized_text.other
+            = simple_format(localized_text.other)
           - else
-            = localized_text.text
-          = link_to edit_localized_text_path(localized_text) do
-            [ Edit ]
+            = simple_format(localized_text.text)
 
         %td
           .checkbox
