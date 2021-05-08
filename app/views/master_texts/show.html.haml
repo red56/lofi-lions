@@ -25,6 +25,6 @@
 
 = render :partial => 'localized_texts_table', locals: {localized_texts: @master_text.localized_texts.includes(:views)}
 
-= link_to 'Edit', edit_master_text_path(@master_text)
-|
-\#{link_to 'Back', master_texts_path}
+= link_to 'Edit', edit_master_text_path(@master_text), class: "btn btn-primary"
+
+= link_to 'Back', master_texts_path, class: "btn btn-link"

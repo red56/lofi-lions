@@ -25,12 +25,12 @@
           %td.plurals
             %p
               %small.badge S
-              = master_text.one
+              = simple_format(master_text.one)
             %p
               %small.badge PL
-              = master_text.other
+              = simple_format(master_text.other)
         - else
-          %td= master_text.text
+          %td= simple_format(master_text.text)
         %td
           = master_text.word_count
           - @word_count += master_text.word_count

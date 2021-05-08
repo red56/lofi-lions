@@ -15,12 +15,12 @@
             - if ltext_fields.object.pluralizable
               %p.plurals
                 %small.badge S
-                = ltext_fields.object.original_one
+                = simple_format(ltext_fields.object.original_one, class: "p--simple-formatted")
               %p.plurals
                 %small.badge PL
-                = ltext_fields.object.original_other
+                = simple_format(ltext_fields.object.original_other, class: "p--simple-formatted")
             - else
-              %p= ltext_fields.object.original_text
+              %p= simple_format(ltext_fields.object.original_text, class: "p--simple-formatted")
             %p.comment= ltext_fields.object.master_text_comment
             %div
               .label.label-default.key= ltext_fields.object.key
