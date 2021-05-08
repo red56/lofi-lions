@@ -100,7 +100,6 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
       expect(project_language).to receive(:next_localized_text).with(nil, all: false).and_return(first_localized_text)
       visit project_language_path(project_language)
       click_on "Start"
-      save_and_open_page
       expect(page).to have_current_path(flow_localized_text_path(first_localized_text, flow: "needing"))
     end
 
