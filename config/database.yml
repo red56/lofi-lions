@@ -1,0 +1,27 @@
+development:
+  adapter: postgresql
+  database: lofi_lions_development
+  username: <%= ENV["DB_USER"] || ENV['USERNAME'] %>
+  host: localhost
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
+  encoding: unicode
+  min_messages: WARNING
+  prepared_statements: false
+
+test:
+  adapter: postgresql
+  database: lofi_lions_test
+  username: <%= ENV["DB_USER"] || ENV['USERNAME'] %>
+  host: <%= ENV["DB_HOST"] || "localhost" %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
+  encoding: unicode
+  min_messages: WARNING
+  prepared_statements: false
+
+production: &production
+  url: <%= ENV['DATABASE_CONNECTION_POOL_URL'] || ENV["DATABASE_URL"] || "postgres://#{ENV["DB_USER"] || ENV['USERNAME']}@localhost/lofi_lions_development"%>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
+  prepared_statements: false
+
+staging:
+  <<: *production

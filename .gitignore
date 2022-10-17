@@ -10,7 +10,6 @@
 /tmp
 
 # Ignore local-only files
-/config/database.yml
 /config/heroku_targets.yml
 /spec/support/local_only*.rb
 spec/lib/heroku_targets_spec.rb
