@@ -127,8 +127,7 @@ describe 'Localized Text One by One Edit Page', :type => :feature do
 
   describe "workflow when all reviewed" do
     let!(:project_language) { create(:project_language, project: project, need_entry_count: 0, need_review_count: 0) }
-    let!(:empty_localized_text) { create(:finished_localized_text, project_language: project_language,
-      master_text_id: master_text.id, needs_entry: true) }
+    let!(:empty_localized_text) { nil } # unneded
     let!(:needs_review_localized_text) { nil }
     let!(:alpha_localized) {create :finished_localized_text, project_language: project_language, master_text: alpha}
     let!(:ziggurat_localized){create :finished_localized_text, project_language: project_language, master_text: ziggurat}

@@ -159,6 +159,21 @@ RSpec.describe ProjectLanguage, :type => :model do
       it "if i give it charlies's key it returns *nil*" do
         expect(project_language.next_localized_text(charlie.key, all: true)).to be_nil
       end
+
+      context "with mixed case" do
+        let(:mt_baker) { create(:master_text, project: project, key: "Baker") }
+        it "has correct ordering" do
+          expect(project_language.localized_texts.map(&:key)).to eq([mt_able.key, mt_baker.key, mt_charlie.key])
+        end
+        it "still finds next lowerised" do
+          expect(project_language.next_localized_text(able.key, all: true)).to eq(baker)
+        end
+        it "has expected collation" do
+          # this would help us debug if it's wrong
+          # actually set on database but you can access by any model
+          expect(ProjectLanguage.connection.collation).to eq("en_US.UTF-8")
+        end
+      end
     end
 
     context "with no localized texts" do
