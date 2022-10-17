@@ -48,9 +48,8 @@ NB (rails 4 stuff):
 ```
 
 #### setup db
+
 ```
-cp config/database.template.yml config/database.yml
-psql -c "CREATE USER lofi_lions WITH CREATEDB; ALTER USER lofi_lions WITH PASSWORD NULL;"
 bundle exec rake db:setup
 bundle exec rake db:test:prepare
 ```

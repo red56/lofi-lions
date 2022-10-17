@@ -13,7 +13,7 @@ jobs:
         BUNDLE_RETRY: 3
         BUNDLE_PATH: vendor/bundle
         PGHOST: 127.0.0.1
-        PGUSER: lofilions-user
+        PGUSER: circleci-db-user
         RAILS_ENV: test
         TZ: "Europe/London"
     - image: circleci/postgres:10.8-alpine
@@ -21,8 +21,8 @@ jobs:
         username: $DOCKERHUB_USER
         password: $DOCKERHUB_TOKEN
       environment:
-        POSTGRES_USER: lofilions-user
-        POSTGRES_DB: lofilions_test
+        POSTGRES_USER: circleci-db-user
+        POSTGRES_DB: lofi_lions_test
         POSTGRES_PASSWORD: ""
     steps:
     - checkout
@@ -73,7 +73,7 @@ jobs:
     - run:
         name: Database setup
         command: |
-          cp config/database.circle.yml config/database.yml
+          bundle exec rake db:create --trace
           bundle exec rake db:schema:load --trace
 
     - run:
