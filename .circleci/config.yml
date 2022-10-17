@@ -12,11 +12,10 @@ jobs:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
         BUNDLE_PATH: vendor/bundle
-        PGHOST: 127.0.0.1
-        PGUSER: circleci-db-user
+        DB_USER: circleci-db-user
         RAILS_ENV: test
         TZ: "Europe/London"
-    - image: circleci/postgres:10.8-alpine
+    - image: cimg/postgres:14.5
       auth:
         username: $DOCKERHUB_USER
         password: $DOCKERHUB_TOKEN
@@ -24,6 +23,7 @@ jobs:
         POSTGRES_USER: circleci-db-user
         POSTGRES_DB: lofi_lions_test
         POSTGRES_PASSWORD: ""
+        POSTGRES_HOST_AUTH_METHOD: trust
     steps:
     - checkout
 
