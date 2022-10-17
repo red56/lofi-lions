@@ -35,7 +35,7 @@ gem 'devise-bootstrap-views'
 gem 'puma'
 gem "barnes"
 
-gem 'simple_form', '~> 3.2'
+gem 'simple_form'
 
 gem 'bugsnag'
 
