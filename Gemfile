@@ -44,7 +44,6 @@ gem "easy_translate"
 gem 'rails_12factor'
 gem 'lograge'
 
-gem "heroku_tool", github: "red56/heroku_tool", branch: 'main', require: false
 
 group :development do
   gem 'quiet_assets'
@@ -55,6 +54,7 @@ group :development do
   gem "spring-commands-rspec"
   gem "fix-db-schema-conflicts"
   gem "releasetool", github: "red56/releasetool", branch: 'master'
+  gem "heroku_tool", github: "red56/heroku_tool", branch: 'main', require: false
 end
 
 group :test do
