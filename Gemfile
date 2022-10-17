@@ -68,5 +68,5 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara', '>=2.2.0'
   gem 'capybara-screenshot'
-  gem 'bundler-audit', '~> 0.5'
+  gem 'bundler-audit'
 end
