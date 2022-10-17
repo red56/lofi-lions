@@ -340,6 +340,7 @@ DEPENDENCIES
   devise
   devise-bootstrap-views
   easy_translate
+  execjs (= 2.7.0)
   factory_girl_rails
   faker
   fix-db-schema-conflicts

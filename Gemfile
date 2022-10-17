@@ -14,8 +14,7 @@ gem 'sass-rails', '~> 4.0.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem "execjs", "= 2.7.0" # can't use ExecJS 2.8+ until Ruby 2.7 see https://github.com/rails/execjs/issues/99 # TODO: remove on ruby 2.7
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
