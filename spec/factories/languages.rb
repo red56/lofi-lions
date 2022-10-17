@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :language do
-    name { Faker::Lorem.words(4).join(" ") }
+    name { Faker::Lorem.words(number: 4).join(" ") }
     sequence(:code) { |n| [
-      Faker::Lorem.characters(2),
-      Faker::Lorem.characters(2).upcase,
+      Faker::Lorem.characters(number: 2),
+      Faker::Lorem.characters(number: 2).upcase,
       n.to_s].join("-")
     }
     pluralizable_label_other { "everything" }
@@ -13,7 +13,7 @@ FactoryBot.define do
       pluralizable_label_other { "everything" }
       pluralizable_label_zero { "" }
       pluralizable_label_one { "" }
-      pluralizable_label_two  { "" }
+      pluralizable_label_two { "" }
       pluralizable_label_few { "" }
       pluralizable_label_many { "" }
     end
