@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Localized View pages', :type => :feature do
+describe "Localized View pages", type: :feature do
 
   before { login }
   let(:login) { stubbed_login_as_developer }

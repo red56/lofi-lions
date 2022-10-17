@@ -3,12 +3,12 @@
 
 interactor :off
 
-guard 'rails', port: 3010 do
-  watch('Gemfile.lock')
+guard "rails", port: 3010 do
+  watch("Gemfile.lock")
   watch(%r{^(config|lib)/.*})
 end
 
-guard 'livereload', port: 35740 do
+guard "livereload", port: 35740 do
   watch(%r{app/views/.+\.(erb|haml|slim)$})
   watch(%r{app/helpers/.+\.rb})
   watch(%r{public/.+\.(css|js|html)})

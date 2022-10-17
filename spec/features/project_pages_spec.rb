@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Project Pages', :type => :feature do
+describe "Project Pages", type: :feature do
   let!(:project) { create(:project, name: "steve") }
   let!(:project_language) { create(:project_language, language_id: language.id, project_id: project.id) }
   let(:language) { create(:language, name: "French") }

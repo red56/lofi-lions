@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe Api::ProjectsController, :type => :controller do
-  let(:file_upload) { fixture_file_upload(file_path, 'application/octet-stream') }
+describe Api::ProjectsController, type: :controller do
+  let(:file_upload) { fixture_file_upload(file_path, "application/octet-stream") }
   let(:selected_project) { create(:project) }
 
   shared_context "full-stack" do
-    let(:language) { create :language, code: 'zh' }
+    let(:language) { create :language, code: "zh" }
     let(:project_language) { create :project_language, language: language, project: selected_project }
     before do
       ["Adding", "Almost done", "Done"].each do |key|
@@ -14,7 +14,7 @@ describe Api::ProjectsController, :type => :controller do
     end
 
     def request
-      post :import, {platform: platform, file: file_upload, code: project_language.language.code, format: 'json',
+      post :import, {platform: platform, file: file_upload, code: project_language.language.code, format: "json",
               id: selected_project.slug}
     end
   end
@@ -26,7 +26,7 @@ describe Api::ProjectsController, :type => :controller do
       it "should fail with 401?"
     end
 
-    let(:chinese) { build_stubbed(:language, :type_0_chinese, code: 'zh', name: "Chinese") }
+    let(:chinese) { build_stubbed(:language, :type_0_chinese, code: "zh", name: "Chinese") }
     let(:localizations) { Localization::CollectionWrappingArray.new(build_list(:localization, 3)) }
 
     describe "ios" do
@@ -35,18 +35,18 @@ describe Api::ProjectsController, :type => :controller do
       context("mocked") do
 
         it "accepts a android xml upload" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
           localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
 
-          post :import, {platform: :ios, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
         it "should stop if it receives unknown code" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :ios, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
       end
 
@@ -69,17 +69,17 @@ describe Api::ProjectsController, :type => :controller do
       context("mocked") do
 
         it "accepts a android xml upload" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
           localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :android, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
         it "should stop if it receives unknown code" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :android, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
       end
 
@@ -103,17 +103,17 @@ describe Api::ProjectsController, :type => :controller do
       context("mocked") do
 
         it "accepts a yaml upload" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
           localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :yaml, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
         it "should stop if it receives unknown code" do
-          expect(Language).to receive(:find_by_code).with('zh').and_return(nil)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :yaml, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
       end
 
@@ -141,9 +141,9 @@ describe Api::ProjectsController, :type => :controller do
           expect(localizations).to receive(:close)
           expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
 
-          expect(Language).to receive(:find_by_code).with('zh').and_return(chinese)
+          expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :yaml, file: file_upload, code: 'zh', format: 'json', id: selected_project.slug}
+          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
         end
       end
     end

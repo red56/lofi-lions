@@ -32,6 +32,6 @@ class Project < ActiveRecord::Base
   end
 
   def word_count
-    master_texts.sum('word_count')
+    master_texts.sum("word_count")
   end
 end

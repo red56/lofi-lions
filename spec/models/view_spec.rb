@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe View, :type => :model do
+describe View, type: :model do
   let(:view) { create :view }
   let(:master_texts) { create_list(:master_text, 3) }
 
@@ -12,7 +12,7 @@ describe View, :type => :model do
 
   describe "#keys" do
     it "works empty" do
-      expect(view.keys).to eq('')
+      expect(view.keys).to eq("")
     end
     it "works full" do
       add_reversed
@@ -44,7 +44,7 @@ describe View, :type => :model do
   end
 
   context "#name" do
-    let(:existing){create :view, project:create(:project)}
+    let(:existing) {create :view, project: create(:project)}
     it "must be unique" do
       expect(View.new(name: existing.name, project: existing.project)).not_to be_valid
     end

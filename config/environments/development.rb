@@ -27,7 +27,7 @@ LofiLions::Application.configure do
   config.active_support.deprecation = :log
 
   # See everything in the log (default is :info)
-  config.log_level = ENV['RAILS_LOG_LEVEL'].presence&.to_sym || :info
+  config.log_level = ENV["RAILS_LOG_LEVEL"].presence&.to_sym || :info
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -45,12 +45,12 @@ LofiLions::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  ENV['DEVISE_KEY'] = 'not-so-random'
-  config.action_mailer.default_url_options = { host: ENV['CANONICAL_HOST'] || 'localhost:3007' }
+  ENV["DEVISE_KEY"] = "not-so-random"
+  config.action_mailer.default_url_options = { host: ENV["CANONICAL_HOST"] || "localhost:3007" }
 
   # mailcatcher setup
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+  config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
 
   # previews
   config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"

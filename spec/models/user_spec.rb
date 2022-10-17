@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe User, :type => :model do
+describe User, type: :model do
 
   describe "destroy" do
     let!(:user) { create :user }

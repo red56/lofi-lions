@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe LanguagesController, :type => :routing do
+describe LanguagesController, type: :routing do
   describe "routing" do
 
     it "routes to #index" do
@@ -12,11 +12,11 @@ describe LanguagesController, :type => :routing do
     end
 
     it "routes to #show" do
-      expect(get("/languages/1")).to route_to("languages#show", :id => "1")
+      expect(get("/languages/1")).to route_to("languages#show", id: "1")
     end
 
     it "routes to #edit" do
-      expect(get("/languages/1/edit")).to route_to("languages#edit", :id => "1")
+      expect(get("/languages/1/edit")).to route_to("languages#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -24,11 +24,11 @@ describe LanguagesController, :type => :routing do
     end
 
     it "routes to #update" do
-      expect(put("/languages/1")).to route_to("languages#update", :id => "1")
+      expect(put("/languages/1")).to route_to("languages#update", id: "1")
     end
 
     it "routes to #destroy" do
-      expect(delete("/languages/1")).to route_to("languages#destroy", :id => "1")
+      expect(delete("/languages/1")).to route_to("languages#destroy", id: "1")
     end
 
   end

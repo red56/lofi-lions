@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-LofiLions::Application.config.secret_key_base = '40b5a45e2ff7bf2c8d887ac918e46e680944fbc7661cac51cc652aa2ad118ce1f71d81ccf53b2860e821d9b810d837e20e4cc8c95e2d821f94e0ea465e9039a1'
+LofiLions::Application.config.secret_key_base = "40b5a45e2ff7bf2c8d887ac918e46e680944fbc7661cac51cc652aa2ad118ce1f71d81ccf53b2860e821d9b810d837e20e4cc8c95e2d821f94e0ea465e9039a1"

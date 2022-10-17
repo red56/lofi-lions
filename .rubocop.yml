@@ -1,0 +1,180 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.4
+  DefaultFormatter: fuubar
+  Exclude:
+  - 'node_modules/**/*'
+  - 'vendor/**/*'
+  - 'db/schema.rb'
+  - 'bin/*'
+  - 'Gemfile'
+  - 'Gemfile.lock'
+  DisplayCopNames: true
+  NewCops: enable
+  CacheRootDirectory: tmp # ie. tmp/rubocop_cache
+  UseCache: true
+
+# Don't like this, it's too annoying
+Layout/LineLength:
+  Max: 120
+  Enabled: false
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Lint/EmptyWhen:
+  Enabled: false
+  # This one seems mostly ok - I use empty when on purpose a lot
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: true
+  Exclude:
+    - "spec/**/*" # https://github.com/rubocop/rubocop/issues/4222
+
+Metrics/AbcSize:
+  Enabled: false
+  # I don't think this is something we want to enforce (yet?)
+
+Metrics/BlockLength:
+  IgnoredMethods:
+    - "included" # concerns
+    - "no_commands" # thor
+    - "create_table" # migrations
+  Exclude:
+    - "spec/**/*.rb"
+    - "lib/tasks/**/*.rake"
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+  # No (not yet)
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+  # In theory this is good. In practice lots of false errors
+
+Performance/Count:
+  Enabled: false
+  # unfixed autocorrect issue https://github.com/bbatsov/rubocop/issues/2809
+  # not compatible with ActiveRecord
+
+Performance/Detect:
+  Enabled: false
+  # not compatible with ActiveRecord
+
+# I'm not very keen on this one
+Performance/TimesMap:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - staging
+    - development
+    - test
+
+# I can't see the value of this
+RSpec/DescribeClass:
+  Enabled: false
+
+# I can't see the value of this
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+  EnforcedStyle: semantic
+  ProceduralMethods:
+    # Methods that are known to be procedural in nature but look functional from
+    # their usage, e.g.
+    #
+    #   time = Benchmark.realtime do
+    #     foo.bar
+    #   end
+    #
+    # Here, the return value of the block is discarded but the return value of
+    # `Benchmark.realtime` is used.
+    - benchmark
+    - bm
+    - bmbm
+    - create
+    - each_with_object
+    - measure
+    - new
+    - realtime
+    - tap
+    - with_object
+  FunctionalMethods:
+    # Methods that are known to be functional in nature but look procedural from
+    # their usage, e.g.
+    #
+    #   let(:foo) { Foo.new }
+    #
+    # Here, the return value of `Foo.new` is used to define a `foo` helper but
+    # doesn't appear to be used from the return value of `let`.
+    - let
+    - let!
+    - subject
+    - watch
+    - expect
+  IgnoredMethods:
+    # Methods that can be either procedural or functional and cannot be
+    # categorised from their usage alone, e.g.
+    #
+    #   foo = lambda do |x|
+    #     puts "Hello, #{x}"
+    #   end
+    #
+    #   foo = lambda do |x|
+    #     x * 100
+    #   end
+    #
+    # Here, it is impossible to tell from the return value of `lambda` whether
+    # the inner block's return value is significant.
+    - lambda
+    - proc
+    - it
+    - html # format.html
+    - json # format.json
+    - before
+
+Style/Documentation:
+  Enabled: false
+  # Sounds good, but really?
+
+Style/DoubleNegation:
+  Enabled: false
+  # double negation is an ok way to enforce true / false when assigning
+
+Style/Encoding:
+  Exclude:
+    - 'lib/tasks/*.thor' # https://github.com/rails/thor/issues/776
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+
+Style/NumericLiterals:
+  Enabled: false
+  # This is a pain, most long numeric literals are things like ids or times as numbers
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/SymbolProc:
+  Enabled: true
+  AllowMethodsWithArguments: true

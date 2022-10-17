@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'Strings file parser' do
+describe "Strings file parser" do
   let(:file_path) { File.expand_path("../../fixtures/#{file_name}.strings", __FILE__) }
   let(:parsed) { IOS::StringsFile.parse(File.new(file_path)) }
 

@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Login pages', :type => :feature do
+describe "Login pages", type: :feature do
 
   context "when logs in " do
     before do

@@ -40,8 +40,7 @@ class Localization
       if master_text.nil?
         errors[localization.key] = "couldn't find master text"
       else
-        localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, project_language_id:
-                project_language.id)
+        localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, project_language_id: project_language.id)
         if localization.value.is_a?(Hash)
           localized_text.update_attributes!(localization.value)
         else

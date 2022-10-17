@@ -3,7 +3,7 @@ class ProjectLanguage < ActiveRecord::Base
   belongs_to :project, inverse_of: :project_languages
   belongs_to :language, inverse_of: :project_languages
   has_many(:localized_texts,
-      lambda{ joins(:master_text).order('LOWER(master_texts.key)') },
+      lambda { joins(:master_text).order("LOWER(master_texts.key)") },
       inverse_of: :project_language, dependent: :destroy,
   )
   has_and_belongs_to_many :users
@@ -18,8 +18,8 @@ class ProjectLanguage < ActiveRecord::Base
     self.update!(
         need_review_count: self.localized_texts.needing_review.count,
         need_entry_count: self.localized_texts.needing_entry.count,
-        need_review_word_count: self.localized_texts.needing_review.sum('master_texts.word_count'),
-        need_entry_word_count: self.localized_texts.needing_entry.sum('master_texts.word_count'),
+        need_review_word_count: self.localized_texts.needing_review.sum("master_texts.word_count"),
+        need_entry_word_count: self.localized_texts.needing_entry.sum("master_texts.word_count"),
     )
   end
 
@@ -46,7 +46,7 @@ class ProjectLanguage < ActiveRecord::Base
 
   def next_localized_text(after_key = nil, all: false)
     candidates = all ? localized_texts : localized_texts.needs_review_or_entry
-    candidates = candidates.where('LOWER(key) > ?', after_key.downcase) if after_key.present?
+    candidates = candidates.where("LOWER(key) > ?", after_key.downcase) if after_key.present?
     candidates.limit(1).first
   end
 
@@ -57,7 +57,7 @@ class ProjectLanguage < ActiveRecord::Base
       to_translate.map(&:original_text),
       from: "en",
       to: language_code_for_google,
-      format: 'text'
+      format: "text"
     )
     translations.zip(to_translate) do |translation, localized_text|
       localized_text.google_translated!(translation)

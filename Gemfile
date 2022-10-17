@@ -55,6 +55,11 @@ group :development do
   gem "fix-db-schema-conflicts"
   gem "releasetool", github: "red56/releasetool", branch: 'master'
   gem "heroku_tool", github: "red56/heroku_tool", branch: 'main', require: false
+
+  gem "rubocop"
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
 end
 
 group :test do

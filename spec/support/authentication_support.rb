@@ -9,7 +9,7 @@ def stubbed_login_as_admin_user
 end
 
 def ensure_admin_user
-  @user ||= build_stubbed(:user, email: 'admin@example.com', is_administrator: true)
+  @user ||= build_stubbed(:user, email: "admin@example.com", is_administrator: true)
 end
 
 def stubbed_login_as_user
@@ -17,12 +17,12 @@ def stubbed_login_as_user
 end
 
 def stubbed_login_as_developer
-  @user = build_stubbed(:user, email: 'dev@example.com', is_developer: true)
+  @user = build_stubbed(:user, email: "dev@example.com", is_developer: true)
   _stub_authenticated_user(@user)
 end
 
 def ensure_user
-  @user ||= build_stubbed(:user, email: 'test@example.com')
+  @user ||= build_stubbed(:user, email: "test@example.com")
 end
 
 RSpec.configure do |config|

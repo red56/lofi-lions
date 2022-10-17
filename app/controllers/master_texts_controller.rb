@@ -30,10 +30,10 @@ class MasterTextsController < ApplicationController
     @master_text = MasterText.new(master_text_params)
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).save
-        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @master_text }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: "Master text was successfully created." }
+        format.json { render action: "show", status: :created, location: @master_text }
       else
-        format.html { render action: 'new' }
+        format.html { render action: "new" }
         format.json { render json: @master_text.errors, status: :unprocessable_entity }
       end
     end
@@ -44,10 +44,10 @@ class MasterTextsController < ApplicationController
   def update
     respond_to do |format|
       if LocalizedTextEnforcer::MasterTextCrudder.new(@master_text).update(master_text_params)
-        format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully updated.' }
+        format.html { redirect_to project_master_texts_path(@master_text.project), notice: "Master text was successfully updated." }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: "edit" }
         format.json { render json: @master_text.errors, status: :unprocessable_entity }
       end
     end
@@ -59,7 +59,7 @@ class MasterTextsController < ApplicationController
     @master_text.destroy
     @master_text.project.recalculate_counts!
     respond_to do |format|
-      format.html { redirect_to project_master_texts_path(@master_text.project), notice: 'Master text was successfully deleted.' }
+      format.html { redirect_to project_master_texts_path(@master_text.project), notice: "Master text was successfully deleted." }
       format.json { head :no_content }
     end
   end

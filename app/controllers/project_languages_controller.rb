@@ -9,7 +9,7 @@ class ProjectLanguagesController < ApplicationController
     else
       @project_languages = current_user.project_languages
     end
-    @project_languages = @project_languages.includes(:project, :language).order('languages.name, projects.id')
+    @project_languages = @project_languages.includes(:project, :language).order("languages.name, projects.id")
   end
 
   def show
@@ -23,7 +23,7 @@ class ProjectLanguagesController < ApplicationController
         format.html { redirect_to next_page_after_update, notice: "#{@project_language} was successfully updated." }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: "edit" }
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end
     end

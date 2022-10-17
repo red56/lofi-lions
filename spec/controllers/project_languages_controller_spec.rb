@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe ProjectLanguagesController, :type => :controller do
+describe ProjectLanguagesController, type: :controller do
 
   before { login }
   let(:login) { stubbed_login_as_user }

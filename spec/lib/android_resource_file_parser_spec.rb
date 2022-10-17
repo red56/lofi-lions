@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'Android resource file parser' do
+describe "Android resource file parser" do
   let(:file_path) { File.expand_path("../../fixtures/#{file_name}.xml", __FILE__) }
   let(:parsed) { Android::ResourceFile.parse(File.new(file_path)) }
 
@@ -63,7 +63,7 @@ describe 'Android resource file parser' do
     end
 
     it "can give a list of plural values" do
-      expect(parsed.to_hash['remaining_days']).to eq(Localization.new('remaining_days', one: '%d day', other: '%d days'))
+      expect(parsed.to_hash["remaining_days"]).to eq(Localization.new("remaining_days", one: "%d day", other: "%d days"))
     end
   end
 
@@ -74,12 +74,12 @@ describe 'Android resource file parser' do
     end
 
     it "can give a list of the keys" do
-      expect(parsed.keys).to eq(["login_to_get_started", "email", "server_choice[0]", 'server_choice[1]'])
+      expect(parsed.keys).to eq(["login_to_get_started", "email", "server_choice[0]", "server_choice[1]"])
     end
 
     it "can give a the array items" do
-      expect(parsed.to_hash['server_choice[0]']).to eq(Localization.new('server_choice[0]', 'Production'))
-      expect(parsed.to_hash['server_choice[1]']).to eq(Localization.new('server_choice[1]', 'Staging'))
+      expect(parsed.to_hash["server_choice[0]"]).to eq(Localization.new("server_choice[0]", "Production"))
+      expect(parsed.to_hash["server_choice[1]"]).to eq(Localization.new("server_choice[1]", "Staging"))
     end
   end
 

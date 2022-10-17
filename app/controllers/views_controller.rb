@@ -31,10 +31,10 @@ class ViewsController < ApplicationController
 
     respond_to do |format|
       if @view.save
-        format.html { redirect_to @view, notice: 'View was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @view }
+        format.html { redirect_to @view, notice: "View was successfully created." }
+        format.json { render action: "show", status: :created, location: @view }
       else
-        format.html { render action: 'new' }
+        format.html { render action: "new" }
         format.json { render json: @view.errors, status: :unprocessable_entity }
       end
     end
@@ -45,10 +45,10 @@ class ViewsController < ApplicationController
   def update
     respond_to do |format|
       if @view.update(view_params)
-        format.html { redirect_to @view, notice: 'View was successfully updated.' }
+        format.html { redirect_to @view, notice: "View was successfully updated." }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: "edit" }
         format.json { render json: @view.errors, status: :unprocessable_entity }
       end
     end

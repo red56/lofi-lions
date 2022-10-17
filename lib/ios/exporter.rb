@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module IOS
   class Exporter < ::BaseExporter
     def body_for(localized_texts)

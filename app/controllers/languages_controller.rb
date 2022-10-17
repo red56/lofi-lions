@@ -30,10 +30,10 @@ class LanguagesController < ApplicationController
     @language = Language.new(language_params)
     respond_to do |format|
       if LocalizedTextEnforcer::LanguageCreator.new(@language).save
-        format.html { redirect_to languages_path, notice: 'Language was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @language }
+        format.html { redirect_to languages_path, notice: "Language was successfully created." }
+        format.json { render action: "show", status: :created, location: @language }
       else
-        format.html { render action: 'new' }
+        format.html { render action: "new" }
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end
     end
@@ -44,10 +44,10 @@ class LanguagesController < ApplicationController
   def update
     respond_to do |format|
       if @language.update(language_params)
-        format.html { redirect_to languages_path, notice: 'Language was successfully updated.' }
+        format.html { redirect_to languages_path, notice: "Language was successfully updated." }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: "edit" }
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end
     end

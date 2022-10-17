@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Project Language Pages', :type => :feature do
+describe "Project Language Pages", type: :feature do
   let(:project_language) { create(:project_language) }
 
   before { login }
@@ -28,9 +28,9 @@ describe 'Project Language Pages', :type => :feature do
   end
 
   describe "index" do
-    let(:project_languages){like_a_scope([project_language])}
-    let(:project_language){build_stubbed(:project_language, project: project)}
-    let(:project){build_stubbed(:project)}
+    let(:project_languages) {like_a_scope([project_language])}
+    let(:project_language) {build_stubbed(:project_language, project: project)}
+    let(:project) {build_stubbed(:project)}
 
 
     context "as an admin" do
@@ -99,7 +99,7 @@ describe 'Project Language Pages', :type => :feature do
         expect(current_path).to eq(path)
       end
 
-      context 'when pluralizable' do
+      context "when pluralizable" do
         before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true, pluralizable?: true) }
         it "displays" do
           localized_text
