@@ -51,4 +51,7 @@ LofiLions::Application.configure do
   # mailcatcher setup
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+
+  # previews
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 end

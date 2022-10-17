@@ -44,9 +44,6 @@ gem "easy_translate"
 gem 'rails_12factor'
 gem 'lograge'
 
-# needs to be in production because of autoloading... not because it's actually used!
-gem "mail_view", "~> 2.0.4"
-
 gem "heroku_tool", github: "red56/heroku_tool", branch: 'main', require: false
 
 group :development do
