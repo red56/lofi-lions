@@ -1,9 +1,13 @@
-version: 2
+version: 2.1
+
 jobs:
   build:
     parallelism: 1
     docker:
     - image: circleci/ruby:2.4.10-node
+      auth:
+        username: $DOCKERHUB_USER
+        password: $DOCKERHUB_TOKEN
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
@@ -13,6 +17,9 @@ jobs:
         RAILS_ENV: test
         TZ: "Europe/London"
     - image: circleci/postgres:10.8-alpine
+      auth:
+        username: $DOCKERHUB_USER
+        password: $DOCKERHUB_TOKEN
       environment:
         POSTGRES_USER: lofilions-user
         POSTGRES_DB: lofilions_test
@@ -91,3 +98,21 @@ jobs:
     - store_artifacts:
         path: tmp/capybara
         destination: screenshots
+
+workflows:
+  commit:
+    jobs:
+      - build:
+          context: docker-auth
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 2 * * 1" # every monday at 2am
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - build:
+          context: docker-auth
+
