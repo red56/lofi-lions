@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :language do
     name { Faker::Lorem.words(4).join(' ') }
     sequence(:code) { |n| [

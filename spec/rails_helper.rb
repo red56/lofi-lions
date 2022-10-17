@@ -3,7 +3,7 @@ require 'spec_helper'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'faker'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -34,6 +34,6 @@ RSpec.configure do |config|
   # I don't like running the specs in a random order, except for special effects.
   #config.order = "random"
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.infer_spec_type_from_file_location!
 end

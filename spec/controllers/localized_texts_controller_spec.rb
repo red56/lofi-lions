@@ -2,10 +2,10 @@ require 'rails_helper'
 
 describe LocalizedTextsController, type: :controller do
 
-  let!(:project_language) { build_stubbed :project_language, project: project }
-  let(:localized_text) {build_stubbed(:localized_text, project_language: project_language, master_text: master_text)}
-  let(:master_text) {build_stubbed(:master_text, project: project)}
-  let(:project) {build_stubbed(:project)}
+  let!(:project_language) { create :project_language, project: project }
+  let(:localized_text) {create(:localized_text, project_language: project_language, master_text: master_text)}
+  let(:master_text) {create(:master_text, project: project)}
+  let(:project) {create(:project)}
 
   before { login }
   let(:login) { stubbed_login_as_user }

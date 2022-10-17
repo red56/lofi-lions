@@ -33,8 +33,12 @@ LofiLions::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # Print deprecation notices to the stderr.
-  config.active_support.deprecation = :stderr
+  config.active_support.deprecation = :raise
+  # config.active_support.deprecation = if ENV["BUNDLE_GEMFILE"]&.ends_with?("Gemfile.next")
+  #                                       :stderr
+  #                                     else
+  #                                       :raise
+  #                                     end
 
   config.action_controller.action_on_unpermitted_parameters = :raise
 

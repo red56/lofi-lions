@@ -102,10 +102,10 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
-    factory_girl (4.5.0)
+    factory_bot (4.10.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.5.0)
-      factory_girl (~> 4.5.0)
+    factory_bot_rails (4.10.0)
+      factory_bot (~> 4.10.0)
       railties (>= 3.0.0)
     faker (1.4.3)
       i18n (~> 0.5)
@@ -241,7 +241,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.2)
       rake
-    rake (13.0.3)
+    rake (13.0.6)
     rb-fsevent (0.9.5)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -338,7 +338,7 @@ DEPENDENCIES
   devise-bootstrap-views
   easy_translate
   execjs (= 2.7.0)
-  factory_girl_rails
+  factory_bot_rails (< 4.11.0)
   faker
   fix-db-schema-conflicts
   font-awesome-sass

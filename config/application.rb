@@ -38,7 +38,7 @@ module LofiLions
       g.test_framework :rspec
       g.view_specs false
       g.helper_specs false
-      #g.fixture_replacement :factory_girl
+      g.fixture_replacement :factory_bot
       g.stylesheets false
     end
   end
