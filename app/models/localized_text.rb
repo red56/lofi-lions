@@ -1,4 +1,4 @@
-class LocalizedText < ActiveRecord::Base
+class LocalizedText < ApplicationRecord
   belongs_to :master_text, inverse_of: :localized_texts
   belongs_to :project_language, inverse_of: :localized_texts
   has_many :views, through: :master_text

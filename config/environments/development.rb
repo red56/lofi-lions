@@ -45,6 +45,9 @@ LofiLions::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # replacement for quiet_assets gem
+  config.assets.quiet = true
+
   ENV["DEVISE_KEY"] = "not-so-random"
   config.action_mailer.default_url_options = { host: ENV["CANONICAL_HOST"] || "localhost:3007" }
 

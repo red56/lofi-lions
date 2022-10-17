@@ -1,4 +1,4 @@
-class MasterText < ActiveRecord::Base
+class MasterText < ApplicationRecord
 
   MARKDOWN_FORMAT = "markdown"
   PLAIN_FORMAT = "plain"

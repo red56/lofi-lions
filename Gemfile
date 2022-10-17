@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby "2.4.10"
+ruby "2.5.9"
 
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 5.0.7'
 
 gem 'nokogiri',  '>= 1.8.2'
 
@@ -9,7 +9,7 @@ gem 'nokogiri',  '>= 1.8.2'
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -46,7 +46,6 @@ gem 'lograge'
 
 
 group :development do
-  gem 'quiet_assets'
   gem 'guard-rails'
   gem 'rack-livereload'
   gem 'guard-livereload'

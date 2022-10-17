@@ -1,4 +1,4 @@
-class View < ActiveRecord::Base
+class View < ApplicationRecord
 
   belongs_to :project, inverse_of: :views
   has_many :key_placements, -> { order "position asc" }, inverse_of: :view, dependent: :destroy

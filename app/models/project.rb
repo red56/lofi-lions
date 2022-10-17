@@ -1,4 +1,4 @@
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
 
   has_many :master_texts, inverse_of: :project, dependent: :destroy
   has_many :views, inverse_of: :project, dependent: :destroy

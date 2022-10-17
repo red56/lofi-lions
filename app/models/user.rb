@@ -1,6 +1,6 @@
 require "securerandom"
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   devise :database_authenticatable,
       :recoverable, :rememberable, :trackable, :validatable
   # Other devise modules available are.

@@ -1,4 +1,4 @@
-class KeyPlacement < ActiveRecord::Base
+class KeyPlacement < ApplicationRecord
   belongs_to :master_text, inverse_of: :key_placements
   belongs_to :view, inverse_of: :key_placements
 end
