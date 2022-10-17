@@ -1,6 +1,6 @@
 module ApplicationHelper
   def active_section(section)
-    @section == section ? {class:"active"} : {}
+    @section == section ? {class: "active"} : {}
   end
 
   def version_details
@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def deployment_commit_hash
-    (ENV['COMMIT_HASH'] ?  "##{ENV['COMMIT_HASH']}" : '(dev)') unless Rails.env.production?
+    (ENV["COMMIT_HASH"] ?  "##{ENV['COMMIT_HASH']}" : "(dev)") unless Rails.env.production?
   end
 
   def version_number

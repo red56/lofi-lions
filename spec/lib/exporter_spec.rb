@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 shared_examples_for "a BaseExporter" do
 
@@ -31,7 +31,7 @@ end
 
 describe "Exporters" do
   let(:project) { build_stubbed(:project) }
-  let(:language) { build_stubbed(:language, code: 'la') }
+  let(:language) { build_stubbed(:language, code: "la") }
   let(:project_language) { build_stubbed(:project_language, project: project, language: language) }
   let(:master_texts) { build_stubbed_list(:master_text, 3, project: project) }
   let(:localized_texts) { master_texts.map { |mt| build_stubbed(:stubbed_localized_text, master_text: mt,
@@ -77,7 +77,7 @@ describe "Exporters" do
 
 
       context "with a different language" do
-        let(:language) { build_stubbed(:language, code: 'fr') }
+        let(:language) { build_stubbed(:language, code: "fr") }
         it "has different language code as top level key" do
           expect(YAML.load(subject)).to have_key("fr")
         end

@@ -1,7 +1,7 @@
 module ThorUtils
   protected
   def io_from_filename(filename, &io_block)
-    if filename == '-'
+    if filename == "-"
       if io_block
         io_block.call($stdin)
       else
@@ -9,9 +9,9 @@ module ThorUtils
       end
     else
       if io_block
-        open(filename, 'rb', &io_block)
+        open(filename, "rb", &io_block)
       else
-        return open(filename, 'rb')
+        return open(filename, "rb")
       end
     end
   end

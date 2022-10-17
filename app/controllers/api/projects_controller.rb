@@ -14,7 +14,7 @@ class Api::ProjectsController < ApplicationController
   def import
     import_texts(params[:file], params[:platform] || auto_platform())
     respond_to do |format|
-      format.html { redirect_to redirect_path, notice: 'Import was successful.' }
+      format.html { redirect_to redirect_path, notice: "Import was successful." }
       format.json { render text: "OK" }
     end
     # rescue => e

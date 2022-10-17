@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe 'Yaml file parser' do
+describe "Yaml file parser" do
   let(:file_path) { File.expand_path("../../fixtures/simple_strings.yml", __FILE__) }
   subject { RailsYamlFormat::YamlFile.parse(File.new(file_path)) }
   it "should return keys in UTF-8" do
@@ -22,7 +22,7 @@ describe 'Yaml file parser' do
   end
 
   it "supports close" do
-    expect{subject.close}.not_to raise_exception
+    expect {subject.close}.not_to raise_exception
   end
 
   it "supports being given an Uploaded File" do

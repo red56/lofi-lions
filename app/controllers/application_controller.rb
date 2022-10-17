@@ -22,12 +22,12 @@ class ApplicationController < ActionController::Base
 
   def require_administrator!
     authenticate_user!
-    raise ActionController::RoutingError.new('Not Found') unless current_user.is_administrator?
+    raise ActionController::RoutingError.new("Not Found") unless current_user.is_administrator?
   end
 
   def require_developer!
     authenticate_user!
-    raise ActionController::RoutingError.new('Not Found') unless current_user.is_developer?
+    raise ActionController::RoutingError.new("Not Found") unless current_user.is_developer?
   end
 
 

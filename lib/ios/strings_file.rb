@@ -1,7 +1,5 @@
-# encoding: utf-8
-
 module IOS
-  STRINGS_FILE_ENCODING = 'BOM|UTF-16LE:UTF-8'.freeze
+  STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8".freeze
 
   class StringsFile < BaseParsedFile
 
@@ -43,9 +41,9 @@ module IOS
       return [nil, nil] if line.empty?
       scanner = StringScanner.new(line)
       scanner.skip_until(/"/)
-      key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, '')
+      key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, "")
       scanner.skip(/\s*=\s*"/)
-      value = (scanner.scan_until(NON_ESCAPED_QUOTE) || "").gsub(TRAILING_QUOTE, '')
+      value = (scanner.scan_until(NON_ESCAPED_QUOTE) || "").gsub(TRAILING_QUOTE, "")
       [key, value].map { |s| unescape(s) }
     end
 
@@ -58,11 +56,11 @@ module IOS
       contents = []
       begin
         text = scanner.scan_until(TEXT_END)
-        contents << text.gsub(COMMENT_START, '')
+        contents << text.gsub(COMMENT_START, "")
         scanner.skip_until(COMMENT_END)
       end until scanner.eos?
       contents << scanner.rest
-      contents.join('').strip
+      contents.join("").strip
     end
 
     def source

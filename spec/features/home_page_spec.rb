@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Home page', :type => :feature do
+describe "Home page", type: :feature do
 
   let!(:project) {create(:project, name: "steve" )}
   let(:project_language) {create(:project_language, language_id: language.id)}
@@ -8,7 +8,7 @@ describe 'Home page', :type => :feature do
 
   context "when not logged in" do
     it "redirects to login page" do
-      visit '/'
+      visit "/"
       expect(current_path).to eq(new_user_session_path)
     end
   end
@@ -19,16 +19,16 @@ describe 'Home page', :type => :feature do
     end
 
     it "works" do
-      visit '/'
-      expect(current_path).to eq('/')
+      visit "/"
+      expect(current_path).to eq("/")
       expect(page).to have_content(@user.email)
     end
     it "has logout" do
-      visit '/'
+      visit "/"
       click_on "Logout"
     end
     it "links to projects" do
-      visit '/'
+      visit "/"
       expect(page).to have_content(project.name)
       expect(page).to have_link_to(project_path(project))
     end
@@ -40,7 +40,7 @@ describe 'Home page', :type => :feature do
     end
 
     it "links to projects" do
-      visit '/'
+      visit "/"
       expect(page).to have_content(project.name)
       expect(page).to have_link_to(project_path(project))
     end
@@ -53,13 +53,13 @@ describe 'Home page', :type => :feature do
     end
 
     it "doesn't link to projects" do
-      visit '/'
+      visit "/"
       expect(page).to_not have_content(project.name)
       expect(page).to_not have_link_to(project_path(project))
     end
 
     it "links to project languages" do
-      visit '/'
+      visit "/"
       expect(page).to have_content(project_language.language.name)
       expect(page).to have_link_to(project_language_path(project_language))
     end
@@ -83,8 +83,7 @@ describe 'Home page', :type => :feature do
 
     context "with to enter/review" do
       let!(:project_language) { create(:project_language, language_id: language.id, need_entry_count: 1,
-          need_review_count:
-              3) }
+          need_review_count: 3) }
 
       before do
         stubbed_login_as_developer

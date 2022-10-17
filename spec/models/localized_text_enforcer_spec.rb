@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe LocalizedTextEnforcer, :type => :model do
+describe LocalizedTextEnforcer, type: :model do
   let(:project) { create(:project) }
   let(:master_text) { create(:master_text, project: project) }
   let(:other_master_text) { create(:master_text, project: project) }
@@ -238,7 +238,7 @@ describe LocalizedTextEnforcer, :type => :model do
         expect(l_crudder.save).to be_truthy
       end
       it "returns false when not saving" do
-        l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ''))
+        l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ""))
         expect(l_crudder.save).to be_falsey
       end
     end

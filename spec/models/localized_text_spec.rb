@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe LocalizedText, :type => :model do
-  let(:localized_text) { build(:localized_text, text: 'something').tap do |localized_text|
+describe LocalizedText, type: :model do
+  let(:localized_text) { build(:localized_text, text: "something").tap do |localized_text|
     allow(localized_text).to receive_messages(pluralizable: pluralizable, language: language)
   end
   }
@@ -25,10 +25,10 @@ describe LocalizedText, :type => :model do
   context "unpluralizable" do
     let(:pluralizable) { false }
     it "can get text" do
-      expect(localized_text.text).to eq('something')
+      expect(localized_text.text).to eq("something")
     end
     it "can set text" do
-      localized_text.text = 'something'
+      localized_text.text = "something"
     end
   end
 
@@ -40,14 +40,14 @@ describe LocalizedText, :type => :model do
       }.to raise_error(/when pluralizable/)
     end
     it "can set text" do
-      localized_text.text = 'something'
+      localized_text.text = "something"
     end
   end
 
   describe "#markdown?" do
-    let(:localized_text) { build(:localized_text, text: 'something', master_text: master_text) }
+    let(:localized_text) { build(:localized_text, text: "something", master_text: master_text) }
     let(:master_text) { build(:master_text, format: format) }
-    subject{localized_text}
+    subject {localized_text}
     context "markdown" do
       let(:format) { MasterText::MARKDOWN_FORMAT }
       it { is_expected.to be_markdown }
@@ -61,7 +61,7 @@ describe LocalizedText, :type => :model do
 
   describe "calculate needs_entry" do
     it "is called and set on validate" do
-      expect(localized_text).to receive(:calculate_needs_entry).and_return('true')
+      expect(localized_text).to receive(:calculate_needs_entry).and_return("true")
       expect {
         localized_text.valid?
       }.to change { localized_text.needs_entry }
@@ -69,11 +69,11 @@ describe LocalizedText, :type => :model do
 
     context "unpluralizable" do
       it "is true if text is empty" do
-        localized_text.text = ''
+        localized_text.text = ""
         expect(localized_text.calculate_needs_entry).to be_truthy
       end
-      it 'is false if text is filled' do
-        localized_text.text = 'fillll'
+      it "is false if text is filled" do
+        localized_text.text = "fillll"
         expect(localized_text.calculate_needs_entry).to be_falsey
       end
     end
@@ -82,16 +82,16 @@ describe LocalizedText, :type => :model do
       let(:pluralizable) { true }
       before do
         #fill everything
-        localized_text.update_attributes(one: 'one', two: 'two', few: 'few', many: 'many', other: 'other')
+        localized_text.update_attributes(one: "one", two: "two", few: "few", many: "many", other: "other")
       end
       context "with language of Plural rule #0" do
         let(:language) { build :language, :type_0_chinese }
         it "is true if other is empty" do
-          localized_text.other = ''
+          localized_text.other = ""
           expect(localized_text.calculate_needs_entry).to be_truthy
         end
-        it 'is false if everything important is filled' do
-          localized_text.one = ''
+        it "is false if everything important is filled" do
+          localized_text.one = ""
           expect(localized_text.calculate_needs_entry).to be_falsey
         end
       end
@@ -99,15 +99,15 @@ describe LocalizedText, :type => :model do
       context "with language of Plural rule #1" do
         let(:language) { build :language, :type_1_english }
         it "is true if one is empty" do
-          localized_text.one = ''
+          localized_text.one = ""
           expect(localized_text.calculate_needs_entry).to be_truthy
         end
         it "is true if other is empty" do
-          localized_text.other = ''
+          localized_text.other = ""
           expect(localized_text.calculate_needs_entry).to be_truthy
         end
-        it 'is false if everything important is filled' do
-          localized_text.few = ''
+        it "is false if everything important is filled" do
+          localized_text.few = ""
           expect(localized_text.calculate_needs_entry).to be_falsey
         end
       end

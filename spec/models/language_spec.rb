@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe Language, :type => :model do
+describe Language, type: :model do
   describe "validations" do
     let(:language) { build(:language) }
     it "basically works" do
@@ -11,7 +11,7 @@ describe Language, :type => :model do
       expect(language).not_to be_valid
     end
     it "requires name" do
-      language.name = ''
+      language.name = ""
       expect(language).not_to be_valid
     end
     it "requires code" do
@@ -19,7 +19,7 @@ describe Language, :type => :model do
       expect(language).not_to be_valid
     end
     it "requires code" do
-      language.code = ''
+      language.code = ""
       expect(language).not_to be_valid
     end
   end
@@ -32,25 +32,25 @@ describe Language, :type => :model do
     context "with some specific labels" do
       let(:language) { build(:language, :type_0_chinese) }
       it "should be a hash" do
-        expect(language.plural_forms_with_fields).to eq({other: 'everything'})
+        expect(language.plural_forms_with_fields).to eq({other: "everything"})
       end
     end
     context "with some specific labels" do
       let(:language) { build(:language, :type_1_english) }
       it "should be a hash" do
-        expect(language.plural_forms_with_fields).to eq({one: 'is 1', other: 'everything else'})
+        expect(language.plural_forms_with_fields).to eq({one: "is 1", other: "everything else"})
       end
     end
   end
 
   describe "code for google" do
     it "is mostly the same" do
-      expect(build(:language, code: 'de').code_for_google).to eq('de')
-      expect(build(:language, code: 'fr').code_for_google).to eq('fr')
-      expect(build(:language, code: 'pt-BR').code_for_google).to eq('pt-BR')
+      expect(build(:language, code: "de").code_for_google).to eq("de")
+      expect(build(:language, code: "fr").code_for_google).to eq("fr")
+      expect(build(:language, code: "pt-BR").code_for_google).to eq("pt-BR")
     end
     it "it is normalized for chinese" do
-      expect(build(:language, code: 'zh').code_for_google).to eq('zh-CN')
+      expect(build(:language, code: "zh").code_for_google).to eq("zh-CN")
     end
   end
 end

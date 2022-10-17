@@ -1,7 +1,7 @@
 class View < ActiveRecord::Base
 
   belongs_to :project, inverse_of: :views
-  has_many :key_placements, -> { order 'position asc' }, inverse_of: :view, dependent: :destroy
+  has_many :key_placements, -> { order "position asc" }, inverse_of: :view, dependent: :destroy
   has_many :master_texts, through: :key_placements
   has_many :localized_texts, through: :master_texts
 
@@ -9,10 +9,10 @@ class View < ActiveRecord::Base
   validates :name, presence: true
   validates_uniqueness_of :name, scope: :project_id
 
-  default_scope { order('name asc') }
+  default_scope { order("name asc") }
 
   def keys
-    @keys ||= master_texts.collect{|mt| mt.key}.join("\n")
+    @keys ||= master_texts.collect {|mt| mt.key}.join("\n")
   end
 
   def keys= new_keys

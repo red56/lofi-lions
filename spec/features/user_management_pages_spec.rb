@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'User management pages', :type => :feature do
+describe "User management pages", type: :feature do
 
   before { login }
   let(:login) { stubbed_login_as_admin_user }
@@ -52,12 +52,12 @@ describe 'User management pages', :type => :feature do
     end
     context "with project langaguges" do
       let(:project_languages) { [build_stubbed(:project_language,
-          project: build_stubbed(:project, name: 'projecty'),
-          language: build_stubbed(:language, name: 'fingle'))]}
+          project: build_stubbed(:project, name: "projecty"),
+          language: build_stubbed(:language, name: "fingle"))]}
       specify "lists users with editing privileges" do
         expect(users.last).to receive_messages(project_languages: like_a_scope(project_languages))
         visit users_path
-        expect(page).to have_content('fingle')
+        expect(page).to have_content("fingle")
       end
     end
 
@@ -108,9 +108,9 @@ describe 'User management pages', :type => :feature do
       click_on "Save"
       expect(current_path).to eq(users_path)
       within ("#user_#{user.id}") do
-        expect(page).to have_content('Admin')
-        expect(page).to have_content('English')
-        expect(page).to have_content('Dev')
+        expect(page).to have_content("Admin")
+        expect(page).to have_content("English")
+        expect(page).to have_content("Dev")
       end
     end
     it "user to be specific language editor" do

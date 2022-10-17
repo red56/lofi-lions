@@ -9,11 +9,11 @@ FactoryBot.define do
     end
 
     factory :finished_localized_text do
-      other 'Some translation or other'
+      other "Some translation or other"
       needs_review false
     end
     factory :to_review_localized_text do
-      other 'Some translation or other'
+      other "Some translation or other"
       needs_review true
     end
   end

@@ -5,7 +5,7 @@ class LocalizedText < ActiveRecord::Base
 
   scope :needing_entry,  -> {where(needs_entry: true)}
   scope :needing_review,  -> {where(needs_entry: false, needs_review: true)}
-  scope :needs_review_or_entry,  -> {where('needs_entry or needs_review')}
+  scope :needs_review_or_entry,  -> {where("needs_entry or needs_review")}
 
   validates :master_text_id, presence: true
   validates :project_language_id, presence: true
@@ -16,7 +16,7 @@ class LocalizedText < ActiveRecord::Base
 
   delegate :key, :pluralizable, :markdown?, :format, to: :master_text
   delegate :comment, to: :master_text, prefix: "master_text"
-  delegate :text, :one, :other, to: :master_text, prefix: 'original'
+  delegate :text, :one, :other, to: :master_text, prefix: "original"
   delegate :language, :language_id, :language_code, :language_code_for_google, to: :project_language
 
   before_save :update_translated_from

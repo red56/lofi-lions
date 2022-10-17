@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Master Text Pages', :type => :feature do
+describe "Master Text Pages", type: :feature do
 
   before { login }
   let(:login) { stubbed_login_as_user }
@@ -27,13 +27,13 @@ describe 'Master Text Pages', :type => :feature do
       expect(page).to have_content(texts[0].key)
     end
     context "with plural forms" do
-      let(:texts) { build_stubbed_list(:master_text, 1, pluralizable: true, one: 'one-one', other: 'othery-other') }
+      let(:texts) { build_stubbed_list(:master_text, 1, pluralizable: true, one: "one-one", other: "othery-other") }
       it "can list one" do
         allow(project).to receive_messages(master_texts: texts)
         allow(Project).to receive_messages(find: project)
         visit project_master_texts_path(project)
-        expect(page).to have_content('othery-other')
-        expect(page).to have_content('one-one')
+        expect(page).to have_content("othery-other")
+        expect(page).to have_content("one-one")
       end
     end
     it "links to new" do
@@ -45,9 +45,8 @@ describe 'Master Text Pages', :type => :feature do
   describe "index - unmocked" do
     context "with multiple projects" do
       let!(:other_project) {create(:project)}
-      let!(:master_text) {create :master_text, project: project, key: 'my-project-master-text-key'}
-      let!(:other_projects_master_text) {create :master_text, project: other_project, key:
-              'other-project-master-text-key'}
+      let!(:master_text) {create :master_text, project: project, key: "my-project-master-text-key"}
+      let!(:other_projects_master_text) {create :master_text, project: other_project, key: "other-project-master-text-key"}
 
       it "doesn't show other project's master texts" do
         visit project_master_texts_path(project)
@@ -64,8 +63,8 @@ describe 'Master Text Pages', :type => :feature do
     end
     def fill_in_and_save
       expect(page).to have_css("form.master_text")
-      fill_in "master_text_key", with: 'my.key'
-      fill_in "master_text_text", with: 'My text'
+      fill_in "master_text_key", with: "my.key"
+      fill_in "master_text_text", with: "My text"
       click_on "Save"
     end
     it "works for developer" do
@@ -78,7 +77,7 @@ describe 'Master Text Pages', :type => :feature do
     it "displays errors" do
       expect(@user).to receive_messages(is_developer?: true)
       visit new_project_master_text_path(project)
-      fill_in "master_text_key", with: 'my.key'
+      fill_in "master_text_key", with: "my.key"
       click_on "Save"
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
@@ -90,7 +89,7 @@ describe 'Master Text Pages', :type => :feature do
           expect(@user).to receive_messages(is_developer?: true)
           visit new_project_master_text_path(project)
           fill_in_and_save
-        }.to change{ project_language.reload.need_entry_count }.from(0).to(1)
+        }.to change { project_language.reload.need_entry_count }.from(0).to(1)
       end
     end
 
@@ -107,7 +106,7 @@ describe 'Master Text Pages', :type => :feature do
         visit edit_master_text_path(master_text)
         expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
         expect(page).to have_css("form.master_text")
-        fill_in "master_text_text", with: 'My new text'
+        fill_in "master_text_text", with: "My new text"
         click_on "Save"
         expect(page).not_to have_css("form.master_text")
       end
@@ -115,7 +114,7 @@ describe 'Master Text Pages', :type => :feature do
     it "works for developer to change key" do
       visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
-      fill_in "master_text_key", with: 'new.key'
+      fill_in "master_text_key", with: "new.key"
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
     end
@@ -128,7 +127,7 @@ describe 'Master Text Pages', :type => :feature do
       it "works for developer to add view" do
         visit edit_master_text_path(master_text)
         expect(page).to have_css("form.master_text")
-        fill_in "master_text_key", with: 'new.key'
+        fill_in "master_text_key", with: "new.key"
         find("#master_text_view_ids_#{view.id}").set(true)
         click_on "Save"
         expect(page).not_to have_css("form.master_text")
@@ -149,7 +148,7 @@ describe 'Master Text Pages', :type => :feature do
       visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
       expect {
-        page.check('plural')
+        page.check("plural")
         click_on "Save"
       }.to change { master_text.reload.pluralizable }
       expect(page).not_to have_css("form.master_text")
@@ -180,7 +179,7 @@ describe 'Master Text Pages', :type => :feature do
       expect_any_instance_of(LocalizedTextEnforcer).not_to receive(:master_text_changed)
       visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
-      fill_in "master_text_text", with: ''
+      fill_in "master_text_text", with: ""
       click_on "Save"
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
@@ -189,7 +188,7 @@ describe 'Master Text Pages', :type => :feature do
     it "allows developers to change format" do
       visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
-      select "markdown", from: 'master_text_format'
+      select "markdown", from: "master_text_format"
       click_on "Save"
       expect(master_text.reload.format).to eq("markdown")
     end
@@ -202,12 +201,12 @@ describe 'Master Text Pages', :type => :feature do
         expect {
           visit edit_master_text_path(master_text)
           expect(page).to have_css("form.master_text")
-          fill_in "master_text_text", with: 'something new in sandwiches'
+          fill_in "master_text_text", with: "something new in sandwiches"
           click_on "Save"
           expect(page).not_to have_css("form.master_text")
           expect(localized_text.reload.needs_entry).to be_falsey
           expect(localized_text.reload.needs_review).to be_truthy
-        }.to change{ project_language.reload.need_review_count }.from(0).to(1)
+        }.to change { project_language.reload.need_review_count }.from(0).to(1)
       end
     end
   end

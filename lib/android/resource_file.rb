@@ -1,4 +1,4 @@
-require 'nokogiri'
+require "nokogiri"
 
 module Android
   class ResourceFile < BaseParsedFile
@@ -14,7 +14,7 @@ module Android
 
     def parse_and_append_simple_strings(localizations)
       @doc.css("string").each do |node|
-        key = node['name']
+        key = node["name"]
         value = unescape(node.text)
         localizations << Localization.new(key, value)
       end
@@ -22,9 +22,9 @@ module Android
 
     def parse_and_append_plurals(localizations)
       @doc.css("plurals").each do |node|
-        key = node['name']
-        values = Hash[node.css('item').collect do |item_node|
-              plural_form = item_node['quantity'].to_sym
+        key = node["name"]
+        values = Hash[node.css("item").collect do |item_node|
+              plural_form = item_node["quantity"].to_sym
               value = unescape(item_node.text)
               [plural_form, value]
             end]
@@ -34,7 +34,7 @@ module Android
 
     def parse_and_append_arrays(localizations)
       @doc.css("string-array").each do |node|
-        base_key = node['name']
+        base_key = node["name"]
         node.css("item").each_with_index do |item_node, index|
           value = unescape(item_node.text)
           localizations << Localization.new("#{base_key}[#{index}]", value)

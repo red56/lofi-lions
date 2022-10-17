@@ -1,4 +1,4 @@
-require 'nokogiri'
+require "nokogiri"
 
 module Android
   class Exporter < ::BaseExporter
@@ -41,7 +41,7 @@ module Android
     end
 
     def body_for(localized_texts)
-      builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+      builder = Nokogiri::XML::Builder.new(encoding: "UTF-8") do |xml|
         xml.resources do
           localized_texts.each do |text|
             singular_array_plural(xml, text)

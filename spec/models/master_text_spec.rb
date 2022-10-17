@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe MasterText, :type => :model do
+describe MasterText, type: :model do
   describe "validations" do
     let(:master_text) { build(:master_text) }
     it "basically works" do
@@ -11,7 +11,7 @@ describe MasterText, :type => :model do
       expect(master_text).not_to be_valid
     end
     it "requires key" do
-      master_text.key = ''
+      master_text.key = ""
       expect(master_text).not_to be_valid
     end
     it "requires unique key" do
@@ -24,7 +24,7 @@ describe MasterText, :type => :model do
       expect(master_text).not_to be_valid
     end
     it "requires text" do
-      master_text.text = ''
+      master_text.text = ""
       expect(master_text).not_to be_valid
     end
     context "pluralizable" do
@@ -37,7 +37,7 @@ describe MasterText, :type => :model do
         expect(master_text).not_to be_valid
       end
       it "requires key" do
-        master_text.key = ''
+        master_text.key = ""
         expect(master_text).not_to be_valid
       end
       it "requires unique key" do
@@ -46,7 +46,7 @@ describe MasterText, :type => :model do
         expect(new_master_text).not_to be_valid
       end
       it "requires other" do
-        master_text.other = ''
+        master_text.other = ""
         expect(master_text).not_to be_valid
       end
       it "requires a project" do
@@ -102,7 +102,7 @@ describe MasterText, :type => :model do
     end
   end
   context "#key" do
-    let(:existing){create :master_text, project:create(:project)}
+    let(:existing) {create :master_text, project: create(:project)}
     it "must be unique" do
       expect(build(:master_text, key: existing.key, project: existing.project)).not_to be_valid
     end
@@ -113,7 +113,7 @@ describe MasterText, :type => :model do
 
   describe "#markdown?" do
     let(:master_text) { build(:master_text, format: format) }
-    subject{master_text}
+    subject {master_text}
     context "markdown" do
       let(:format) { MasterText::MARKDOWN_FORMAT }
       it { is_expected.to be_markdown }
@@ -128,7 +128,7 @@ describe MasterText, :type => :model do
     it "counts nothing" do
       master_text = build(:master_text, text: nil)
       expect(master_text.send(:calculate_word_count)).to eq(0)
-      master_text = build(:master_text, text: '')
+      master_text = build(:master_text, text: "")
       expect(master_text.send(:calculate_word_count)).to eq(0)
     end
     it "counts a word" do

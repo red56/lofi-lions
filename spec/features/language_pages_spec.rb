@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Language Pages', :type => :feature do
+describe "Language Pages", type: :feature do
   let(:language) { create(:language) }
 
   before { login }
@@ -43,15 +43,15 @@ describe 'Language Pages', :type => :feature do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:language_created)
       visit new_language_path
       expect(page).to have_css("form.language")
-      fill_in "language_code", with: 'FR'
-      fill_in "language_name", with: 'Frenchie'
+      fill_in "language_code", with: "FR"
+      fill_in "language_name", with: "Frenchie"
       click_on "Save"
       expect(page).not_to have_css("form.language")
     end
     it "displays errors" do
       visit new_language_path
       expect(page).to have_css("form.language")
-      fill_in "language_name", with: 'fr'
+      fill_in "language_name", with: "fr"
       click_on "Save"
       expect(page).to have_css("form.language")
       expect(page).to have_css("form.language .errors")
@@ -64,7 +64,7 @@ describe 'Language Pages', :type => :feature do
     end
     it "works" do
       expect(page).to have_css("form.language")
-      fill_in "language_name", with: 'Franglais'
+      fill_in "language_name", with: "Franglais"
       click_on "Save"
       expect(page).not_to have_css("form.language")
     end
@@ -76,7 +76,7 @@ describe 'Language Pages', :type => :feature do
 
     it "displays errors" do
       expect(page).to have_css("form.language")
-      fill_in "language_name", with: ''
+      fill_in "language_name", with: ""
       click_on "Save"
       expect(page).to have_css("form.language")
       expect(page).to have_css("form.language .errors")

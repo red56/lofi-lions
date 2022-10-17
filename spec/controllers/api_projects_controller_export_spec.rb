@@ -1,20 +1,18 @@
-# encoding: utf-8
+require "rails_helper"
 
-require 'rails_helper'
-
-describe Api::ProjectsController, :type => :controller do
+describe Api::ProjectsController, type: :controller do
 
   describe "export" do
     let(:project) { create :project }
-    let(:language) { create :language, code: 'ja' }
+    let(:language) { create :language, code: "ja" }
     let(:language_code) { language.code } #ensures that language is in db
     let!(:project_language) { create :project_language, project: project, language: language }
     shared_context "with a bunch of precreated stuff" do
-      let!(:languages) { [create(:language, code: 'es'), language] }
+      let!(:languages) { [create(:language, code: "es"), language] }
       let!(:project_languages) { languages.map { |lang| create(:project_language, project: project, language: lang) } }
       let!(:project_language) { project_languages.detect { |plang| plang.project == project && plang.language == language } }
       let(:keys) { %w(title welcome complete) }
-      let(:master_text) { MasterText.where(key: 'title', project_id: project.id).first }
+      let(:master_text) { MasterText.where(key: "title", project_id: project.id).first }
       let!(:master_texts) { keys.map { |key| MasterText.create!(key: key, other: key.capitalize, project: project) } }
 
       def ensure_localised_texts(project_languages)
@@ -84,7 +82,7 @@ describe Api::ProjectsController, :type => :controller do
       end
 
       describe "escaping" do
-        let(:master_text) { create :master_text, project: project, key: 'title' }
+        let(:master_text) { create :master_text, project: project, key: "title" }
         before do
           create(:localized_text, project_language: project_language, master_text: master_text, other: text)
         end
@@ -109,7 +107,7 @@ describe Api::ProjectsController, :type => :controller do
 
       describe "english texts" do
 
-        let(:language_code) { 'en' }
+        let(:language_code) { "en" }
         it "uses fallbacks to produce the english version" do
           request
           expect(response.status).to eq(200)
@@ -118,7 +116,7 @@ describe Api::ProjectsController, :type => :controller do
         context "with texts" do
           include_context "with a bunch of precreated stuff"
 
-          let(:language_code) { 'en' }
+          let(:language_code) { "en" }
 
           it "uses the master text values" do
             request
@@ -295,13 +293,13 @@ describe Api::ProjectsController, :type => :controller do
           get :export, platform: platform, code: language.code, id: project.slug
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="escape"]')
-          item = array.css('item').first
+          item = array.css("item").first
           expect(item.text).to eq("escape\\'d \\\"")
         end
       end
 
       describe "escaping" do
-        let(:master_text) { create :master_text, project: project, key: 'title' }
+        let(:master_text) { create :master_text, project: project, key: "title" }
         before do
           create(:localized_text, project_language: project_language, master_text: master_text, other: text)
           request
@@ -338,7 +336,7 @@ describe Api::ProjectsController, :type => :controller do
         expect(response.content_type).to eq("text/yaml; charset=utf-8")
       end
 
-      context 'with multiple projects' do
+      context "with multiple projects" do
         let(:other_project) { create :project }
         let(:master_texts) {
           super() + [other_projects_master_text]

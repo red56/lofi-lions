@@ -21,30 +21,30 @@ LofiLions::Application.routes.draw do
     member do
       get :next
     end
-    resources :texts, controller: 'localized_texts' do
+    resources :texts, controller: "localized_texts" do
       collection do
         get :entry
         get :review
       end
     end
-    resources :views, controller: 'localized_views'
+    resources :views, controller: "localized_views"
   end
 
   resources :users
 
   resources :views, except: [:index, :new]
 
-  namespace :api, defaults: {format: 'json'} do
+  namespace :api, defaults: {format: "json"} do
     resources :projects, only: [] do
       member do
-        post 'import/(:platform)', action: 'import'
-        post 'languages/:code/import/(:platform)', action: 'import'
-        get 'export/:platform/:code', action: 'export'
+        post "import/(:platform)", action: "import"
+        post "languages/:code/import/(:platform)", action: "import"
+        get "export/:platform/:code", action: "export"
       end
     end
   end
 
-  root 'welcome#index'
+  root "welcome#index"
 
-  get 'docs', to: 'welcome#docs', as: 'docs'
+  get "docs", to: "welcome#docs", as: "docs"
 end

@@ -3,8 +3,8 @@ class CreateLocalizedTexts < ActiveRecord::Migration
     create_table :localized_texts do |t|
       t.integer :master_text_id
       t.integer :language_id
-      t.text :text, default: ''
-      t.text :comment, default: ''
+      t.text :text, default: ""
+      t.text :comment, default: ""
       t.boolean :needs_review, default: false
 
       t.timestamps
