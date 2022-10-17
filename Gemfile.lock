@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/red56/heroku_tool.git
-  revision: 65dcdea753956eca20ec26d2ccb12ddfa20243e8
-  branch: master
+  revision: 184732687d6f0e319514ba25dd459203a9add99f
+  branch: main
   specs:
-    heroku_tool (0.1.0)
+    heroku_tool (0.3.0)
       activesupport
       thor (~> 0.18)
 
