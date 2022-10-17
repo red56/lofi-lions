@@ -89,5 +89,5 @@ jobs:
         path: test_results
 
     - store_artifacts:
-        path: /tmp/test-results
-        destination: test-results
+        path: tmp/capybara
+        destination: screenshots
