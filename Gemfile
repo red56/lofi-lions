@@ -24,6 +24,8 @@ gem 'font-awesome-sass'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
+gem "sprockets", "< 4.0"
+
 gem 'haml'
 gem 'haml-rails'
 gem 'kramdown', ">= 2.3.0"
@@ -49,7 +51,7 @@ group :development do
   gem 'guard-rails'
   gem 'rack-livereload'
   gem 'guard-livereload'
-  gem "spring"
+  gem "spring", "< 3.0"
   gem "spring-commands-rspec"
   gem "fix-db-schema-conflicts"
   gem "releasetool", github: "red56/releasetool", branch: 'master'
