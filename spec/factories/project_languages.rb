@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :project_language do
     language { create(:language) }
     project { create(:project) }

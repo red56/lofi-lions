@@ -59,7 +59,7 @@ end
 
 group :test do
   gem 'launchy'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails', "< 4.11.0"
   gem 'faker'
   gem 'rspec_junit_formatter' # circleci
 end
