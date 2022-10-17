@@ -14,8 +14,7 @@ describe Api::ProjectsController, type: :controller do
     end
 
     def request
-      post :import, {platform: platform, file: file_upload, code: project_language.language.code, format: "json",
-              id: selected_project.slug}
+      post :import, params: { platform: platform, file: file_upload, code: project_language.language.code, format: "json", id: selected_project.slug }
     end
   end
   describe "with language specified" do
@@ -41,12 +40,12 @@ describe Api::ProjectsController, type: :controller do
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
 
-          post :import, {platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
       end
 
@@ -74,12 +73,12 @@ describe Api::ProjectsController, type: :controller do
           localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
       end
 
@@ -108,12 +107,12 @@ describe Api::ProjectsController, type: :controller do
           localizations.define_singleton_method(:close){}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
-          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
       end
 
@@ -143,7 +142,7 @@ describe Api::ProjectsController, type: :controller do
 
           expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
-          post :import, {platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug}
+          post :import, params: { platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
       end
     end

@@ -54,7 +54,7 @@ module Android
 
     def append_arrays(xml)
       arrays.each do |key, texts|
-        xml.send("string-array", name: key) do
+        xml.send(:"string-array", name: key) do
           texts.sort.each do |text|
             xml.item(escape(text.other))
           end

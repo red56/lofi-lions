@@ -18,7 +18,7 @@
               = link_to view do
                 %span
                   %small.together
-                    = icon('list-alt')
+                    = icon("fa-solid", 'list-alt')
                     = view.name
               %span.divider
         - if master_text.pluralizable
@@ -44,7 +44,7 @@
           - if current_user.is_developer?
             = link_to master_text, method: :delete, data: { confirm: 'Are you sure?' },
               class: 'btn btn-default' do
-              %span.text-danger #{icon('times')}
+              %span.text-danger #{icon("fa-solid", 'times')}
   %tfoot
     %tr
       %th

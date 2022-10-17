@@ -1,12 +1,12 @@
 = render :partial => 'projects/tabs'
 
 %h2
-  = icon('list-alt')
+  = icon("fa-solid", 'list-alt')
   = @view.name
   - if current_user.is_developer?
     .pull-right
       = link_to 'Edit', edit_view_path(@view), class: 'btn btn-primary'
       = link_to @view, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-default' do
-        .text-danger #{icon('trash-o')}
+        .text-danger #{icon("fa-solid", 'trash-o')}
 %p= render "views/comments", view: @view
 = render :partial => 'master_texts/master_texts_table', locals: {master_texts: @view.master_texts}

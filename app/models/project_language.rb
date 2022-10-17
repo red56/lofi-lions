@@ -71,7 +71,7 @@ class ProjectLanguage < ApplicationRecord
     report << "Auto translate"
     all.each do |project_language|
       n = project_language.google_translate_missing
-      report << "* [%5s] #{project_language}" % [n] if n > 0
+      report << ("* [%5s] #{project_language}" % [n]) if n > 0
     end
     puts report.join("\n")
   end

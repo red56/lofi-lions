@@ -16,7 +16,7 @@ describe LocalizedTextEnforcer, type: :model do
   describe "Enforcer" do
     before { master_text; project_language }
     describe "master text created" do
-      it " it creates blank localized texts for each project_language" do
+      it "it creates blank localized texts for each project_language" do
         master_text; project_language
         expect {
           LocalizedTextEnforcer.new.master_text_created(master_text)
@@ -61,7 +61,7 @@ describe LocalizedTextEnforcer, type: :model do
   describe LocalizedTextEnforcer::MasterTextCrudder do
 
     describe "master text created" do
-      it " it creates blank localized texts for each project_language" do
+      it "it creates blank localized texts for each project_language" do
         project_language
         mt_crudder = LocalizedTextEnforcer::MasterTextCrudder.new(build :master_text, project: project)
         expect {

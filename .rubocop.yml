@@ -80,6 +80,10 @@ Performance/Detect:
 Performance/TimesMap:
   Enabled: false
 
+# not now
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Rails/UnknownEnv:
   Environments:
     - production

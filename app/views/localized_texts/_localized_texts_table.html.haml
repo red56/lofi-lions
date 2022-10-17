@@ -28,7 +28,7 @@
               = link_to project_language_view_path(@project_language, view) do
                 %span
                   %small
-                    = icon('list-alt')
+                    = icon("fa-solid", 'list-alt')
                     = view.name
               %span.divider
           %td.js-autoexpand-textarea
@@ -44,7 +44,7 @@
             .edit
               = link_to edit_localized_text_path(ltext_fields.object) do
                 Edit
-                =icon('comment') if ltext_fields.object.comment.present?
+                =icon("fa-solid", 'comment') if ltext_fields.object.comment.present?
 
   = f.submit 'Save', class: 'btn btn-primary'
   = link_to 'Cancel', :back, class: 'btn btn-link'

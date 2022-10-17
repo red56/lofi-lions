@@ -18,7 +18,7 @@ class Language < ApplicationRecord
   # Our canonical "english" text -- used when exporting the master texts to localization files
   def self.for_master_texts
     Language.new(code: "en", name: "English (fallback)",
-        pluralizable_label_one: "One", pluralizable_label_other: "Other").tap do |language|
+                 pluralizable_label_one: "One", pluralizable_label_other: "Other").tap do |language|
       def language.is_master_text?
         true
       end

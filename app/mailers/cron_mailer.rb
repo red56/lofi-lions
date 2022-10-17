@@ -1,4 +1,4 @@
-class CronMailer < ActionMailer::Base
+class CronMailer < ApplicationMailer
   default from: ENV["CRON_EMAIL_FROM"] || "cron@example.com"
 
   def translation_status_report

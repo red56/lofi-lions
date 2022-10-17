@@ -3,12 +3,11 @@ class MasterText < ApplicationRecord
   MARKDOWN_FORMAT = "markdown"
   PLAIN_FORMAT = "plain"
 
-  belongs_to :project, inverse_of: :master_texts
+  belongs_to :project, inverse_of: :master_texts, optional: false
   has_many :localized_texts, inverse_of: :master_text, dependent: :destroy
   has_many :key_placements, inverse_of: :master_text
   has_many :views, through: :key_placements
 
-  validates :project_id, presence: true
   validates :key, presence: true
   validates_uniqueness_of :key, scope: :project_id
   validates :other, presence: true

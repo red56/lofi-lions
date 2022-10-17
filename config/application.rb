@@ -24,9 +24,6 @@ module LofiLions
     # TODO: move these to app/lib
     config.autoload_paths += %W(#{config.root}/lib)
 
-    # Tell error callbacks to adopt new behaviour
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.generators do |g|
       g.helper nil
       g.test_framework :rspec

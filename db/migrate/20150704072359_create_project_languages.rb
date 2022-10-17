@@ -1,5 +1,5 @@
 class CreateProjectLanguages < ActiveRecord::Migration
-  class LanguageUser < ActiveRecord::Base
+  class LanguageUser < ApplicationRecord
     self.table_name= :languages_users
 
     belongs_to :user

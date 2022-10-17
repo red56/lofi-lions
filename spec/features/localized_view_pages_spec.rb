@@ -21,7 +21,7 @@ describe "Localized View pages", type: :feature do
     let(:master_text_in_view) { master_texts.last }
     before {
       language
-      view.key_placements << KeyPlacement.create!(master_text: master_text_in_view)
+      view.key_placements.create!(master_text: master_text_in_view)
       view.reload
       master_text_in_view.reload
       language.reload
