@@ -33,7 +33,8 @@ gem "kramdown-parser-gfm"
 gem 'devise'
 gem 'devise-bootstrap-views'
 
-gem 'unicorn'
+gem 'puma'
+gem "barnes"
 
 gem 'simple_form', '~> 3.2'
 
@@ -52,7 +53,6 @@ gem "heroku_tool", github: "red56/heroku_tool", branch: 'master', require: false
 group :development do
   gem 'quiet_assets'
   gem 'guard-rails'
-  gem 'thin'
   gem 'rack-livereload'
   gem 'guard-livereload'
   gem "spring"
