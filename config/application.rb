@@ -8,6 +8,12 @@ Bundler.require(:default, Rails.env)
 
 module LofiLions
   class Application < Rails::Application
+
+    # returns staging if you set
+    def pseudo_env
+      ENV["PSEUDO_PRODUCTION_ENV"]&.inquiry || Rails.env
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

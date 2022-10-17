@@ -3,7 +3,7 @@
 
 interactor :off
 
-guard 'rails', server: :thin, port: 3010 do
+guard 'rails', port: 3010 do
   watch('Gemfile.lock')
   watch(%r{^(config|lib)/.*})
 end

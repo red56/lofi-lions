@@ -47,8 +47,4 @@ LofiLions::Application.routes.draw do
   root 'welcome#index'
 
   get 'docs', to: 'welcome#docs', as: 'docs'
-
-  if Rails.env.development?
-    mount MailPreview => 'mail_view'
-  end
 end

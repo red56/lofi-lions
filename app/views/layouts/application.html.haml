@@ -3,7 +3,13 @@
   %head
     %meta{name:"viewport", content:"width=device-width, initial-scale=1.0"}
     %meta{ 'http-equiv'=>"X-UA-Compatible", content:"IE=edge"}
-    %link{href: favicon, rel: "shortcut icon", type: "image/x-icon"}/
+
+    %link{rel: "icon", href: favicon, sizes: "any"}
+    %link{rel: "icon", href: favicon(".svg"), type: "image/svg+xml"}
+    %link{rel: "apple-touch-icon", href: favicon("-180.png")}
+    -# TODO: serve at /favicon.ico and /apple-touch-icon.png
+    -# TODO: manifest.webmanifest
+    -# https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs
 
     %title LofiLions
     = stylesheet_link_tag    "application", media: "all"

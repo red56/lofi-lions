@@ -1,5 +1,5 @@
-class MailPreview < MailView
-  # Navigate to http://localhost:3000/mail_view
+class CronMailerPreview < ActionMailer::Preview
+  # Navigate to http://localhost:3010/rails/mailers
   # to see a preview of the emails you include here
 
   def translation_status_report

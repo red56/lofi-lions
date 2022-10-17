@@ -143,19 +143,19 @@ Also add scheduled tasks add on with a daily task which runs `rake cron:if_monda
 
 ### Routine deployment
 
-#### Prepare release
+#### Create release
+
 ```
-#update config/initializers/00-version.rb with NEXTVERSION
-release prepare -s vLASTVERSION vNEXTVERSION
-# review release_notes/vNEXTVERSION and then
-git add release_notes/vNEXTVERSION config/initializers/00-version.rb
-git commit
+release start # or release start --minor or release start --major 
+# review release notes
+release commit
+release tag
+release push
 ```
-#### Tag and deploy
+
+#### Deploy
+
 ```
-git push origin master
-git tag -a vNEXTVERSION
-git push origin vNEXTVERSION
 thor heroku:deploy production
 ```
 
