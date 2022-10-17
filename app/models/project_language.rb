@@ -44,13 +44,10 @@ class ProjectLanguage < ActiveRecord::Base
     "#{project.name} - #{language.name}"
   end
 
-  def next_localized_text(after_key = '', all: false)
-    candidates = all ? localized_texts.limit(1) : localized_texts.needs_review_or_entry.limit(1)
-    if after_key.present?
-      candidates.where('key > ?', after_key).first
-    else
-      candidates.first
-    end
+  def next_localized_text(after_key = nil, all: false)
+    candidates = all ? localized_texts : localized_texts.needs_review_or_entry
+    candidates = candidates.where('LOWER(key) > ?', after_key.downcase) if after_key.present?
+    candidates.limit(1).first
   end
 
   def google_translate_missing
