@@ -19,7 +19,7 @@ describe Api::ProjectsController, type: :controller do
         project_languages.each do |project_language|
           project_language.project.master_texts.each do |mt|
             LocalizedText.create!(master_text: mt, project_language: project_language,
-                other: [mt.key, project_language.language.code].join(":"))
+                                  other: [mt.key, project_language.language.code].join(":"))
           end
         end
       end
@@ -27,10 +27,10 @@ describe Api::ProjectsController, type: :controller do
       before { ensure_localised_texts(project_languages) }
     end
 
-    let(:request) { get :export, platform: platform, code: language_code, id: project.slug }
+    let(:request) { get :export, params: { platform: platform, code: language_code, id: project.slug } }
     describe "common" do
       it "returns a 404 if the language is uknown" do
-        get :export, platform: :android, code: "xx", id: project.slug
+        get :export, params: { platform: :android, code: "xx", id: project.slug }
         expect(response.status).to eq(404)
       end
     end
@@ -43,7 +43,8 @@ describe Api::ProjectsController, type: :controller do
 
         it "should return a zip file" do
           request
-          expect(response.content_type).to eq("application/octet-stream; charset=#{Encoding::UTF_16.name}")
+          expect(response.content_type).to start_with("application/octet-stream")
+          # ; charset=#{Encoding::UTF_16.name} ?
         end
 
         it "has a relative filename in the headers" do
@@ -67,7 +68,7 @@ describe Api::ProjectsController, type: :controller do
           # create mt with no localizations
           mt = MasterText.create!(key: "missing", other: "Missing", project: project)
           LocalizedText.create!(master_text: mt, project_language: project_language, other: "")
-          get :export, platform: platform, code: language_code, id: project.slug
+          get :export, params: { platform: platform, code: language_code, id: project.slug }
           file = IOS::StringsFile.parse(StringIO.new(body))
           local = file.localizations.detect { |l| l.key == mt.key }
           expect(local.value).to eq(mt.other)
@@ -135,7 +136,7 @@ describe Api::ProjectsController, type: :controller do
 
       describe "singular" do
         before do
-          get :export, platform: platform, code: language_code, id: project.slug
+          get :export, params: { platform: platform, code: language_code, id: project.slug }
         end
 
         it "should return a zip file" do
@@ -166,7 +167,7 @@ describe Api::ProjectsController, type: :controller do
           # create mt with no localizations
           mt = MasterText.create!(key: "missing", other: "Missing", project: project)
           LocalizedText.create!(master_text: mt, project_language: project_language, other: "")
-          get :export, platform: platform, code: language_code, id: project.slug
+          get :export, params: { platform: platform, code: language_code, id: project.slug }
           file = Android::ResourceFile.parse(response.body)
           local = file.localizations.detect { |l| l.key == mt.key }
           expect(local.value).to eq(mt.other)
@@ -179,12 +180,12 @@ describe Api::ProjectsController, type: :controller do
         let(:plural_keys) { %w(cow duck) }
         let(:plural_master_texts) { plural_keys.map do |key|
           MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true,
-              project: project)
+                             project: project)
         end
         }
 
         let(:french) { Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
-            pluralizable_label_one: "one", pluralizable_label_many: "many") }
+                                        pluralizable_label_one: "one", pluralizable_label_many: "many") }
         let(:french_project_language) { create(:project_language, language: french, project: project) }
         before do
           master_texts.concat(plural_master_texts)
@@ -205,7 +206,7 @@ describe Api::ProjectsController, type: :controller do
         end
 
         it "includes the plural forms in the xml" do
-          get :export, platform: platform, code: french.code, id: project.slug
+          get :export, params: { platform: platform, code: french.code, id: project.slug }
           resource = Android::ResourceFile.parse(response.body)
           locals = resource.localizations
           plurals = locals.select { |l| plural_keys.include?(l.key) }
@@ -218,7 +219,7 @@ describe Api::ProjectsController, type: :controller do
         end
 
         it "uses the master text for the english version" do
-          get :export, platform: platform, code: "en", id: project.slug
+          get :export, params: { platform: platform, code: "en", id: project.slug }
           resource = Android::ResourceFile.parse(response.body)
           locals = resource.localizations
           plurals = locals.select { |l| plural_keys.include?(l.key) }
@@ -247,7 +248,7 @@ describe Api::ProjectsController, type: :controller do
         end
 
         it "includes array forms in the xml" do
-          get :export, platform: platform, code: language.code, id: project.slug
+          get :export, params: { platform: platform, code: language.code, id: project.slug }
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="planet"]')
           expect(array.length).to eq(1)
@@ -265,7 +266,7 @@ describe Api::ProjectsController, type: :controller do
         end
 
         it "includes master texts of arrays for english" do
-          get :export, platform: platform, code: "en", id: project.slug
+          get :export, params: { platform: platform, code: "en", id: project.slug }
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="planet"]')
           expect(array.length).to eq(1)
@@ -290,7 +291,7 @@ describe Api::ProjectsController, type: :controller do
                   project_language: project_language,
                   other: "escape'd \""
               })
-          get :export, platform: platform, code: language.code, id: project.slug
+          get :export, params: { platform: platform, code: language.code, id: project.slug }
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="escape"]')
           item = array.css("item").first
@@ -329,11 +330,12 @@ describe Api::ProjectsController, type: :controller do
       let(:platform) { :yaml }
 
       before do
-        get :export, platform: platform, code: language_code, id: project.slug
+        get :export, params: { platform: platform, code: language_code, id: project.slug }
       end
 
       it "should return a yaml file" do
-        expect(response.content_type).to eq("text/yaml; charset=utf-8")
+        expect(response.content_type).to start_with("text/yaml")
+        # ; charset=utf-8 ?
       end
 
       context "with multiple projects" do

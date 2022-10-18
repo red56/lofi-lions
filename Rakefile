@@ -5,4 +5,9 @@ require File.expand_path("../config/application", __FILE__)
 
 LofiLions::Application.load_tasks
 
-load "heroku_tool/tasks/db_drop_all_tables.rake"
+begin
+  spec = Gem::Specification.find_by_name "heroku_tool"
+  load File.expand_path("lib/heroku_tool/tasks/db_drop_all_tables.rake", spec.gem_dir)
+rescue LoadError
+  # not loading db_drop_all_tables -- not defined in this environment?
+end

@@ -143,7 +143,7 @@ describe LocalizedText, type: :model do
       create :project_language, project: master_text.project;
       LocalizedTextEnforcer.new.master_text_created(master_text)
       localized_text = master_text.reload.localized_texts.first
-      expect(localized_text.translated_from).to eq nil
+      expect(localized_text.translated_from).to be_nil
     end
     context "when pluralizable" do
       let(:master_text) {create(:master_text, pluralizable: true)}

@@ -16,18 +16,18 @@ describe Api::ProjectsController, type: :controller do
 
     it "recognises an ios strings file" do
       expect {
-        post :import, {platform: :ios, file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { platform: :ios, file: file_upload, format: "json", id: selected_project.slug }
       }.to change(MasterText, :count).by(3)
     end
 
     it "accepts a strings file upload" do
       expect {
-        post :import, {platform: :ios, file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { platform: :ios, file: file_upload, format: "json", id: selected_project.slug }
       }.to change(MasterText, :count).by(3)
     end
 
     it "creates the expected master texts" do
-      post :import, {platform: :ios, file: file_upload, format: "json", id: selected_project.slug}
+      post :import, params: { platform: :ios, file: file_upload, format: "json", id: selected_project.slug }
       masters = MasterText.all
       pairs = masters.map { |mt| [mt.key, mt.text] }
       expect(pairs).to include(["Adding", "Adding..."])
@@ -49,17 +49,17 @@ describe Api::ProjectsController, type: :controller do
       end
 
       it "recognises a android xml" do
-        post :import, {file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { file: file_upload, format: "json", id: selected_project.slug }
       end
 
       it "accepts a android xml upload" do
-        post :import, {platform: :android, file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { platform: :android, file: file_upload, format: "json", id: selected_project.slug }
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :import, {platform: :android, file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { platform: :android, file: file_upload, format: "json", id: selected_project.slug }
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
@@ -79,17 +79,17 @@ describe Api::ProjectsController, type: :controller do
       end
 
       it "recognises a yaml file" do
-        post :import, {file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { file: file_upload, format: "json", id: selected_project.slug }
       end
 
       it "accepts a yaml file upload" do
-        post :import, {file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { file: file_upload, format: "json", id: selected_project.slug }
       end
     end
 
     context("full-stack") do
       it "creates the expected master texts" do
-        post :import, {file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { file: file_upload, format: "json", id: selected_project.slug }
         masters = MasterText.all
         expect(masters.map { |mt| [mt.key, mt.text] }).to eq([["Adding", "Adding..."], ["Almost done", "Almost done..."], ["Done", "Done!"]])
       end
@@ -106,7 +106,7 @@ describe Api::ProjectsController, type: :controller do
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
         expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
-        post :import, {platform: :yaml, file: file_upload, format: "json", id: selected_project.slug}
+        post :import, params: { platform: :yaml, file: file_upload, format: "json", id: selected_project.slug }
       end
     end
   end

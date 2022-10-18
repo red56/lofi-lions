@@ -171,10 +171,11 @@ describe "Project Language Pages", type: :feature do
         expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
         expect(page).not_to have_css("#localized_text_#{needs_review_localized_text.id}")
       end
+
       it "displays number of of items left to enter" do
         localized_texts
         visit path
-        expect(page).to have_content("#{project_language.need_entry_count} to enter")
+        expect(page).to have_content("#{project_language.need_entry_count} To enter")
       end
     end
 

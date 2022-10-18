@@ -24,7 +24,7 @@ describe ViewsController, type: :controller do
   describe "GET index" do
     it "assigns all views as @views" do
       view = View.create! valid_attributes
-      get :index, {project_id: project.id}, valid_session
+      get :index, params: { project_id: project.id }, session: valid_session
       expect(assigns(:views)).to eq([view])
     end
   end
@@ -32,14 +32,14 @@ describe ViewsController, type: :controller do
   describe "GET show" do
     it "assigns the requested view as @view" do
       view = View.create! valid_attributes
-      get :show, {id: view.to_param}, valid_session
+      get :show, params: { id: view.to_param }, session: valid_session
       expect(assigns(:view)).to eq(view)
     end
   end
 
   describe "GET new" do
     it "assigns a new view as @view" do
-      get :new, {project_id: project.id}, valid_session
+      get :new, params: { project_id: project.id }, session: valid_session
       expect(assigns(:view)).to be_a_new(View)
     end
   end
@@ -47,7 +47,7 @@ describe ViewsController, type: :controller do
   describe "GET edit" do
     it "assigns the requested view as @view" do
       view = View.create! valid_attributes
-      get :edit, {id: view.to_param}, valid_session
+      get :edit, params: { id: view.to_param }, session: valid_session
       expect(assigns(:view)).to eq(view)
     end
   end
@@ -56,30 +56,30 @@ describe ViewsController, type: :controller do
     describe "with valid params" do
       it "creates a new View" do
         expect {
-          post :create, {view: valid_attributes}, valid_session
+          post :create, params: { view: valid_attributes }, session: valid_session
         }.to change(View, :count).by(1)
       end
 
       it "assigns a newly created view as @view" do
-        post :create, {view: valid_attributes}, valid_session
+        post :create, params: { view: valid_attributes }, session: valid_session
         expect(assigns(:view)).to be_a(View)
         expect(assigns(:view)).to be_persisted
       end
 
       it "redirects to the created view" do
-        post :create, {view: valid_attributes}, valid_session
+        post :create, params: { view: valid_attributes }, session: valid_session
         expect(response).to redirect_to(View.last)
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved view as @view" do
-        post :create, {view: invalid_attributes}, valid_session
+        post :create, params: { view: invalid_attributes }, session: valid_session
         expect(assigns(:view)).to be_a_new(View)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {view: invalid_attributes}, valid_session
+        post :create, params: { view: invalid_attributes }, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -91,19 +91,19 @@ describe ViewsController, type: :controller do
 
       it "updates the requested view" do
         view = View.create! valid_attributes
-        put :update, {id: view.to_param, view: new_attributes}, valid_session
+        put :update, params: { id: view.to_param, view: new_attributes }, session: valid_session
         expect(view.reload.name).to eq(new_attributes[:name])
       end
 
       it "assigns the requested view as @view" do
         view = View.create! valid_attributes
-        put :update, {id: view.to_param, view: valid_attributes}, valid_session
+        put :update, params: { id: view.to_param, view: valid_attributes }, session: valid_session
         expect(assigns(:view)).to eq(view)
       end
 
       it "redirects to the view" do
         view = View.create! valid_attributes
-        put :update, {id: view.to_param, view: valid_attributes}, valid_session
+        put :update, params: { id: view.to_param, view: valid_attributes }, session: valid_session
         expect(response).to redirect_to(view)
       end
     end
@@ -111,7 +111,7 @@ describe ViewsController, type: :controller do
     describe "with invalid params" do
       it "assigns the view as @view" do
         view = View.create! valid_attributes
-        put :update, {id: view.to_param, view: invalid_attributes}, valid_session
+        put :update, params: { id: view.to_param, view: invalid_attributes }, session: valid_session
         expect(assigns(:view)).to eq(view)
       end
 
@@ -127,13 +127,13 @@ describe ViewsController, type: :controller do
     it "destroys the requested view" do
       view = View.create! valid_attributes
       expect {
-        delete :destroy, {id: view.to_param}, valid_session
+        delete :destroy, params: { id: view.to_param }, session: valid_session
       }.to change(View, :count).by(-1)
     end
 
     it "redirects to the views list" do
       view = View.create! valid_attributes
-      delete :destroy, {id: view.to_param}, valid_session
+      delete :destroy, params: { id: view.to_param }, session: valid_session
       expect(response).to redirect_to(views_url)
     end
   end

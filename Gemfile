@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby "2.4.10"
+ruby "2.5.9"
 
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 5.0.7'
 
 gem 'nokogiri',  '>= 1.8.2'
 
@@ -9,7 +9,7 @@ gem 'nokogiri',  '>= 1.8.2'
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -23,6 +23,8 @@ gem 'font-awesome-sass'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
+
+gem "sprockets", "< 4.0"
 
 gem 'haml'
 gem 'haml-rails'
@@ -46,11 +48,10 @@ gem 'lograge'
 
 
 group :development do
-  gem 'quiet_assets'
   gem 'guard-rails'
   gem 'rack-livereload'
   gem 'guard-livereload'
-  gem "spring"
+  gem "spring", "< 3.0"
   gem "spring-commands-rspec"
   gem "fix-db-schema-conflicts"
   gem "releasetool", github: "red56/releasetool", branch: 'master'
@@ -67,6 +68,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec_junit_formatter' # circleci
+  gem "rails-controller-testing" # remove eventually?
 end
 
 group :development, :test do

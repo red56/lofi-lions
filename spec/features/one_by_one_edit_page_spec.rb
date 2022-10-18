@@ -25,7 +25,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
       visit edit_localized_text_path(empty_localized_text.id)
       fill_in "localized_text[other]", with: "Je suis un master text"
       click_on "Save"
-      expect(empty_localized_text.reload.needs_entry).to eq false
+      expect(empty_localized_text.reload.needs_entry).to be false
     end
 
     it "saves the comment" do

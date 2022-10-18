@@ -4,7 +4,7 @@ jobs:
   build:
     parallelism: 1
     docker:
-    - image: circleci/ruby:2.4.10-node
+    - image: circleci/ruby:2.5.9-node
       auth:
         username: $DOCKERHUB_USER
         password: $DOCKERHUB_TOKEN
@@ -27,10 +27,11 @@ jobs:
     steps:
     - checkout
 
-      # Which version of bundler?
     - run:
-        name: Which bundler?
-        command: bundle -v
+        name: install bundler (and report)
+        command: |
+          gem install bundler
+          bundle -v
 
       # Restore bundle cache
     - restore_cache:

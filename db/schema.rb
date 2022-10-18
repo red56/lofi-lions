@@ -1,4 +1,3 @@
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -21,10 +20,9 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.integer "position"
     t.datetime "updated_at"
     t.integer "view_id"
+    t.index ["master_text_id"], name: "index_key_placements_on_master_text_id", using: :btree
+    t.index ["view_id"], name: "index_key_placements_on_view_id", using: :btree
   end
-
-  add_index "key_placements", ["master_text_id"], name: "index_key_placements_on_master_text_id", using: :btree
-  add_index "key_placements", ["view_id"], name: "index_key_placements_on_view_id", using: :btree
 
   create_table "languages", force: :cascade do |t|
     t.string "code", limit: 255
@@ -55,9 +53,8 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.text "two", default: ""
     t.datetime "updated_at"
     t.text "zero", default: ""
+    t.index ["master_text_id"], name: "index_master_text_id", using: :btree
   end
-
-  add_index "localized_texts", ["master_text_id"], name: "index_master_text_id", using: :btree
 
   create_table "master_texts", force: :cascade do |t|
     t.text "comment"
@@ -70,9 +67,8 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.integer "project_id"
     t.datetime "updated_at"
     t.integer "word_count"
+    t.index ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
   end
-
-  add_index "master_texts", ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
 
   create_table "project_languages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -114,10 +110,9 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.string "reset_password_token", limit: 255
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "views", force: :cascade do |t|
     t.text "comments"
@@ -125,7 +120,6 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.string "name", limit: 255
     t.integer "project_id"
     t.datetime "updated_at"
+    t.index ["name", "project_id"], name: "index_views_on_name_and_project_id", unique: true, using: :btree
   end
-
-  add_index "views", ["name", "project_id"], name: "index_views_on_name_and_project_id", unique: true, using: :btree
 end

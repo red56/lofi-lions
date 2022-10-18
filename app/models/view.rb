@@ -1,11 +1,10 @@
-class View < ActiveRecord::Base
+class View < ApplicationRecord
 
-  belongs_to :project, inverse_of: :views
+  belongs_to :project, inverse_of: :views, optional: false
   has_many :key_placements, -> { order "position asc" }, inverse_of: :view, dependent: :destroy
   has_many :master_texts, through: :key_placements
   has_many :localized_texts, through: :master_texts
 
-  validates :project_id, presence: true
   validates :name, presence: true
   validates_uniqueness_of :name, scope: :project_id
 

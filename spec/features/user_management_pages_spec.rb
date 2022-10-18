@@ -17,11 +17,11 @@ describe "User management pages", type: :feature do
   context "when logged in as non-admin" do
     let(:login) { stubbed_login_as_user }
     it "redirects to login page" do
-      begin
-        visit users_path
-        expect(page.status_code).to eq(404)
-      rescue ActionController::RoutingError
-      end
+
+      visit users_path
+      expect(page.status_code).to eq(404)
+    rescue ActionController::RoutingError
+
 
     end
 

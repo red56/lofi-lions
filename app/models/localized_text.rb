@@ -1,14 +1,12 @@
-class LocalizedText < ActiveRecord::Base
-  belongs_to :master_text, inverse_of: :localized_texts
-  belongs_to :project_language, inverse_of: :localized_texts
+class LocalizedText < ApplicationRecord
+  belongs_to :master_text, inverse_of: :localized_texts, optional: false
+  belongs_to :project_language, inverse_of: :localized_texts, optional: false
   has_many :views, through: :master_text
 
   scope :needing_entry,  -> {where(needs_entry: true)}
   scope :needing_review,  -> {where(needs_entry: false, needs_review: true)}
   scope :needs_review_or_entry,  -> {where("needs_entry or needs_review")}
 
-  validates :master_text_id, presence: true
-  validates :project_language_id, presence: true
 
   validate do
     self.needs_entry = calculate_needs_entry

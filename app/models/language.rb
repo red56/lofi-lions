@@ -1,4 +1,4 @@
-class Language < ActiveRecord::Base
+class Language < ApplicationRecord
 
   PLURAL_FORMS = [:zero, :one, :two, :few, :many, :other].freeze
   PLURAL_FORMS_WITH_FIELDS = PLURAL_FORMS.map { |form| [form, "pluralizable_label_#{form}".to_sym] }.freeze
@@ -18,7 +18,7 @@ class Language < ActiveRecord::Base
   # Our canonical "english" text -- used when exporting the master texts to localization files
   def self.for_master_texts
     Language.new(code: "en", name: "English (fallback)",
-        pluralizable_label_one: "One", pluralizable_label_other: "Other").tap do |language|
+                 pluralizable_label_one: "One", pluralizable_label_other: "Other").tap do |language|
       def language.is_master_text?
         true
       end

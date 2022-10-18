@@ -88,8 +88,7 @@ describe Localization do
       end
     end
     context "without master text in specified project" do
-      before { master_text }
-      let(:master_text) { create :master_text, key: "somekey", project_id: 1234 }
+      let!(:master_text) { create :master_text, key: "somekey" } # rubocop:disable RSpec/LetSetup
       it "doesn't create but returns errors" do
         expect {
           result = Localization.create_localized_texts(language, [Localization.new("somekey",

@@ -5,7 +5,7 @@
     - @localized_text.views.each do |view|
       = link_to project_language_view_path(@project_language, view), class: 'pull-right' do
         %small
-          = icon('list-alt')
+          = icon("fa-solid", 'list-alt')
           = view.name
   .clearfix
     %p
@@ -77,7 +77,7 @@
 
   .form-group
     = f.label :comment, class: 'text-muted' do
-      = icon('comment')
+      = icon("fa-solid", 'comment')
       Translation Notes or Queries
       %small (Not part of the translation -- just notes to save on this page)
     = f.text_area :comment, class: 'form-control', rows: 3

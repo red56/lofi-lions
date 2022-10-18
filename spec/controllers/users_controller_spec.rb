@@ -18,11 +18,11 @@ describe UsersController, type: :controller do
   context "when not logged in" do
     let(:login) { stubbed_login_as_user }
     it "shows 404" do
-      begin
-        get :index
-        fail("should have raised RoutingError") unless response.status == 404
-      rescue ActionController::RoutingError
-      end
+
+      get :index
+      fail("should have raised RoutingError") unless response.status == 404
+    rescue ActionController::RoutingError
+
     end
   end
 

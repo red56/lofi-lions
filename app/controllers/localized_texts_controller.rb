@@ -3,7 +3,7 @@ class LocalizedTextsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section
   before_action :find_localized_text, only: [:update, :flow, :edit]
-  before_filter :find_language, only: [:index, :entry, :review]
+  before_action :find_language, only: [:index, :entry, :review]
 
   def index
     @localized_texts = localized_texts

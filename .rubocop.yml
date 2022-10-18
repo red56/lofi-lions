@@ -6,7 +6,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   DefaultFormatter: fuubar
   Exclude:
   - 'node_modules/**/*'
@@ -78,6 +78,10 @@ Performance/Detect:
 
 # I'm not very keen on this one
 Performance/TimesMap:
+  Enabled: false
+
+# not now
+Rails/I18nLocaleTexts:
   Enabled: false
 
 Rails/UnknownEnv:
@@ -163,6 +167,10 @@ Style/DoubleNegation:
 Style/Encoding:
   Exclude:
     - 'lib/tasks/*.thor' # https://github.com/rails/thor/issues/776
+
+Style/FetchEnvVar:
+  Enabled:
+    false
 
 Style/HashSyntax:
   EnforcedStyle: ruby19

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :master_text do
-    key { Faker::Lorem.words(4).join(".") }
-    other { Faker::Lorem.sentence(8) }
+    key { Faker::Lorem.words(number: 4).join(".") }
+    other { Faker::Lorem.sentence(word_count: 8) }
     project { create(:project) }
 
     after(:stub) do |master_text, e|
