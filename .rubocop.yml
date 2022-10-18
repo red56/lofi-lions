@@ -95,6 +95,9 @@ Rails/UnknownEnv:
 RSpec/DescribeClass:
   Enabled: false
 
+RSpec/ExpectChange:
+  EnforcedStyle: block
+
 # I think it is sometimes useful to use let! instead of before
 RSpec/LetSetup:
   Enabled: false

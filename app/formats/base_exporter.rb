@@ -11,7 +11,7 @@ class BaseExporter
       body_for(@project.master_texts_impersonating_localized_texts)
     else
       project_language = ProjectLanguage.where(language_id: @language.id, project_id: @project.id).first
-      fail "No ProjectLanguage" unless project_language
+      raise "No ProjectLanguage" unless project_language
 
       body_for(project_language.localized_texts_with_fallback)
     end
@@ -26,7 +26,7 @@ class BaseExporter
     when "yaml"
       RailsYamlFormat::Exporter
     else
-      fail "Not expecting #{platform}"
+      raise "Not expecting #{platform}"
     end
   end
 end

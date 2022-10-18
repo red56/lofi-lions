@@ -7,7 +7,7 @@ describe "Android resource file parser" do
   let(:parsed) { Android::ResourceFile.parse(File.new(file_path)) }
 
   shared_examples "Resource file parsing" do
-    it "should return keys in UTF-8" do
+    it "returns keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
@@ -19,7 +19,7 @@ describe "Android resource file parser" do
       expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
     end
 
-    it "should return values in UTF-8 encoding" do
+    it "returns values in UTF-8 encoding" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
@@ -45,16 +45,16 @@ describe "Android resource file parser" do
     end
   end
 
-  context "simple file (no plurals or fancypants)" do
+  context "with a simple file (no plurals or fancypants)" do
     let(:file_name) { "simple_strings" }
 
     include_examples "Resource file parsing"
   end
 
-  context "file with plurals" do
+  context "with a file with plurals" do
     let(:file_name) { "strings_with_plurals" }
 
-    it "should return keys in UTF-8" do
+    it "returns keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
@@ -71,10 +71,10 @@ describe "Android resource file parser" do
     end
   end
 
-  context "file with string arrays" do
+  context "with a file with string arrays" do
     let(:file_name) { "strings_with_array" }
 
-    it "should return keys in UTF-8" do
+    it "returns keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
@@ -88,7 +88,7 @@ describe "Android resource file parser" do
     end
   end
 
-  context "file with escaped characters" do
+  context "with a file with escaped characters" do
     let(:file_name) { "with_escaped_characters" }
 
     it "unescapes apostrophes" do
@@ -107,7 +107,7 @@ describe "Android resource file parser" do
     end
   end
 
-  context "real world example" do
+  context "with a real world example" do
     let(:file_name) { "full_example" }
 
     it "works" do

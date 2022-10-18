@@ -24,11 +24,11 @@ module Android
     def parse_and_append_plurals(localizations)
       @doc.css("plurals").each do |node|
         key = node["name"]
-        values = Hash[node.css("item").collect do |item_node|
-                        plural_form = item_node["quantity"].to_sym
-                        value = unescape(item_node.text)
-                        [plural_form, value]
-                      end]
+        values = node.css("item").collect do |item_node|
+          plural_form = item_node["quantity"].to_sym
+          value = unescape(item_node.text)
+          [plural_form, value]
+        end.to_h
         localizations << Localization.new(key, values)
       end
     end
@@ -45,8 +45,8 @@ module Android
 
     UNESCAPES = {
       "\\'" => "'",
-      "\\\"" => '"',
-    }
+      "\\\"" => '"'
+    }.freeze
 
     def unescape(value)
       value.gsub(/(\\'|\\")/, UNESCAPES)

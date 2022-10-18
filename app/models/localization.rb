@@ -7,10 +7,11 @@ class Localization
   attr_reader :key, :value
 
   def initialize(key, value)
-    @key, @value = key, value
+    @key = key
+    @value = value
   end
 
-  alias_method :text, :value
+  alias text value
 
   def to_a
     [key, value]
@@ -21,8 +22,8 @@ class Localization
   end
 
   include Comparable
-  def <=> other
-    return [key, value] <=> [other.key, other.value]
+  def <=>(other)
+    [key, value] <=> [other.key, other.value]
   end
 
   def self.create_master_texts(localizations, project)
@@ -35,7 +36,7 @@ class Localization
   def self.create_localized_texts(language, localizations, project_id)
     errors = {}
     project_language = ProjectLanguage.where(language_id: language.id, project_id: project_id).first
-    fail "Couldn't find ProjectLanguage" unless project_language
+    raise "Couldn't find ProjectLanguage" unless project_language
 
     localizations.each do |localization|
       master_text = MasterText.where(key: localization.key, project_id: project_id).first
@@ -44,9 +45,9 @@ class Localization
       else
         localized_text = LocalizedText.find_or_initialize_by(master_text_id: master_text.id, project_language_id: project_language.id)
         if localization.value.is_a?(Hash)
-          localized_text.update_attributes!(localization.value)
+          localized_text.update!(localization.value)
         else
-          localized_text.update_attributes!(other: localization.value)
+          localized_text.update!(other: localization.value)
         end
       end
     end
@@ -68,7 +69,7 @@ class Localization
     end
 
     def to_hash
-      Hash[localizations.map { |l| [l.key, l] }]
+      localizations.index_by { |l| l.key }
     end
 
     def each(&block)

@@ -5,7 +5,7 @@ require "nokogiri"
 module Android
   class Exporter < ::BaseExporter
     class ArrayText
-      ARRAY_KEY = /\A(.+)\[(\d+)\]\z/o
+      ARRAY_KEY = /\A(.+)\[(\d+)\]\z/o.freeze
 
       def self.===(text)
         super || ARRAY_KEY === text.key
@@ -88,13 +88,13 @@ module Android
 
     def plural(xml, text)
       xml.plurals(name: text.key) do
-        @language.plural_forms_with_fields.each do |key, label|
+        @language.plural_forms_with_fields.each do |key, _label|
           xml.item(escape(text.send(key)), quantity: key)
         end
       end
     end
 
-    def array(xml, text)
+    def array(_xml, text)
       ak = ArrayText.new(text)
       arrays[ak.key] << ak
     end
