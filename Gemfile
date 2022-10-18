@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 ruby "2.5.9"
 
-gem 'rails', '~> 5.1.7'
+gem 'rails', '~> 5.2.8'
+gem 'bootsnap', require: false
 
 gem 'nokogiri',  '>= 1.8.2'
 

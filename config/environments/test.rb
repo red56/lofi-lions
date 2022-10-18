@@ -17,7 +17,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=3600"
+    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
   }
 
   # Show full error reports and disable caching.
@@ -30,7 +30,8 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  config.log_level = :warn
+  # Store uploaded files on the local file system in a temporary directory
+  # config.active_storage.service = :test
 
   config.action_mailer.perform_caching = false
 
@@ -39,7 +40,7 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  config.active_support.deprecation = :raise
+  config.active_support.deprecation = :stderr
   # config.active_support.deprecation = if ENV["BUNDLE_GEMFILE"]&.ends_with?("Gemfile.next")
   #                                       :stderr
   #                                     else
@@ -49,7 +50,9 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_controller.action_on_unpermitted_parameters = :raise
+  config.log_level = :warn
+
+  config.action_controller.action_on_unpermitted_parameters = :stderr
 
   ENV["DEVISE_KEY"] = "not-so-random"
   config.action_mailer.default_url_options = { host: "www.example.com" }
