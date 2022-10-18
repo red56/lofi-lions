@@ -4,18 +4,18 @@ module IOS
   STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8"
 
   class StringsFile < BaseParsedFile
-    TRAILING_QUOTE = /"\z/
-    NON_ESCAPED_QUOTE = /[^\\]"/
+    TRAILING_QUOTE = /"\z/.freeze
+    NON_ESCAPED_QUOTE = /[^\\]"/.freeze
     SLASH_STAR = Regexp.escape("/*")
-    COMMENT_START = %r[#{SLASH_STAR}\z]
-    TEXT_END = %r[(#{SLASH_STAR}|\z)]
+    COMMENT_START = /#{SLASH_STAR}\z/.freeze
+    TEXT_END = /(#{SLASH_STAR}|\z)/.freeze
     COMMENT_END = Regexp.new(Regexp.escape("*/"))
 
     # initialize with an IO object - we're mostly going to be
     # creating these from file uploads so best to just deal with the
     # tmpfile instances this gives us
     def initialize(file)
-      @file = reopen_with_utf16_encoding(file)
+      super(reopen_with_utf16_encoding(file))
     end
 
     def reopen_with_utf16_encoding(file)
@@ -57,13 +57,14 @@ module IOS
     def file_text_without_comments
       scanner = StringScanner.new(source)
       contents = []
-      begin
+      loop do
         text = scanner.scan_until(TEXT_END)
         contents << text.gsub(COMMENT_START, "")
         scanner.skip_until(COMMENT_END)
-      end until scanner.eos?
+        break if scanner.eos?
+      end
       contents << scanner.rest
-      contents.join("").strip
+      contents.join.strip
     end
 
     def source
@@ -73,7 +74,7 @@ module IOS
     UNESCAPES = {
       "\\n" => "\n",
       "\\\"" => '"'
-    }
+    }.freeze
 
     def unescape(value)
       value.gsub(/(\\n|\\")/, UNESCAPES)

@@ -22,9 +22,6 @@ module LofiLions
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.enforce_available_locales = true
 
-    # TODO: move these to app/lib
-    config.autoload_paths += %W(#{config.root}/lib)
-
     # TODO: rails5.1 Can be removed
     config.action_controller.raise_on_unfiltered_parameters = true
 

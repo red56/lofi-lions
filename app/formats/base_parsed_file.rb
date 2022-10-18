@@ -4,7 +4,7 @@ class BaseParsedFile
   include Localization::Collection
 
   def self.parse(file)
-    self.new(file)
+    new(file)
   end
 
   def initialize(file)
@@ -16,7 +16,7 @@ class BaseParsedFile
   end
 
   def close
-    @file.close if @file
+    @file&.close
   end
 
   def self.class_for(platform)
@@ -28,7 +28,7 @@ class BaseParsedFile
     when "yaml"
       RailsYamlFormat::YamlFile
     else
-      fail "Not expecting #{platform}"
+      raise "Not expecting #{platform}"
     end
   end
 end

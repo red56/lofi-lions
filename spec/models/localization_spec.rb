@@ -8,14 +8,14 @@ describe Localization do
   describe "create_master_texts" do
     it "works with non pluralized" do
       expect {
-        Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project)
+        described_class.create_master_texts([described_class.new("somekey", "something new in sandwiches")], project)
       }.to change { MasterText.count }.by(1)
     end
 
     it "works with pluralized" do
       expect {
-        Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")],
-                                         project)
+        described_class.create_master_texts([described_class.new("somekey", one: "one sandwich", other: "%d sandwiches")],
+                                            project)
       }.to change { MasterText.count }.by(1)
       expect(MasterText.last.pluralizable).to be_truthy
       expect(MasterText.last.one).to eq("one sandwich")
@@ -24,7 +24,7 @@ describe Localization do
 
     it "invokes recalculate_counts!" do
       expect(project).to receive(:recalculate_counts!)
-      Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project)
+      described_class.create_master_texts([described_class.new("somekey", "something new in sandwiches")], project)
     end
   end
 
@@ -40,28 +40,28 @@ describe Localization do
 
       it "creates" do
         expect {
-          Localization.create_localized_texts(language, [Localization.new("somekey", "something new in sandwiches")], project.id)
+          described_class.create_localized_texts(language, [described_class.new("somekey", "something new in sandwiches")], project.id)
         }.to change { LocalizedText.count }.by(1)
         expect(LocalizedText.last.language).to eq(language)
       end
 
       it "returns no errors" do
-        result = Localization.create_localized_texts(language, [Localization.new("somekey",
-                                                                                 "something new in sandwiches")], project.id)
+        result = described_class.create_localized_texts(language, [described_class.new("somekey",
+                                                                                       "something new in sandwiches")], project.id)
         expect(result).to be_empty
       end
 
       it "calls #recalculates_counts!" do
-        expect(ProjectLanguage).to receive(:where).and_return([project_language])
+        allow(ProjectLanguage).to receive(:where).and_return([project_language])
         expect(project_language).to receive(:recalculate_counts!)
-        Localization.create_localized_texts(language, [Localization.new("somekey", "one sandwich")],
-                                            project.id)
+        described_class.create_localized_texts(language, [described_class.new("somekey", "one sandwich")],
+                                               project.id)
       end
 
       it "creates pluralized forms" do
         expect {
-          Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-                                                                                     two: "two sandwiches", other: "%d sandwiches")], project.id)
+          described_class.create_localized_texts(language, [described_class.new("somekey", one: "one sandwich",
+                                                                                           two: "two sandwiches", other: "%d sandwiches")], project.id)
         }.to change { LocalizedText.count }.by(1)
         localized_text = LocalizedText.last
         expect(localized_text.one).to eq("one sandwich")
@@ -79,8 +79,8 @@ describe Localization do
 
         it "updates" do
           expect {
-            Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
-                                                                                       two: "two sandwiches", other: "%d sandwiches")], project.id)
+            described_class.create_localized_texts(language, [described_class.new("somekey", one: "one sandwich",
+                                                                                             two: "two sandwiches", other: "%d sandwiches")], project.id)
           }.not_to change { LocalizedText.count }
           localized_text.reload
           expect(localized_text.one).to eq("one sandwich")
@@ -93,8 +93,8 @@ describe Localization do
     context "without master text" do
       it "doesn't create but returns errors" do
         expect {
-          result = Localization.create_localized_texts(language, [Localization.new("somekey",
-                                                                                   "something new in sandwiches")], project.id)
+          result = described_class.create_localized_texts(language, [described_class.new("somekey",
+                                                                                         "something new in sandwiches")], project.id)
           expect(result).not_to be_empty
         }.not_to change { LocalizedText.count }
       end
@@ -105,8 +105,8 @@ describe Localization do
 
       it "doesn't create but returns errors" do
         expect {
-          result = Localization.create_localized_texts(language, [Localization.new("somekey",
-                                                                                   "something new in sandwiches")], project.id)
+          result = described_class.create_localized_texts(language, [described_class.new("somekey",
+                                                                                         "something new in sandwiches")], project.id)
           expect(result).not_to be_empty
         }.not_to change { LocalizedText.count }
       end

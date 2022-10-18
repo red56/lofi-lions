@@ -7,7 +7,7 @@ describe "Strings file parser" do
   let(:parsed) { IOS::StringsFile.parse(File.new(file_path)) }
 
   shared_examples "String file parsing" do
-    it "should return keys in UTF-8" do
+    it "returns keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
@@ -19,7 +19,7 @@ describe "Strings file parser" do
       expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
     end
 
-    it "should return keys in UTF-8 encoding" do
+    it "returns keys in UTF-8 encoding" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
 
