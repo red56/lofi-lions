@@ -15,10 +15,10 @@ class Api::ProjectsController < ApplicationController
     import_texts(params[:file], params[:platform] || auto_platform())
     respond_to do |format|
       format.html { redirect_to redirect_path, notice: "Import was successful." }
-      format.json { render text: "OK" }
+      format.json { render json: "OK" }
     end
     # rescue => e
-    #   render text: "Error #{e}", status: :unprocessable_entity
+    #   render json: "Error #{e}", status: :unprocessable_entity
   end
 
   protected
@@ -62,7 +62,7 @@ class Api::ProjectsController < ApplicationController
     if code = language_code
       @language = Language.find_by_code(code)
       if @language.nil?
-        render text: "Language #{code} not found", status: 404
+        render json: "Language #{code} not found", status: 404
         return false
       end
     end
