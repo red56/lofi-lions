@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaseExporter
   def initialize(language, project)
     @language = language

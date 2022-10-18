@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateProjectLanguages < ActiveRecord::Migration
   class LanguageUser < ApplicationRecord
     self.table_name = :languages_users

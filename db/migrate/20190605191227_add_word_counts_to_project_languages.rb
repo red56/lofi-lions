@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddWordCountsToProjectLanguages < ActiveRecord::Migration
   def change
     add_column :master_texts, :word_count, :integer

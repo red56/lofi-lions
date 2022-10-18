@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Capybara
   class Session
     def has_link_to?(path) # rubocop:disable Naming/PredicateName

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CronMailerHelper
   def colourize_translation_status(texts, needing)
     percent = ((needing.to_f / texts.length.to_f) * 100.0).round

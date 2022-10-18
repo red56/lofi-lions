@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_view, only: [:show, :edit, :update, :destroy]

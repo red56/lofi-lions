@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTranslatedMasterToLocalisedText < ActiveRecord::Migration
   def change
     add_column :localized_texts, :translated_from, :text

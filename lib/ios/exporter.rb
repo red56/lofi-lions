@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module IOS
   class Exporter < ::BaseExporter
     def body_for(localized_texts)
-      strings = ""
+      strings = +""
       localized_texts.each do |text|
         strings << %("#{escape(text.key)}" = "#{escape(text.other_export)}";\n)
       end
-      "\xFF\xFE".force_encoding(encoding) << strings.encode(encoding)
+      (+"\xFF\xFE").force_encoding(encoding) << strings.encode(encoding)
     end
 
     def path

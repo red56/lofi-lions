@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :language do
     name { Faker::Lorem.words(number: 4).join(" ") }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :cron do
   task translation_status_email: [:environment] do
     CronMailer.translation_status_report.deliver

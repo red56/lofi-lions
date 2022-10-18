@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def allow_to_behave_like_scope(scope)
   like_a_scope(scope)
 end

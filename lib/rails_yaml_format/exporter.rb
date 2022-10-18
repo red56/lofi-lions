@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsYamlFormat
   class Exporter < ::BaseExporter
     def path

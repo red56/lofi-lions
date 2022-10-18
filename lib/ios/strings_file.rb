@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module IOS
-  STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8".freeze
+  STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8"
 
   class StringsFile < BaseParsedFile
     TRAILING_QUOTE = /"\z/

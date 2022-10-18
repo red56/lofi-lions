@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizedViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section

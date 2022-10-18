@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateKeyPlacements < ActiveRecord::Migration
   def change
     create_table :key_placements do |t|

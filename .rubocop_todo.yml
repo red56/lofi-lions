@@ -594,13 +594,6 @@ Style/FormatString:
   Exclude:
     - 'app/models/project_language.rb'
 
-# Offense count: 145
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: always, always_true, never
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 # Offense count: 1
 # This cop supports safe auto-correction (--auto-correct).
 Style/GlobalStdStream:

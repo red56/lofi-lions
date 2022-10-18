@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def _stub_authenticated_user(user)
   user.tap do |user|
     allow_any_instance_of(ApplicationController).to receive_messages(user_signed_in?: true, current_user: user, authenticate_user!: true)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class View < ApplicationRecord
   belongs_to :project, inverse_of: :views, optional: false
   has_many :key_placements, -> { order "position asc" }, inverse_of: :view, dependent: :destroy

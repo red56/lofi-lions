@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectsController < ApplicationController
   before_action :find_project
   before_action :require_administrator!, except: [:show]

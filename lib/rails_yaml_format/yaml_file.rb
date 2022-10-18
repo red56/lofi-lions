@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsYamlFormat
   class YamlFile < BaseParsedFile
     def initialize(file)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :dev do
   task dev_users: :environment do
     raise Exception.new("Should only do in development!") unless (Rails.env.development? || Rails.env.staging?)

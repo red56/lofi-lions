@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizedTextEnforcer
   # called after a master text is created. Assume no localized texts are created.
   def master_text_created(master_text)

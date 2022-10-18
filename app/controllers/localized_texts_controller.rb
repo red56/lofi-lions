@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizedTextsController < ApplicationController
   include NextLocalizedText
   before_action :authenticate_user!

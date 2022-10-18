@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ProjectsController < ApplicationController
   # FIXME: needs some auth...
   # FIXME: this should only be for the API version

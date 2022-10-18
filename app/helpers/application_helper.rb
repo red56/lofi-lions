@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def active_section(section)
     @section == section ? { class: "active" } : {}

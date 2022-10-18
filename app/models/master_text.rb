@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MasterText < ApplicationRecord
   MARKDOWN_FORMAT = "markdown"
   PLAIN_FORMAT = "plain"

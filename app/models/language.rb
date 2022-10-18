@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Language < ApplicationRecord
   PLURAL_FORMS = [:zero, :one, :two, :few, :many, :other].freeze
   PLURAL_FORMS_WITH_FIELDS = PLURAL_FORMS.map { |form| [form, "pluralizable_label_#{form}".to_sym] }.freeze

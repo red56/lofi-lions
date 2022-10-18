@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectLanguage < ApplicationRecord
   belongs_to :project, inverse_of: :project_languages
   belongs_to :language, inverse_of: :project_languages

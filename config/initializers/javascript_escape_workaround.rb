@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # per https://github.com/advisories/GHSA-65cv-r6x7-79hv
 # workaournd for rails 4.2
 # TODO: rails5: remove this and remove CVE-2020-5267 from circleci/config.yml
