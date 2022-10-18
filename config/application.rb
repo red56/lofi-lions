@@ -24,6 +24,9 @@ module LofiLions
     # TODO: move these to app/lib
     config.autoload_paths += %W(#{config.root}/lib)
 
+    # TODO: rails5.1 Can be removed
+    config.action_controller.raise_on_unfiltered_parameters = true
+
     config.generators do |g|
       g.helper nil
       g.test_framework :rspec
