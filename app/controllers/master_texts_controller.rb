@@ -8,7 +8,7 @@ class MasterTextsController < ApplicationController
   # GET /master_texts
   # GET /master_texts.json
   def index
-    @master_texts = @project.master_texts.order("LOWER(key)")
+    @master_texts = @project.master_texts.order(Arel.sql("LOWER(key)"))
     # TODO: would be nice to have an index on lower(key), but hard to do without moving schema.sql -- think more on it
   end
 
