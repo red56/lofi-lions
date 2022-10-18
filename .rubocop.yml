@@ -15,6 +15,7 @@ AllCops:
   - 'bin/*'
   - 'Gemfile'
   - 'Gemfile.lock'
+  - 'db/migrate/201*'
   DisplayCopNames: true
   NewCops: enable
   CacheRootDirectory: tmp # ie. tmp/rubocop_cache
