@@ -2,7 +2,7 @@ class LocalizedViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section
 
-  before_filter :find_project_language
+  before_action :find_project_language
 
   def index
     @active_tab = :view
