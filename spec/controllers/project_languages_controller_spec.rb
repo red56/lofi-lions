@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe ProjectLanguagesController, type: :controller do
   before { login }
+
   let(:login) { stubbed_login_as_user }
   let(:project_language) { create(:project_language, need_entry_count: nil) }
   let!(:localized_text) { create(:localized_text, project_language: project_language) }

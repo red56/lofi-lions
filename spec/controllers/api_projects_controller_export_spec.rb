@@ -3,9 +3,11 @@ require "rails_helper"
 describe Api::ProjectsController, type: :controller do
   describe "export" do
     let(:project) { create :project }
+    let(:request) { get :export, params: { platform: platform, code: language_code, id: project.slug } }
     let(:language) { create :language, code: "ja" }
     let(:language_code) { language.code } # ensures that language is in db
     let!(:project_language) { create :project_language, project: project, language: language }
+
     shared_context "with a bunch of precreated stuff" do
       let!(:languages) { [create(:language, code: "es"), language] }
       let!(:project_languages) { languages.map { |lang| create(:project_language, project: project, language: lang) } }
@@ -26,13 +28,13 @@ describe Api::ProjectsController, type: :controller do
       before { ensure_localised_texts(project_languages) }
     end
 
-    let(:request) { get :export, params: { platform: platform, code: language_code, id: project.slug } }
     describe "common" do
       it "returns a 404 if the language is uknown" do
         get :export, params: { platform: :android, code: "xx", id: project.slug }
         expect(response.status).to eq(404)
       end
     end
+
     describe "ios" do
       let(:platform) { :ios }
       let(:body) { response.body[1..-1].encode(Encoding::UTF_8) }
@@ -83,6 +85,7 @@ describe Api::ProjectsController, type: :controller do
 
       describe "escaping" do
         let(:master_text) { create :master_text, project: project, key: "title" }
+
         before do
           create(:localized_text, project_language: project_language, master_text: master_text, other: text)
         end
@@ -107,6 +110,7 @@ describe Api::ProjectsController, type: :controller do
 
       describe "english texts" do
         let(:language_code) { "en" }
+
         it "uses fallbacks to produce the english version" do
           request
           expect(response.status).to eq(200)
@@ -188,6 +192,7 @@ describe Api::ProjectsController, type: :controller do
                            pluralizable_label_one: "one", pluralizable_label_many: "many")
         }
         let(:french_project_language) { create(:project_language, language: french, project: project) }
+
         before do
           master_texts.concat(plural_master_texts)
           master_texts.each do |mt|
@@ -235,6 +240,7 @@ describe Api::ProjectsController, type: :controller do
 
       describe "arrays" do
         let(:array_master_texts) { %w(planet[0] planet[1] planet[2] door[0] door[1]) }
+
         before do
           @array_master_texts = array_master_texts.map do |key|
             MasterText.create!(key: key, other: "#{key}", pluralizable: false, project: project)
@@ -302,6 +308,7 @@ describe Api::ProjectsController, type: :controller do
 
       describe "escaping" do
         let(:master_text) { create :master_text, project: project, key: "title" }
+
         before do
           create(:localized_text, project_language: project_language, master_text: master_text, other: text)
           request
@@ -347,12 +354,14 @@ describe Api::ProjectsController, type: :controller do
         let(:other_projects_master_text) {
           create :master_text, key: "my-special-key", project: other_project
         }
+
         include_context "with a bunch of precreated stuff"
 
         it "should include keys from selected project" do
           request
           expect(response.body).to include(keys.first)
         end
+
         it "shouldn't include text from other project" do
           request
           expect(response.body).not_to include(other_projects_master_text.key)

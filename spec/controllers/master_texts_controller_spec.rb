@@ -2,19 +2,20 @@ require "rails_helper"
 
 describe MasterTextsController, type: :controller do
   before { login }
+
   let(:login) { stubbed_login_as_user }
+  let(:master_text) { create(:master_text, project: project) }
   let(:project) { create :project }
   let(:master_text_attributes) { attributes_for(:master_text, project_id: project.id) }
 
   context "not logged in" do
     let(:login) { nil }
+
     it "redirects to sign in page" do
       post :create, params: { master_text: master_text_attributes }
       expect(response).to redirect_to(new_user_session_path)
     end
   end
-
-  let(:master_text) { create(:master_text, project: project) }
 
   describe "POST create" do
     describe "with valid params" do
@@ -51,6 +52,7 @@ describe MasterTextsController, type: :controller do
 
   describe "PUT update" do
     before { master_text }
+
     describe "with valid params" do
       it "updates the requested master_text" do
         put :update, params: { id: master_text.to_param, master_text: { "key" => "MyString" } }
@@ -83,6 +85,7 @@ describe MasterTextsController, type: :controller do
 
   describe "DELETE destroy" do
     before { master_text }
+
     it "destroys the requested master_text" do
       expect {
         delete :destroy, params: { id: master_text.to_param }

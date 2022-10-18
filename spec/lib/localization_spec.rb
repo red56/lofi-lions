@@ -9,6 +9,7 @@ describe Localization do
         Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project)
       }.to change { MasterText.count }.by(1)
     end
+
     it "works with pluralized" do
       expect {
         Localization.create_master_texts([Localization.new("somekey", one: "one sandwich", other: "%d sandwiches")],
@@ -18,6 +19,7 @@ describe Localization do
       expect(MasterText.last.one).to eq("one sandwich")
       expect(MasterText.last.other).to eq("%d sandwiches")
     end
+
     it "invokes recalculate_counts!" do
       expect(project).to receive(:recalculate_counts!)
       Localization.create_master_texts([Localization.new("somekey", "something new in sandwiches")], project)
@@ -28,9 +30,12 @@ describe Localization do
     let(:language) { project_language.language }
     let(:project) { create :project }
     let(:project_language) { create :project_language, project: project, language: create(:language) }
+
     context "with master key" do
       before { master_text }
+
       let(:master_text) { create :master_text, key: "somekey", project: project }
+
       it "creates" do
         expect {
           Localization.create_localized_texts(language, [Localization.new("somekey", "something new in sandwiches")], project.id)
@@ -61,12 +66,15 @@ describe Localization do
         expect(localized_text.two).to eq("two sandwiches")
         expect(localized_text.other).to eq("%d sandwiches")
       end
+
       context "when already exists" do
         before { localized_text }
+
         let(:localized_text) {
           create :localized_text, project_language: project_language, master_text: master_text,
                                   other: "some value"
         }
+
         it "updates" do
           expect {
             Localization.create_localized_texts(language, [Localization.new("somekey", one: "one sandwich",
@@ -79,6 +87,7 @@ describe Localization do
         end
       end
     end
+
     context "without master text" do
       it "doesn't create but returns errors" do
         expect {
@@ -88,8 +97,10 @@ describe Localization do
         }.not_to change { LocalizedText.count }
       end
     end
+
     context "without master text in specified project" do
-      let!(:master_text) { create :master_text, key: "somekey" } # rubocop:disable RSpec/LetSetup
+      let!(:master_text) { create :master_text, key: "somekey" }
+
       it "doesn't create but returns errors" do
         expect {
           result = Localization.create_localized_texts(language, [Localization.new("somekey",

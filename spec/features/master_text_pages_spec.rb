@@ -2,11 +2,13 @@ require "rails_helper"
 
 describe "Master Text Pages", type: :feature do
   before { login }
+
   let(:login) { stubbed_login_as_user }
   let!(:project) { create :project }
 
   context "when not logged in" do
     let(:login) { nil }
+
     it "redirects to login page" do
       visit project_master_texts_path(project)
       expect(current_path).to eq(new_user_session_path)
@@ -19,14 +21,17 @@ describe "Master Text Pages", type: :feature do
     before do
       allow_to_behave_like_scope(texts)
     end
+
     it "can list several" do
       allow(project).to receive_messages(master_texts: texts)
       allow(Project).to receive_messages(find: project)
       visit project_master_texts_path(project)
       expect(page).to have_content(texts[0].key)
     end
+
     context "with plural forms" do
       let(:texts) { build_stubbed_list(:master_text, 1, pluralizable: true, one: "one-one", other: "othery-other") }
+
       it "can list one" do
         allow(project).to receive_messages(master_texts: texts)
         allow(Project).to receive_messages(find: project)
@@ -35,6 +40,7 @@ describe "Master Text Pages", type: :feature do
         expect(page).to have_content("one-one")
       end
     end
+
     it "links to new" do
       visit project_master_texts_path(project)
       expect(page).to have_link_to(new_project_master_text_path(project))
@@ -60,6 +66,7 @@ describe "Master Text Pages", type: :feature do
     it "displays" do
       visit new_project_master_text_path(project)
     end
+
     def fill_in_and_save
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: "my.key"
@@ -73,6 +80,7 @@ describe "Master Text Pages", type: :feature do
       fill_in_and_save
       expect(page).not_to have_css("form.master_text")
     end
+
     it "displays errors" do
       expect(@user).to receive_messages(is_developer?: true)
       visit new_project_master_text_path(project)
@@ -81,8 +89,10 @@ describe "Master Text Pages", type: :feature do
       expect(page).to have_css("form.master_text")
       expect(page).to have_css("form.master_text .errors")
     end
+
     context "with a language..." do
       let!(:project_language) { create(:project_language, project: project, need_entry_count: 0) }
+
       it "updates project language need_entry_count" do
         expect {
           expect(@user).to receive_messages(is_developer?: true)
@@ -92,14 +102,18 @@ describe "Master Text Pages", type: :feature do
       end
     end
   end
+
   describe "edit" do
     let(:master_text) { create(:master_text, project: project) }
     let(:login) { stubbed_login_as_developer }
+
     it "displays" do
       visit edit_master_text_path(master_text)
     end
+
     context "for editor" do
       let(:login) { stubbed_login_as_user }
+
       it "works" do
         visit edit_master_text_path(master_text)
         expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
@@ -109,6 +123,7 @@ describe "Master Text Pages", type: :feature do
         expect(page).not_to have_css("form.master_text")
       end
     end
+
     it "works for developer to change key" do
       visit edit_master_text_path(master_text)
       expect(page).to have_css("form.master_text")
@@ -116,6 +131,7 @@ describe "Master Text Pages", type: :feature do
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
     end
+
     describe "edit with views" do
       let!(:view) { create(:view, project: project, name: "Me") }
       let(:master_text) { create(:master_text, project: project) }
@@ -137,9 +153,10 @@ describe "Master Text Pages", type: :feature do
         visit edit_master_text_path(master_text)
         expect(page).to have_css("form.master_text")
         expect(page).to have_content(view.name)
-        expect(page).to_not have_content(other_projects_view.name)
+        expect(page).not_to have_content(other_projects_view.name)
       end
     end
+
     it "can change pluralizable" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:master_text_changed).with(master_text)
       visit edit_master_text_path(master_text)
@@ -153,6 +170,7 @@ describe "Master Text Pages", type: :feature do
 
     context "when pluralizable" do
       let(:master_text) { create(:master_text, project: project, pluralizable: true) }
+
       it "allows me to change one" do
         visit edit_master_text_path(master_text)
         fill_in "master_text_one", with: "My one one"
@@ -161,6 +179,7 @@ describe "Master Text Pages", type: :feature do
         }.to change { master_text.reload.one }
         expect(page).not_to have_css("form.master_text")
       end
+
       it "allows me to change many" do
         visit edit_master_text_path(master_text)
         fill_in "master_text_other", with: "My other other"
@@ -195,6 +214,7 @@ describe "Master Text Pages", type: :feature do
         create(:localized_text, project_language: project_language, master_text: master_text,
                                 other: "some original translation")
       }
+
       it "updates project language review_count" do
         expect {
           visit edit_master_text_path(master_text)

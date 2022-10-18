@@ -3,11 +3,14 @@ require "rails_helper"
 describe Api::ProjectsController, type: :controller do
   let(:file_upload) { fixture_file_upload(file_path, "application/octet-stream") }
   let!(:selected_project) { create(:project) }
+
   before { bypass_rescue }
-  context "without auth token" do
+
+  context "without auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it "should fail with 401?"
   end
-  context "with invalid auth token" do
+
+  context "with invalid auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it "should fail with 401?"
   end
 

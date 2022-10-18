@@ -2,9 +2,9 @@ require "rails_helper"
 
 describe "Project Language Pages", type: :feature do
   let(:project_language) { create(:project_language) }
+  let(:login) { stubbed_login_as_user }
 
   before { login }
-  let(:login) { stubbed_login_as_user }
 
   context "when not logged in" do
     let(:login) { nil }
@@ -13,14 +13,17 @@ describe "Project Language Pages", type: :feature do
       visit project_languages_path
       expect(current_path).to eq(new_user_session_path)
     end
+
     it "project_language page redirects to login page" do
       visit project_language_path(project_language)
       expect(current_path).to eq(new_user_session_path)
     end
+
     it "review localized text page redirects to login page" do
       visit review_project_language_texts_path(project_language)
       expect(current_path).to eq(new_user_session_path)
     end
+
     it "all localized text page redirects to login page" do
       visit project_language_texts_path(project_language)
       expect(current_path).to eq(new_user_session_path)
@@ -34,10 +37,12 @@ describe "Project Language Pages", type: :feature do
 
     context "as an admin" do
       let(:login) { stubbed_login_as_admin_user }
+
       before do
         allow(ProjectLanguage).to receive(:all).and_return(project_languages)
         allow(login).to receive(:project_languages).and_return(like_a_scope([]))
       end
+
       it "shows project language rows" do
         visit project_languages_path
         within "#project_language_#{project_language.id}" do
@@ -82,6 +87,7 @@ describe "Project Language Pages", type: :feature do
         expect(page).to have_content(localized_text.master_text.text)
         expect(page).to have_css("#localized_text_#{localized_text.id}")
       end
+
       it "updates one" do
         localized_text
         visit path
@@ -90,6 +96,7 @@ describe "Project Language Pages", type: :feature do
         visit project_language_texts_path(project_language)
         expect(page).to have_content("flounce")
       end
+
       it "remains on page when information edited and saved" do
         localized_text
         visit path
@@ -100,12 +107,14 @@ describe "Project Language Pages", type: :feature do
 
       context "when pluralizable" do
         before { allow_any_instance_of(MasterText).to receive_messages(pluralizable: true, pluralizable?: true) }
+
         it "displays" do
           localized_text
           visit path
           expect(page).to have_content(localized_text.master_text.other)
           expect(page).to have_css("#localized_text_#{localized_text.id}")
         end
+
         it "updates a localized other" do
           localized_text
           visit path
@@ -114,27 +123,33 @@ describe "Project Language Pages", type: :feature do
           visit project_language_texts_path(project_language)
           expect(page).to have_content("flounce")
         end
+
         it "has correct other fields/labels" do
           pending
           flunk "need to test this with different project_language types"
         end
       end
+
       it "linked from show" do
         visit project_language_path(project_language)
         expect(page).to have_link_to(path)
       end
+
       it "linked from all" do
         visit project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
+
       it "linked from entry" do
         visit entry_project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
+
       it "linked from review" do
         visit review_project_language_texts_path(project_language)
         expect(page).to have_link_to(path)
       end
+
       it "is active" do
         visit path
         within "ul.localized-texts.nav li.active" do
@@ -145,6 +160,7 @@ describe "Project Language Pages", type: :feature do
     describe "all" do
       let(:localized_text) { ok_localized_text }
       let(:path) { project_language_texts_path(project_language) }
+
       it_behaves_like "localized text list"
 
       it "displays all" do
@@ -159,10 +175,12 @@ describe "Project Language Pages", type: :feature do
     describe "translations to enter" do
       let(:localized_text) { empty_localized_text }
       let(:path) { entry_project_language_texts_path(project_language) }
+
       it_behaves_like "localized text list"
       it "should be created needing entry" do
         expect(empty_localized_text.needs_entry).to be_truthy
       end
+
       it "displays appropriate" do
         localized_texts
         visit path
@@ -181,6 +199,7 @@ describe "Project Language Pages", type: :feature do
     describe "translations to review" do
       let(:localized_text) { needs_review_localized_text }
       let(:path) { review_project_language_texts_path(project_language) }
+
       it_behaves_like "localized text list"
       it "displays all" do
         localized_texts
@@ -189,6 +208,7 @@ describe "Project Language Pages", type: :feature do
         expect(page).not_to have_css("#localized_text_#{ok_localized_text.id}")
         expect(page).not_to have_css("#localized_text_#{empty_localized_text.id}")
       end
+
       it "displays number of of items left to review" do
         localized_texts
         visit path
@@ -203,6 +223,7 @@ describe "Project Language Pages", type: :feature do
         visit entry_project_language_texts_path(empty_project_language)
         expect(page).to have_content("All entered")
       end
+
       it "displays 'all entered' with none left to enter" do
         visit review_project_language_texts_path(empty_project_language)
         expect(page).to have_content("All reviewed")

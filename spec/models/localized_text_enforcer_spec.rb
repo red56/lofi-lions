@@ -15,6 +15,7 @@ describe LocalizedTextEnforcer, type: :model do
 
   describe "Enforcer" do
     before { master_text; project_language }
+
     describe "master text created" do
       it "it creates blank localized texts for each project_language" do
         master_text; project_language
@@ -23,6 +24,7 @@ describe LocalizedTextEnforcer, type: :model do
         }.to change { LocalizedText.count }.by(1)
       end
     end
+
     describe "master text changed" do
       it "it doesnt do anything to blank localized texts" do
         blank_localized_text = create(:localized_text, master_text: master_text, project_language: project_language)
@@ -36,6 +38,7 @@ describe LocalizedTextEnforcer, type: :model do
                    ]
                  }
       end
+
       it "makes filled localized texts as needing review" do
         localized_text = create(:localized_text, master_text: master_text, project_language: project_language, text: "Quelque chose d'ancien")
         LocalizedTextEnforcer.new.master_text_changed(master_text)
@@ -54,6 +57,7 @@ describe LocalizedTextEnforcer, type: :model do
           LocalizedTextEnforcer.new.project_language_created(project_language)
         }.to change { LocalizedText.count }.by(1)
       end
+
       it "calls #recalculates_counts!" do
         expect(project_language).to receive(:recalculate_counts!)
         LocalizedTextEnforcer.new.project_language_created(project_language)
@@ -70,6 +74,7 @@ describe LocalizedTextEnforcer, type: :model do
           mt_crudder.save
         }.to change { LocalizedText.count }.by(1)
       end
+
       it "should do something if update called on a new_record" do
         project_language
         mt_crudder = LocalizedTextEnforcer::MasterTextCrudder.new(build :master_text, project: project)
@@ -77,11 +82,13 @@ describe LocalizedTextEnforcer, type: :model do
           mt_crudder.update(text: "flong")
         }.to change { LocalizedText.count }.by(1)
       end
+
       it "calls #recalculate_counts!" do
         expect(project).to receive(:recalculate_counts!)
         LocalizedTextEnforcer::MasterTextCrudder.new(build :master_text, project: project).save!
       end
     end
+
     describe "master text changed" do
       it "it doesnt do anything to blank localized texts" do
         project_language
@@ -98,6 +105,7 @@ describe LocalizedTextEnforcer, type: :model do
                  }
         expect(master_text.reload.text).to eq("flong")
       end
+
       it "makes filled localized texts as needing review" do
         localized_text = create(:localized_text, master_text: master_text, project_language: project_language, text: "Quelque chose d'ancien")
         mt_crudder = LocalizedTextEnforcer::MasterTextCrudder.new(master_text)
@@ -107,6 +115,7 @@ describe LocalizedTextEnforcer, type: :model do
         expect(localized_text.reload.needs_review).to be_truthy
         expect(master_text.reload.text).to eq("flong")
       end
+
       it "doesn't mark as needing review if text unchanged" do
         localized_text = create(:localized_text, master_text: master_text, project_language: project_language, text: "Quelque chose d'ancien")
         mt_crudder = LocalizedTextEnforcer::MasterTextCrudder.new(master_text)
@@ -115,6 +124,7 @@ describe LocalizedTextEnforcer, type: :model do
         }.not_to change { [LocalizedText.count, localized_text.reload.text, localized_text.reload.needs_review] }
         expect(master_text.reload.key).to eq("flong")
       end
+
       it "should do something if save called on a exisitng record" do
         project_language
         localized_text = create(:localized_text, master_text: master_text, project_language: project_language, text: "Quelque chose d'ancien")
@@ -159,6 +169,7 @@ describe LocalizedTextEnforcer, type: :model do
       describe "with changed value" do
         let(:new_text) { "This is not my key" }
         let!(:mt) { create(:master_text, project: project, key: key, text: text) }
+
         it "updates the master text with the new value" do
           expect {
             LocalizedTextEnforcer::MasterTextCrudder.create_or_update(key, new_text, project.id)
@@ -177,6 +188,7 @@ describe LocalizedTextEnforcer, type: :model do
 
       context "with a key ending _md" do
         let(:key) { "MyText_md" }
+
         it "creates a new master text with type markdown for key if none exists" do
           mt = nil
           expect {
@@ -184,6 +196,7 @@ describe LocalizedTextEnforcer, type: :model do
           }.to change { MasterText.count }.by(1)
           expect(mt.format).to eq(MasterText::MARKDOWN_FORMAT)
         end
+
         it "doesn't touch an existing master text with same value" do
           original = create(:master_text, key: key, text: text, project: project)
           expect {
@@ -203,10 +216,12 @@ describe LocalizedTextEnforcer, type: :model do
           l_crudder.save
         }.to change { LocalizedText.count }.by(1)
       end
+
       it "returns true when saving" do
         l_crudder = LocalizedTextEnforcer::ProjectLanguageCreator.new(build(:project_language, project: project))
         expect(l_crudder.save).to be_truthy
       end
+
       it "returns false when not saving" do
         l_crudder = LocalizedTextEnforcer::ProjectLanguageCreator.new(build(:project_language, project: nil))
         expect(l_crudder.save).to be_falsey
@@ -223,6 +238,7 @@ describe LocalizedTextEnforcer, type: :model do
           l_crudder.save
         }.to change { ProjectLanguage.count }.by(Project.count)
       end
+
       it "creates blank localized texts for each master text" do
         master_text
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language))
@@ -230,10 +246,12 @@ describe LocalizedTextEnforcer, type: :model do
           l_crudder.save
         }.to change { LocalizedText.count }.by(1)
       end
+
       it "returns true when saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language))
         expect(l_crudder.save).to be_truthy
       end
+
       it "returns false when not saving" do
         l_crudder = LocalizedTextEnforcer::LanguageCreator.new(build(:language, name: ""))
         expect(l_crudder.save).to be_falsey

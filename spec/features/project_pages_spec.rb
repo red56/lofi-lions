@@ -6,6 +6,7 @@ describe "Project Pages", type: :feature do
   let(:language) { create(:language, name: "French") }
 
   let(:do_logging_in) { stubbed_login_as_admin_user }
+
   before { do_logging_in }
 
   it "shows project name" do

@@ -22,10 +22,12 @@ describe "Home page", type: :feature do
       expect(current_path).to eq("/")
       expect(page).to have_content(@user.email)
     end
+
     it "has logout" do
       visit "/"
       click_on "Logout"
     end
+
     it "links to projects" do
       visit "/"
       expect(page).to have_content(project.name)
@@ -53,8 +55,8 @@ describe "Home page", type: :feature do
 
     it "doesn't link to projects" do
       visit "/"
-      expect(page).to_not have_content(project.name)
-      expect(page).to_not have_link_to(project_path(project))
+      expect(page).not_to have_content(project.name)
+      expect(page).not_to have_link_to(project_path(project))
     end
 
     it "links to project languages" do
@@ -77,7 +79,7 @@ describe "Home page", type: :feature do
 
       it "doesn't display the start button but does display review all" do
         visit "/"
-        expect(page).to_not have_link_to(next_project_language_path(complete_project_language, flow: "needing"))
+        expect(page).not_to have_link_to(next_project_language_path(complete_project_language, flow: "needing"))
         expect(page).to have_link_to(next_project_language_path(complete_project_language, flow: "all"))
       end
     end

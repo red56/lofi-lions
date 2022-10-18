@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "Localized Text One by One Edit Page", type: :feature do
   let!(:project) { create(:project) }
+  let(:login) { stubbed_login_as_user }
   let!(:project_language) { create(:project_language, project: project) }
   let!(:empty_localized_text) {
     create(:localized_text, project_language: project_language,
@@ -12,8 +13,8 @@ describe "Localized Text One by One Edit Page", type: :feature do
                             other: "something new", master_text_id: master_text.id, needs_review: true)
   }
   let!(:master_text) { create(:master_text, key: "I am a master text", project: project) }
+
   before { login }
-  let(:login) { stubbed_login_as_user }
 
   describe "getting there" do
     it "links from project language text list" do
@@ -70,7 +71,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
 
       it "doesn't display the original" do
         visit edit_localized_text_path(localized_text)
-        expect(page).to_not have_css(".translated_from")
+        expect(page).not_to have_css(".translated_from")
       end
     end
 
@@ -79,7 +80,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
 
       it "doesn't display the original" do
         visit edit_localized_text_path(localized_text)
-        expect(page).to_not have_css(".translated_from")
+        expect(page).not_to have_css(".translated_from")
       end
     end
   end
@@ -90,7 +91,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
       click_link "Edit"
       fill_in "localized_text[other]", with: "Je suis un master text"
       click_on "Save"
-      expect(page).to_not have_css("#localized_text_#{needs_review_localized_text.id}")
+      expect(page).not_to have_css("#localized_text_#{needs_review_localized_text.id}")
     end
   end
 
@@ -135,6 +136,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
     let!(:ziggurat_localized) { create :finished_localized_text, project_language: project_language, master_text: ziggurat }
     let(:alpha) { create(:master_text, key: "alpha", project: project) }
     let(:ziggurat) { create(:master_text, key: "ziggurat", project: project) }
+
     it "project_lanaguage # next links through to edit page from overview by calling next_localized_text" do
       visit project_language_path(project_language)
       click_on "Review all"

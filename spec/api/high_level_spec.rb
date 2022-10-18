@@ -29,6 +29,7 @@ describe "High-level API spec", type: :request do
       mt = create(:master_text, project: project, key: "key", other: "there")
       mt.localized_texts.create!(project_language: project_language, text: "voila")
     }
+
     it "can export" do
       get "/api/projects/#{project.slug}/export/yaml/#{language.code}", params: {}
       expect(response.status).to eq(200)

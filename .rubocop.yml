@@ -95,6 +95,10 @@ Rails/UnknownEnv:
 RSpec/DescribeClass:
   Enabled: false
 
+# I think it is sometimes useful to use let! instead of before
+RSpec/LetSetup:
+  Enabled: false
+
 # I can't see the value of this
 RSpec/MultipleMemoizedHelpers:
   Enabled: false

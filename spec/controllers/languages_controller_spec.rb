@@ -2,17 +2,18 @@ require "rails_helper"
 
 describe LanguagesController, type: :controller do
   before { login }
+
   let(:login) { stubbed_login_as_user }
+  let(:language) { create(:language) }
 
   context "not logged in" do
     let(:login) { nil }
+
     it "redirects to sign in page" do
       post :create, params: { language: attributes_for(:language) }
       expect(response).to redirect_to(new_user_session_path)
     end
   end
-
-  let(:language) { create(:language) }
 
   describe "POST create" do
     describe "with valid params" do
@@ -21,6 +22,7 @@ describe LanguagesController, type: :controller do
           post :create, params: { language: attributes_for(:language) }
         }.to change(Language, :count).by(1)
       end
+
       it "calls Enforcer" do
         expect_any_instance_of(LocalizedTextEnforcer).to receive(:language_created)
         post :create, params: { language: attributes_for(:language) }
@@ -84,6 +86,7 @@ describe LanguagesController, type: :controller do
 
   describe "DELETE destroy" do
     before { language }
+
     it "destroys the requested language" do
       expect {
         delete :destroy, params: { id: language.to_param }

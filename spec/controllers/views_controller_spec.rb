@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe ViewsController, type: :controller do
   before { login }
+
   let!(:project) { create :project }
   let(:login) { stubbed_login_as_developer }
 
