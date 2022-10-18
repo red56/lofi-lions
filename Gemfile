@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.5.9"
 
-gem 'rails', '~> 5.0.7'
+gem 'rails', '~> 5.1.7'
 
 gem 'nokogiri',  '>= 1.8.2'
 

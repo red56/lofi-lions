@@ -10,20 +10,20 @@ Bundler.require(*Rails.groups)
 
 module LofiLions
   class Application < Rails::Application
-    # returns staging if you set
-    def pseudo_env
-      ENV["PSEUDO_PRODUCTION_ENV"]&.inquiry || Rails.env
-    end
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # returns staging if you set
+    def pseudo_env
+      ENV["PSEUDO_PRODUCTION_ENV"]&.inquiry || Rails.env
+    end
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.enforce_available_locales = true
-
-    # TODO: rails5.1 Can be removed
-    config.action_controller.raise_on_unfiltered_parameters = true
 
     config.generators do |g|
       g.helper nil
