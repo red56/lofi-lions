@@ -60,7 +60,7 @@ class LocalizedTextsController < ApplicationController
   end
 
   def localized_texts
-    @project_language.localized_texts.includes(:master_text).order("LOWER(master_texts.key)").references(:master_texts)
+    @project_language.localized_texts.includes(:master_text).order(Arel.sql("LOWER(master_texts.key)")).references(:master_texts)
   end
 
   def find_language

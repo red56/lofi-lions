@@ -4,7 +4,7 @@ class ProjectLanguage < ApplicationRecord
   belongs_to :project, inverse_of: :project_languages
   belongs_to :language, inverse_of: :project_languages
   has_many(:localized_texts,
-           lambda { joins(:master_text).order("LOWER(master_texts.key)") },
+           lambda { joins(:master_text).order(Arel.sql("LOWER(master_texts.key)")) },
            inverse_of: :project_language, dependent: :destroy,)
   has_and_belongs_to_many :users
 
