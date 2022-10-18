@@ -31,6 +31,7 @@ class ProjectLanguagesController < ApplicationController
 
   def next
     raise "missing params[:flow]" if params[:flow].blank?
+
     redirect_to next_localized_text_or_project_language_path(params[:key])
   end
 
@@ -40,13 +41,14 @@ class ProjectLanguagesController < ApplicationController
 
   def next_page_after_update
     return request.referer if request.referer
+
     project_language_path(@project_language)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def project_language_params
     params.require(:project_language).permit(
-        localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
+      localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
     )
   end
 

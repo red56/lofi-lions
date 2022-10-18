@@ -64,20 +64,19 @@ class LanguagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_language
-      @language = Language.find_by_code(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def language_params
-      params.require(:language).permit(
-          :name, :code,
-          :pluralizable_label_zero, :pluralizable_label_one, :pluralizable_label_two, :pluralizable_label_few,
-          :pluralizable_label_many, :pluralizable_label_other,
-          localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_language
+    @language = Language.find_by_code(params[:id])
+  end
 
-
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def language_params
+    params.require(:language).permit(
+      :name, :code,
+      :pluralizable_label_zero, :pluralizable_label_one, :pluralizable_label_two, :pluralizable_label_few,
+      :pluralizable_label_many, :pluralizable_label_other,
+      localized_texts_attributes: [:text, :zero, :one, :two, :few, :many, :other, :needs_review, :id]
+    )
+  end
 end

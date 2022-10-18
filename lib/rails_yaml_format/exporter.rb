@@ -21,7 +21,7 @@ module RailsYamlFormat
       top_level_hash.to_yaml
     end
 
-    def add_to_hash(hash, keys: , value: )
+    def add_to_hash(hash, keys:, value:)
       key = keys.shift
       if keys.empty?
         hash[key] = value

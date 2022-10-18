@@ -86,15 +86,15 @@ describe "Android resource file parser" do
   context "file with escaped characters" do
     let(:file_name) { "with_escaped_characters" }
     it "unescapes apostrophes" do
-      local = parsed.localizations.detect { |l| l.key == "apostrophe"}
+      local = parsed.localizations.detect { |l| l.key == "apostrophe" }
       expect(local.value).to eq("don't")
     end
     it "unescapes double quotes" do
-      local = parsed.localizations.detect { |l| l.key == "double"}
+      local = parsed.localizations.detect { |l| l.key == "double" }
       expect(local.value).to eq('"double"')
     end
     it "unescapes mixed escapes" do
-      local = parsed.localizations.detect { |l| l.key == "both"}
+      local = parsed.localizations.detect { |l| l.key == "both" }
       expect(local.value).to eq('"don\'t"')
     end
   end
@@ -105,5 +105,4 @@ describe "Android resource file parser" do
       parsed
     end
   end
-
 end

@@ -1,11 +1,10 @@
 require "rails_helper"
 
 describe Api::ProjectsController, type: :controller do
-
   describe "export" do
     let(:project) { create :project }
     let(:language) { create :language, code: "ja" }
-    let(:language_code) { language.code } #ensures that language is in db
+    let(:language_code) { language.code } # ensures that language is in db
     let!(:project_language) { create :project_language, project: project, language: language }
     shared_context "with a bunch of precreated stuff" do
       let!(:languages) { [create(:language, code: "es"), language] }
@@ -107,7 +106,6 @@ describe Api::ProjectsController, type: :controller do
       end
 
       describe "english texts" do
-
         let(:language_code) { "en" }
         it "uses fallbacks to produce the english version" do
           request
@@ -178,29 +176,32 @@ describe Api::ProjectsController, type: :controller do
         include_context "with a bunch of precreated stuff"
 
         let(:plural_keys) { %w(cow duck) }
-        let(:plural_master_texts) { plural_keys.map do |key|
-          MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true,
-                             project: project)
-        end
+        let(:plural_master_texts) {
+          plural_keys.map do |key|
+            MasterText.create!(key: key, one: key.capitalize, other: "#{key.capitalize}s", pluralizable: true,
+                               project: project)
+          end
         }
 
-        let(:french) { Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
-                                        pluralizable_label_one: "one", pluralizable_label_many: "many") }
+        let(:french) {
+          Language.create!(code: "fr", name: "French", pluralizable_label_zero: "zero",
+                           pluralizable_label_one: "one", pluralizable_label_many: "many")
+        }
         let(:french_project_language) { create(:project_language, language: french, project: project) }
         before do
           master_texts.concat(plural_master_texts)
           master_texts.each do |mt|
             case mt.pluralizable?
-              when true
-                LocalizedText.create!({
-                        master_text: mt,
-                        project_language: french_project_language,
-                        one: [mt.key, french.code, "one"].join(":"),
-                        zero: [mt.key, french.code, "zero"].join(":"),
-                        many: [mt.key, french.code, "many"].join(":")
-                    })
-              when false
-                LocalizedText.create!(master_text: mt, project_language: french_project_language, other: [mt.key, french.code].join(":"))
+            when true
+              LocalizedText.create!({
+                                      master_text: mt,
+                                      project_language: french_project_language,
+                                      one: [mt.key, french.code, "one"].join(":"),
+                                      zero: [mt.key, french.code, "zero"].join(":"),
+                                      many: [mt.key, french.code, "many"].join(":")
+                                    })
+            when false
+              LocalizedText.create!(master_text: mt, project_language: french_project_language, other: [mt.key, french.code].join(":"))
             end
           end
         end
@@ -240,10 +241,10 @@ describe Api::ProjectsController, type: :controller do
           end
           @array_master_texts.each_with_index do |mt, n|
             LocalizedText.create!({
-                    master_text: mt,
-                    project_language: project_language,
-                    other: [mt.key, language.code, "#{n}"].join(":")
-                })
+                                    master_text: mt,
+                                    project_language: project_language,
+                                    other: [mt.key, language.code, "#{n}"].join(":")
+                                  })
           end
         end
 
@@ -287,10 +288,10 @@ describe Api::ProjectsController, type: :controller do
           key = "escape[0]"
           mt = MasterText.create!(key: key, other: "#{key}", pluralizable: false, project: project)
           LocalizedText.create!({
-                  master_text: mt,
-                  project_language: project_language,
-                  other: "escape'd \""
-              })
+                                  master_text: mt,
+                                  project_language: project_language,
+                                  other: "escape'd \""
+                                })
           get :export, params: { platform: platform, code: language.code, id: project.slug }
           doc = Nokogiri::XML(response.body)
           array = doc.css('string-array[name="escape"]')
@@ -363,7 +364,6 @@ describe Api::ProjectsController, type: :controller do
         sorted = keys.dup.sort
         expect(keys).to eq(sorted)
       end
-
     end
   end
 end

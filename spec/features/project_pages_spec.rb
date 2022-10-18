@@ -65,10 +65,8 @@ describe "Project Pages", type: :feature do
       let(:do_logging_in) { stubbed_login_as_user }
 
       it "won't work" do
-        expect {visit edit_project_path(project)}.to raise_error /Not Found/
+        expect { visit edit_project_path(project) }.to raise_error /Not Found/
       end
     end
   end
-
-
 end

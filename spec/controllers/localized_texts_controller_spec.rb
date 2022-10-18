@@ -1,11 +1,10 @@
 require "rails_helper"
 
 describe LocalizedTextsController, type: :controller do
-
   let!(:project_language) { create :project_language, project: project }
-  let(:localized_text) {create(:localized_text, project_language: project_language, master_text: master_text)}
-  let(:master_text) {create(:master_text, project: project)}
-  let(:project) {create(:project)}
+  let(:localized_text) { create(:localized_text, project_language: project_language, master_text: master_text) }
+  let(:master_text) { create(:master_text, project: project) }
+  let(:project) { create(:project) }
 
   before { login }
   let(:login) { stubbed_login_as_user }
@@ -14,6 +13,6 @@ describe LocalizedTextsController, type: :controller do
     allow(localized_text).to receive(:update)
     expect(LocalizedText).to receive(:find).and_return(localized_text)
     expect(project_language).to receive(:recalculate_counts!)
-    put :update, params: { id: localized_text.id, localized_text: {other: "text"}, original_url: "somewhere" }
+    put :update, params: { id: localized_text.id, localized_text: { other: "text" }, original_url: "somewhere" }
   end
 end

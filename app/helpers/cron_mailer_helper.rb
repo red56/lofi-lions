@@ -4,7 +4,7 @@ module CronMailerHelper
     (%(<span style="color: #{percentage_colour(percent)}">) << needing.to_s.ljust(4, " ") << " (" << percent.to_s << "%)" << %(</span>)).html_safe
   end
 
-    # https://github.com/mbostock/d3/wiki/Ordinal-Scales
+  # https://github.com/mbostock/d3/wiki/Ordinal-Scales
   def percentage_colour(used_percent)
     if used_percent < 10
       "#31a354"
@@ -20,5 +20,4 @@ module CronMailerHelper
       "#d62728"
     end
   end
-
 end

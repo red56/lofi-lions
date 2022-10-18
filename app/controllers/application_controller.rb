@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   protected
+
   def set_languages_section
     @section = "languages"
   end
@@ -29,6 +30,4 @@ class ApplicationController < ActionController::Base
     authenticate_user!
     raise ActionController::RoutingError.new("Not Found") unless current_user.is_developer?
   end
-
-
 end

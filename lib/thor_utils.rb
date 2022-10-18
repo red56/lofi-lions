@@ -1,5 +1,6 @@
 module ThorUtils
   protected
+
   def io_from_filename(filename, &io_block)
     if filename == "-"
       if io_block
@@ -19,5 +20,4 @@ module ThorUtils
   def self.exit_on_failure?
     true
   end
-
 end

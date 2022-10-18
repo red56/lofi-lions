@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   devise_for :users
 
   resources :languages
@@ -34,7 +33,7 @@ Rails.application.routes.draw do
 
   resources :views, except: [:index, :new]
 
-  namespace :api, defaults: {format: "json"} do
+  namespace :api, defaults: { format: "json" } do
     resources :projects, only: [] do
       member do
         post "import/(:platform)", action: "import"

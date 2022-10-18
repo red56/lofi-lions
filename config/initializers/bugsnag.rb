@@ -5,5 +5,3 @@ if ENV["BUGSNAG_API_KEY"].present?
     config.app_version = VERSION
   end
 end
-
-

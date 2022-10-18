@@ -16,8 +16,8 @@ class LocalizedViewsController < ApplicationController
   end
 
   protected
+
   def find_project_language
     @project_language = ProjectLanguage.find(params[:project_language_id])
   end
-
 end

@@ -1,9 +1,9 @@
 namespace :dev do
-
   task dev_users: :environment do
     raise Exception.new("Should only do in development!") unless (Rails.env.development? || Rails.env.staging?)
+
     ensure_users "password"
-    User.all.each {|u| u.update_attributes(password: "password")}
+    User.all.each { |u| u.update_attributes(password: "password") }
   end
 
   def ensure_users password
@@ -12,7 +12,7 @@ namespace :dev do
     puts "ensured admin@example.com and test@example.com with password '#{password}'"
   end
 
-  def ensure_user email, password="password", options={}
+  def ensure_user email, password = "password", options = {}
     admin = options[:is_administrator] || false
     u = User.find_by_email(email)
     if u
@@ -25,8 +25,7 @@ namespace :dev do
     u
   end
 
-  def ensure_admin_user email, password="password"
-    ensure_user email, password=password, is_administrator: true
+  def ensure_admin_user email, password = "password"
+    ensure_user email, password = password, is_administrator: true
   end
-
 end

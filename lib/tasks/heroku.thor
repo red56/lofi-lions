@@ -11,12 +11,12 @@ class Heroku
     end
 
     def app_revision_env_var
-     "COMMIT_HASH"
+      "COMMIT_HASH"
     end
 
     def after_sync_down(instance)
-     super
-     instance.puts_and_system "rake dev:dev_data"
+      super
+      instance.puts_and_system "rake dev:dev_data"
     end
     #
     # def after_sync_to(instance, target)

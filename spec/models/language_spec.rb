@@ -32,13 +32,13 @@ describe Language, type: :model do
     context "with some specific labels" do
       let(:language) { build(:language, :type_0_chinese) }
       it "should be a hash" do
-        expect(language.plural_forms_with_fields).to eq({other: "everything"})
+        expect(language.plural_forms_with_fields).to eq({ other: "everything" })
       end
     end
     context "with some specific labels" do
       let(:language) { build(:language, :type_1_english) }
       it "should be a hash" do
-        expect(language.plural_forms_with_fields).to eq({one: "is 1", other: "everything else"})
+        expect(language.plural_forms_with_fields).to eq({ one: "is 1", other: "everything else" })
       end
     end
   end

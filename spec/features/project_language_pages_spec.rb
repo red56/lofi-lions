@@ -28,10 +28,9 @@ describe "Project Language Pages", type: :feature do
   end
 
   describe "index" do
-    let(:project_languages) {like_a_scope([project_language])}
-    let(:project_language) {build_stubbed(:project_language, project: project)}
-    let(:project) {build_stubbed(:project)}
-
+    let(:project_languages) { like_a_scope([project_language]) }
+    let(:project_language) { build_stubbed(:project_language, project: project) }
+    let(:project) { build_stubbed(:project) }
 
     context "as an admin" do
       let(:login) { stubbed_login_as_admin_user }
@@ -46,7 +45,6 @@ describe "Project Language Pages", type: :feature do
           expect(page).to have_link_to(project_language_path(project_language))
         end
       end
-
     end
 
     context "as a regular user" do
@@ -64,14 +62,15 @@ describe "Project Language Pages", type: :feature do
         end
       end
     end
-
   end
 
   describe "translations" do
     let(:ok_localized_text) { create(:localized_text, project_language: project_language, text: "zongy-bo!") }
     let(:empty_localized_text) { create(:localized_text, project_language: project_language, needs_entry: true) }
-    let(:needs_review_localized_text) { create(:localized_text, project_language: project_language,
-        other: "something new", needs_review: true) }
+    let(:needs_review_localized_text) {
+      create(:localized_text, project_language: project_language,
+                              other: "something new", needs_review: true)
+    }
     let(:localized_texts) { [ok_localized_text, empty_localized_text, needs_review_localized_text] }
 
     before { project_language }
@@ -212,9 +211,7 @@ describe "Project Language Pages", type: :feature do
   end
 
   describe "the overview tab" do
-
     context "with outstanding tasks" do
-
       let(:project_language) { create(:project_language, need_entry_count: 5, need_review_count: 6) }
 
       it "has entry count" do
@@ -233,7 +230,6 @@ describe "Project Language Pages", type: :feature do
     end
 
     context "without outstanding tasks" do
-
       let(:project_language) { create(:project_language, need_entry_count: 0, need_review_count: 0) }
 
       it "has no outstanding" do

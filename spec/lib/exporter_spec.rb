@@ -1,13 +1,11 @@
 require "rails_helper"
 
 shared_examples_for "a BaseExporter" do
-
   specify "should find correct class" do
     klass = BaseExporter.class_for(platform)
     expect(klass).not_to be_nil
     expect(klass).not_to eq BaseExporter
     expect(klass).to be < BaseExporter
-
   end
   describe "instance" do
     subject { BaseExporter.class_for(platform).new(language, project) }
@@ -25,17 +23,19 @@ shared_examples_for "a BaseExporter" do
       expect(subject.body).to be_a String
     end
   end
-
 end
-
 
 describe "Exporters" do
   let(:project) { build_stubbed(:project) }
   let(:language) { build_stubbed(:language, code: "la") }
   let(:project_language) { build_stubbed(:project_language, project: project, language: language) }
   let(:master_texts) { build_stubbed_list(:master_text, 3, project: project) }
-  let(:localized_texts) { master_texts.map { |mt| build_stubbed(:stubbed_localized_text, master_text: mt,
-    project_language: project_language) } }
+  let(:localized_texts) {
+    master_texts.map { |mt|
+      build_stubbed(:stubbed_localized_text, master_text: mt,
+                                             project_language: project_language)
+    }
+  }
   before {
     allow(project_language).to receive(:localized_texts_with_fallback).and_return(localized_texts)
     allow(ProjectLanguage).to receive(:where).with(project_id: project.id, language_id: language.id).and_return([project_language])
@@ -74,7 +74,6 @@ describe "Exporters" do
         expect(parsed).to be_a Hash
         expect(parsed).to have_key(language.code)
       end
-
 
       context "with a different language" do
         let(:language) { build_stubbed(:language, code: "fr") }
@@ -123,15 +122,18 @@ describe "Exporters" do
       let(:master_text2) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/user/password") }
       let(:master_text3) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/project/name") }
       let(:master_texts) { [master_text1, master_text2, master_text3] }
-      let(:localized_texts) { master_texts.map { |mt| build_stubbed(:stubbed_localized_text, master_text: mt,
-        project_language: project_language) } }
+      let(:localized_texts) {
+        master_texts.map { |mt|
+          build_stubbed(:stubbed_localized_text, master_text: mt,
+                                                 project_language: project_language)
+        }
+      }
       subject { YAML.load(body)[language.code] }
       it "produces actual nested output" do
         expect(subject.keys).to contain_exactly("activerecord")
         expect(subject["activerecord"]["attributes"].keys).to contain_exactly("user", "project")
         expect(subject["activerecord"]["attributes"]["user"].keys).to contain_exactly("email", "password")
       end
-
     end
   end
 end

@@ -1,6 +1,6 @@
 class CreateProjectLanguages < ActiveRecord::Migration
   class LanguageUser < ApplicationRecord
-    self.table_name= :languages_users
+    self.table_name = :languages_users
 
     belongs_to :user
   end
@@ -29,8 +29,8 @@ class CreateProjectLanguages < ActiveRecord::Migration
         LanguageUser.where(language_id: language.id).all.each do |luser|
           plang.users << luser.user
         end
-        LocalizedText.joins(:master_text).where(language_id: language.id, master_texts: {project_id: project.id}).
-            update_all(project_language_id: plang.id)
+        LocalizedText.joins(:master_text).where(language_id: language.id, master_texts: { project_id: project.id })
+                     .update_all(project_language_id: plang.id)
         plang.recalculate_counts!
       end
     end

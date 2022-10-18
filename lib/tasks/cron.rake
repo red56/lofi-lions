@@ -4,7 +4,7 @@ namespace :cron do
   end
 
   WEEKLY_TASKS = [
-      "cron:translation_status_email",
+    "cron:translation_status_email",
   ]
   task if_monday: [:environment] do
     if Date.today.monday?

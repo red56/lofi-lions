@@ -19,6 +19,7 @@ module Android
       def parse_key
         m = ARRAY_KEY.match(@text.key)
         raise "Not an array key '#{@text.key}'" if m.nil?
+
         [m[1], m[2].to_i(10)]
       end
 
@@ -90,7 +91,6 @@ module Android
         end
       end
     end
-
 
     def array(xml, text)
       ak = ArrayText.new(text)

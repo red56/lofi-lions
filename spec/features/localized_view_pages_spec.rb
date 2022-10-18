@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Localized View pages", type: :feature do
-
   before { login }
   let(:login) { stubbed_login_as_developer }
   let!(:project) { create :project }
@@ -27,9 +26,10 @@ describe "Localized View pages", type: :feature do
       language.reload
     }
     let(:view) { create :view, project: project }
-    let(:master_texts) { create_list(:master_text, 3, project: project).tap do |mts|
-      mts.each { |mt| create(:localized_text, master_text: mt, project_language: project_language) }
-    end
+    let(:master_texts) {
+      create_list(:master_text, 3, project: project).tap do |mts|
+        mts.each { |mt| create(:localized_text, master_text: mt, project_language: project_language) }
+      end
     }
 
     it "project language show links to localized views" do
@@ -48,6 +48,5 @@ describe "Localized View pages", type: :feature do
       visit project_language_view_path(project_language, view)
       expect(page).to have_content(master_text_in_view.key)
     end
-
   end
 end

@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "View (non-localized) pages", type: :feature do
-
   before { login }
   let(:login) { stubbed_login_as_developer }
   let!(:project) { create :project }
@@ -26,14 +25,13 @@ describe "View (non-localized) pages", type: :feature do
     expect(View.last.reload.master_texts.to_a).to eq([master_texts[3], master_texts[4], master_texts[2]])
   end
 
-  let(:view) {create :view, project: project}
+  let(:view) { create :view, project: project }
   it "shows ok" do
     visit view_path(view)
   end
   it "edits ok" do
     visit edit_view_path(view)
   end
-
 
   context "with multiple projects" do
     let!(:other_project) { create(:project) }

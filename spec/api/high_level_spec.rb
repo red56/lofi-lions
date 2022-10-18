@@ -35,5 +35,4 @@ describe "High-level API spec", type: :request do
       expect(response.body).to include("voila")
     end
   end
-
 end

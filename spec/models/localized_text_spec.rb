@@ -1,9 +1,10 @@
 require "rails_helper"
 
 describe LocalizedText, type: :model do
-  let(:localized_text) { build(:localized_text, text: "something").tap do |localized_text|
-    allow(localized_text).to receive_messages(pluralizable: pluralizable, language: language)
-  end
+  let(:localized_text) {
+    build(:localized_text, text: "something").tap do |localized_text|
+      allow(localized_text).to receive_messages(pluralizable: pluralizable, language: language)
+    end
   }
   let(:language) { build(:language) }
   let(:pluralizable) { false }
@@ -47,7 +48,7 @@ describe LocalizedText, type: :model do
   describe "#markdown?" do
     let(:localized_text) { build(:localized_text, text: "something", master_text: master_text) }
     let(:master_text) { build(:master_text, format: format) }
-    subject {localized_text}
+    subject { localized_text }
     context "markdown" do
       let(:format) { MasterText::MARKDOWN_FORMAT }
       it { is_expected.to be_markdown }
@@ -57,7 +58,6 @@ describe LocalizedText, type: :model do
       it { is_expected.not_to be_markdown }
     end
   end
-
 
   describe "calculate needs_entry" do
     it "is called and set on validate" do
@@ -81,7 +81,7 @@ describe LocalizedText, type: :model do
     context "pluralizable" do
       let(:pluralizable) { true }
       before do
-        #fill everything
+        # fill everything
         localized_text.update_attributes(one: "one", two: "two", few: "few", many: "many", other: "other")
       end
       context "with language of Plural rule #0" do
@@ -115,9 +115,10 @@ describe LocalizedText, type: :model do
   end
 
   describe "adding to the translated_from field" do
-    let(:localized_text) { create(:to_review_localized_text, master_text: master_text).tap do |localized_text|
-      localized_text.translated_from = nil
-    end
+    let(:localized_text) {
+      create(:to_review_localized_text, master_text: master_text).tap do |localized_text|
+        localized_text.translated_from = nil
+      end
     }
     let(:master_text) { create(:master_text, text: "some text") }
 
@@ -146,7 +147,7 @@ describe LocalizedText, type: :model do
       expect(localized_text.translated_from).to be_nil
     end
     context "when pluralizable" do
-      let(:master_text) {create(:master_text, pluralizable: true)}
+      let(:master_text) { create(:master_text, pluralizable: true) }
       it "saves once localized text reviewed" do
         expect {
           localized_text.update_attributes!(needs_review: false)
@@ -156,30 +157,30 @@ describe LocalizedText, type: :model do
   end
 
   describe "#google_translate_url" do
-    let(:localized_text) { create(:localized_text, project_language: project_language, master_text: master_text)}
-    let(:project_language) { create(:project_language, project: project, language: language)}
-    let(:master_text) { create(:master_text, project: project, other: english_text)}
-    let(:project) { create(:project)}
-    let(:language) { create(:language, code: language_code)}
+    let(:localized_text) { create(:localized_text, project_language: project_language, master_text: master_text) }
+    let(:project_language) { create(:project_language, project: project, language: language) }
+    let(:master_text) { create(:master_text, project: project, other: english_text) }
+    let(:project) { create(:project) }
+    let(:language) { create(:language, code: language_code) }
 
     subject { localized_text.google_translate_url }
     context "with single word" do
-      let(:english_text) {"text"}
-      let(:language_code) {"fr"}
+      let(:english_text) { "text" }
+      let(:language_code) { "fr" }
       it "makes url" do
         expect(subject).to eq("https://translate.google.com/#en/fr/text")
       end
     end
     context "with two words in other language" do
-      let(:english_text) {"Some text"}
-      let(:language_code) {"de"}
+      let(:english_text) { "Some text" }
+      let(:language_code) { "de" }
       it "makes url" do
         expect(subject).to eq("https://translate.google.com/#en/de/Some%20text")
       end
     end
     context "with chinese" do
-      let(:english_text) {"Some text"}
-      let(:language_code) {"zh"}
+      let(:english_text) { "Some text" }
+      let(:language_code) { "zh" }
       it "adjust code" do
         expect(subject).to eq("https://translate.google.com/#en/zh-CN/Some%20text")
       end
@@ -187,22 +188,22 @@ describe LocalizedText, type: :model do
   end
 
   describe "#google_translated!" do
-    let(:localized_text) {create(:localized_text)}
-    subject {localized_text.google_translated!("new stuff")}
+    let(:localized_text) { create(:localized_text) }
+    subject { localized_text.google_translated!("new stuff") }
     it "updates value" do
-      expect {subject}.to change {localized_text.other}.to "new stuff"
+      expect { subject }.to change { localized_text.other }.to "new stuff"
     end
     it "sets needs review" do
-      expect {subject}.to change {localized_text.needs_review?}.to true
+      expect { subject }.to change { localized_text.needs_review? }.to true
     end
     it "adds comment" do
-      expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+      expect { subject }.to change { localized_text.comment }.to include("Machine translated with Google ")
     end
 
     context "if already comment" do
-      let(:localized_text) {create(:localized_text, comment: "Important point...")}
+      let(:localized_text) { create(:localized_text, comment: "Important point...") }
       it "adds comment" do
-        expect {subject}.to change {localized_text.comment}.to include("Machine translated with Google ")
+        expect { subject }.to change { localized_text.comment }.to include("Machine translated with Google ")
         expect(localized_text.comment).to start_with("Important point...\n")
       end
     end

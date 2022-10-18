@@ -1,8 +1,6 @@
 require "rails_helper"
 
-
 describe UsersController, type: :controller do
-
   before { login }
   let(:login) { stubbed_login_as_admin_user }
 
@@ -14,15 +12,12 @@ describe UsersController, type: :controller do
     end
   end
 
-
   context "when not logged in" do
     let(:login) { stubbed_login_as_user }
     it "shows 404" do
-
       get :index
       fail("should have raised RoutingError") unless response.status == 404
     rescue ActionController::RoutingError
-
     end
   end
 
@@ -32,5 +27,4 @@ describe UsersController, type: :controller do
       expect(response.status).to eq(200)
     end
   end
-
 end

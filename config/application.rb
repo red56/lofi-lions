@@ -8,7 +8,6 @@ Bundler.require(*Rails.groups)
 
 module LofiLions
   class Application < Rails::Application
-
     # returns staging if you set
     def pseudo_env
       ENV["PSEUDO_PRODUCTION_ENV"]&.inquiry || Rails.env

@@ -20,6 +20,7 @@ class ProjectsController < ApplicationController
   end
 
   protected
+
   def find_project
     @project = Project.find(params[:id])
   end
@@ -48,6 +49,7 @@ class ProjectsController < ApplicationController
   def get_additional_language(language_id)
     return nil unless language_id.present? && @language = Language.where(id: language_id).first
     return nil if @project.languages.include?(@language)
+
     @language
   end
 end

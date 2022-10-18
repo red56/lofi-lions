@@ -6,7 +6,7 @@ RSpec.describe ProjectLanguage, type: :model do
 
   describe "recalculate_counts!" do
     let(:project_language) { create :project_language, project: project, language: language }
-    let(:master_text_with_5words) { create(:master_text, project: project, text: "Deserunt aliquid et voluptatem ut." )}
+    let(:master_text_with_5words) { create(:master_text, project: project, text: "Deserunt aliquid et voluptatem ut.") }
     let(:master_text_with_7words) { create(:master_text, project: project, text: "Maiores magnam nemo nulla et ea aperiam") }
 
     it "has correct setup" do
@@ -14,43 +14,47 @@ RSpec.describe ProjectLanguage, type: :model do
       expect(master_text_with_7words.word_count).to eq(7)
     end
     context "with none complete" do
-      let!(:localized_texts) { [master_text_with_5words, master_text_with_7words].map { |mt|
-        create(:localized_text, master_text: mt, project_language: project_language, text: "")
-      } }
+      let!(:localized_texts) {
+        [master_text_with_5words, master_text_with_7words].map { |mt|
+          create(:localized_text, master_text: mt, project_language: project_language, text: "")
+        }
+      }
       it "can recalculate" do
         expect { project_language.recalculate_counts! }.to change {
           [project_language.need_review_count, project_language.need_entry_count,
-            project_language.need_review_word_count, project_language.need_entry_word_count]
+           project_language.need_review_word_count, project_language.need_entry_word_count]
         }.to [0, 2, 0, 12]
       end
     end
     context "with one needing review" do
-      let!(:localized_texts) { [
-        create(:localized_text, master_text: master_text_with_5words, project_language: project_language, text: "some",
-          needs_review: true),
-        create(:localized_text, master_text: master_text_with_7words, project_language: project_language, text: "")
-      ] }
+      let!(:localized_texts) {
+        [
+          create(:localized_text, master_text: master_text_with_5words, project_language: project_language, text: "some",
+                                  needs_review: true),
+          create(:localized_text, master_text: master_text_with_7words, project_language: project_language, text: "")
+        ]
+      }
       it "can recalculate" do
         expect { project_language.recalculate_counts! }.to change {
           [project_language.need_review_count, project_language.need_entry_count,
-            project_language.need_review_word_count, project_language.need_entry_word_count]
-
+           project_language.need_review_word_count, project_language.need_entry_word_count]
         }.to [1, 1, 5, 7]
       end
     end
     context "with all done" do
-      let!(:localized_texts) { [
-        create(:localized_text, master_text: master_text_with_5words, project_language: project_language, text: "some"),
-        create(:localized_text, master_text: master_text_with_7words, project_language: project_language, text: "done")
-      ] }
+      let!(:localized_texts) {
+        [
+          create(:localized_text, master_text: master_text_with_5words, project_language: project_language, text: "some"),
+          create(:localized_text, master_text: master_text_with_7words, project_language: project_language, text: "done")
+        ]
+      }
       it "can recalculate" do
         expect { project_language.recalculate_counts! }.to change {
           [project_language.need_review_count, project_language.need_entry_count,
-            project_language.need_review_word_count, project_language.need_entry_word_count]
+           project_language.need_review_word_count, project_language.need_entry_word_count]
         }.to [0, 0, 0, 0]
       end
     end
-
   end
 
   describe "#next_localized_text" do
@@ -89,16 +93,19 @@ RSpec.describe ProjectLanguage, type: :model do
       end
 
       context "if baker just requires review" do
-        let(:baker) { create(:localized_text, project_language: project_language, master_text: mt_baker,
-          text: "something", needs_entry: false, needs_review: true) }
+        let(:baker) {
+          create(:localized_text, project_language: project_language, master_text: mt_baker,
+                                  text: "something", needs_entry: false, needs_review: true)
+        }
         it "if i give it able's key it returns baker" do
           expect(project_language.next_localized_text(able.key)).to eq(baker)
         end
-
       end
       context "if baker is all translated" do
-        let(:baker) { create(:localized_text, project_language: project_language, master_text: mt_baker,
-          text: "something", needs_entry: false, needs_review: false) }
+        let(:baker) {
+          create(:localized_text, project_language: project_language, master_text: mt_baker,
+                                  text: "something", needs_entry: false, needs_review: false)
+        }
         it "if i give it able's key it returns charlie" do
           expect(project_language.next_localized_text(able.key)).to eq(charlie)
         end
@@ -197,8 +204,8 @@ RSpec.describe ProjectLanguage, type: :model do
         expect(project_language).to receive(:recalculate_counts!).and_call_original
         expect_any_instance_of(LocalizedText).to receive(:google_translated!).and_call_original
         expect(EasyTranslate).to receive(:translate)
-                                   .with(["some mt1 words"], from: "en", to: "de", format: "text")
-                                   .and_return(["einige mt1 Wörter"])
+          .with(["some mt1 words"], from: "en", to: "de", format: "text")
+          .and_return(["einige mt1 Wörter"])
         expect {
           subject
         }.to change { missing_entry.reload.other }.from("").to("einige mt1 Wörter")
@@ -220,8 +227,8 @@ RSpec.describe ProjectLanguage, type: :model do
       let!(:missing_entry3) { create(:localized_text, master_text: mt3, other: "", project_language: project_language) }
       it "will send off one to google" do
         expect(EasyTranslate).to receive(:translate)
-                                   .with(["some mt1 words", "some mt3 sentences"], from: "en", to: "de", format: "text")
-                                   .and_return(["einige mt1 Wörter", "einige mt3 Sätze"])
+          .with(["some mt1 words", "some mt3 sentences"], from: "en", to: "de", format: "text")
+          .and_return(["einige mt1 Wörter", "einige mt3 Sätze"])
         expect {
           subject
         }.to change { missing_entry3.reload.other }.from("").to("einige mt3 Sätze")

@@ -3,10 +3,9 @@ class LocalizedText < ApplicationRecord
   belongs_to :project_language, inverse_of: :localized_texts, optional: false
   has_many :views, through: :master_text
 
-  scope :needing_entry,  -> {where(needs_entry: true)}
-  scope :needing_review,  -> {where(needs_entry: false, needs_review: true)}
-  scope :needs_review_or_entry,  -> {where("needs_entry or needs_review")}
-
+  scope :needing_entry, -> { where(needs_entry: true) }
+  scope :needing_review, -> { where(needs_entry: false, needs_review: true) }
+  scope :needs_review_or_entry, -> { where("needs_entry or needs_review") }
 
   validate do
     self.needs_entry = calculate_needs_entry
@@ -25,17 +24,20 @@ class LocalizedText < ApplicationRecord
 
   def text
     raise Exception.new("Don't use text when pluralizable") if self.pluralizable
+
     self.other
   end
 
   # Provides a value or master text fallback for the exporters
   def other_export
     return other unless other.blank?
+
     original_other
   end
 
   def calculate_needs_entry
     return self.text.blank? unless pluralizable
+
     self.language.plural_forms_with_fields.keys.any? { |attr_name| self[attr_name].blank? }
   end
 

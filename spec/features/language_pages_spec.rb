@@ -82,6 +82,4 @@ describe "Language Pages", type: :feature do
       expect(page).to have_css("form.language .errors")
     end
   end
-
-
 end

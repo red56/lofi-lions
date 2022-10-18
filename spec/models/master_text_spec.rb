@@ -63,7 +63,6 @@ describe MasterText, type: :model do
         master_text.text
       }.to raise_error(/when pluralizable/)
     end
-
   end
 
   describe "text_changed?" do
@@ -102,7 +101,7 @@ describe MasterText, type: :model do
     end
   end
   context "#key" do
-    let(:existing) {create :master_text, project: create(:project)}
+    let(:existing) { create :master_text, project: create(:project) }
     it "must be unique" do
       expect(build(:master_text, key: existing.key, project: existing.project)).not_to be_valid
     end
@@ -113,7 +112,7 @@ describe MasterText, type: :model do
 
   describe "#markdown?" do
     let(:master_text) { build(:master_text, format: format) }
-    subject {master_text}
+    subject { master_text }
     context "markdown" do
       let(:format) { MasterText::MARKDOWN_FORMAT }
       it { is_expected.to be_markdown }
@@ -140,10 +139,10 @@ describe MasterText, type: :model do
       expect(master_text.send(:calculate_word_count)).to eq(7)
     end
     it "counts some words in paragraphs or weird spacing" do
-      text = <<-TEXT
-      Oh, so there you are Mr Jones.
-We have been expecting you
-\t\tFor some time!
+      text = <<~TEXT
+              Oh, so there you are Mr Jones.
+        We have been expecting you
+        \t\tFor some time!
       TEXT
       master_text = build(:master_text, text: text)
       expect(master_text.send(:calculate_word_count)).to eq(15)
@@ -166,7 +165,7 @@ We have been expecting you
     end
     it "is stored on save" do
       master_text = create(:master_text, text: "many")
-      expect { master_text.update(text: "many dogs are lovely.") }.to change {master_text.reload[:word_count]}.from(1).to(4)
+      expect { master_text.update(text: "many dogs are lovely.") }.to change { master_text.reload[:word_count] }.from(1).to(4)
     end
   end
 end

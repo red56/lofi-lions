@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Login pages", type: :feature do
-
   context "when logs in" do
     before do
       visit new_user_session_path

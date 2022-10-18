@@ -22,7 +22,7 @@ describe "Yaml file parser" do
   end
 
   it "supports close" do
-    expect {subject.close}.not_to raise_exception
+    expect { subject.close }.not_to raise_exception
   end
 
   it "supports being given an Uploaded File" do

@@ -1,13 +1,12 @@
 class LocalizedTextEnforcer
-
-  #called after a master text is created. Assume no localized texts are created.
+  # called after a master text is created. Assume no localized texts are created.
   def master_text_created(master_text)
     master_text.project.project_languages.all.each do |project_language|
       master_text.localized_texts.create!(project_language: project_language)
     end
   end
 
-  #used when a master text is changed. Assume localized texts are all created.
+  # used when a master text is changed. Assume localized texts are all created.
   def master_text_changed(master_text)
     master_text.localized_texts.where(needs_entry: false).update_all(needs_review: true)
   end
@@ -88,7 +87,8 @@ class LocalizedTextEnforcer
 
     def save
       return nil unless @project_language.new_record?
-      if result=@project_language.save
+
+      if result = @project_language.save
         LocalizedTextEnforcer.new.project_language_created(@project_language)
       end
       result
@@ -102,7 +102,8 @@ class LocalizedTextEnforcer
 
     def save
       return nil unless @language.new_record?
-      if result=@language.save
+
+      if result = @language.save
         LocalizedTextEnforcer.new.language_created(@language)
       end
       result

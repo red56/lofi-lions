@@ -53,6 +53,7 @@ class LocalizedTextsController < ApplicationController
 
   def next_path_after_update
     return params[:original_url] if params[:original_url]
+
     next_localized_text_or_project_language_path(@localized_text.key)
   end
 

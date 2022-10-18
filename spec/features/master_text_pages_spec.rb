@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Master Text Pages", type: :feature do
-
   before { login }
   let(:login) { stubbed_login_as_user }
   let!(:project) { create :project }
@@ -44,9 +43,9 @@ describe "Master Text Pages", type: :feature do
 
   describe "index - unmocked" do
     context "with multiple projects" do
-      let!(:other_project) {create(:project)}
-      let!(:master_text) {create :master_text, project: project, key: "my-project-master-text-key"}
-      let!(:other_projects_master_text) {create :master_text, project: other_project, key: "other-project-master-text-key"}
+      let!(:other_project) { create(:project) }
+      let!(:master_text) { create :master_text, project: project, key: "my-project-master-text-key" }
+      let!(:other_projects_master_text) { create :master_text, project: other_project, key: "other-project-master-text-key" }
 
       it "doesn't show other project's master texts" do
         visit project_master_texts_path(project)
@@ -83,7 +82,7 @@ describe "Master Text Pages", type: :feature do
       expect(page).to have_css("form.master_text .errors")
     end
     context "with a language..." do
-      let!(:project_language) {create(:project_language, project: project, need_entry_count: 0)}
+      let!(:project_language) { create(:project_language, project: project, need_entry_count: 0) }
       it "updates project language need_entry_count" do
         expect {
           expect(@user).to receive_messages(is_developer?: true)
@@ -92,7 +91,6 @@ describe "Master Text Pages", type: :feature do
         }.to change { project_language.reload.need_entry_count }.from(0).to(1)
       end
     end
-
   end
   describe "edit" do
     let(:master_text) { create(:master_text, project: project) }
@@ -118,9 +116,9 @@ describe "Master Text Pages", type: :feature do
       click_on "Save"
       expect(page).not_to have_css("form.master_text")
     end
-    describe  "edit with views" do
+    describe "edit with views" do
       let!(:view) { create(:view, project: project, name: "Me") }
-      let(:master_text) {create(:master_text, project: project) }
+      let(:master_text) { create(:master_text, project: project) }
       let!(:other_project) { create(:project) }
       let!(:other_projects_view) { create(:view, project: other_project, name: "Ella") }
 
@@ -140,7 +138,6 @@ describe "Master Text Pages", type: :feature do
         expect(page).to have_css("form.master_text")
         expect(page).to have_content(view.name)
         expect(page).to_not have_content(other_projects_view.name)
-
       end
     end
     it "can change pluralizable" do
@@ -152,7 +149,6 @@ describe "Master Text Pages", type: :feature do
         click_on "Save"
       }.to change { master_text.reload.pluralizable }
       expect(page).not_to have_css("form.master_text")
-
     end
 
     context "when pluralizable" do
@@ -194,9 +190,11 @@ describe "Master Text Pages", type: :feature do
     end
 
     context "with a language..." do
-      let!(:project_language) {create(:project_language, project: project, need_review_count: 0)}
-      let!(:localized_text) {create(:localized_text, project_language: project_language, master_text: master_text,
-          other: "some original translation")}
+      let!(:project_language) { create(:project_language, project: project, need_review_count: 0) }
+      let!(:localized_text) {
+        create(:localized_text, project_language: project_language, master_text: master_text,
+                                other: "some original translation")
+      }
       it "updates project language review_count" do
         expect {
           visit edit_master_text_path(master_text)
@@ -220,5 +218,4 @@ describe "Master Text Pages", type: :feature do
       all(:link, "Edit").first.click
     end
   end
-
 end

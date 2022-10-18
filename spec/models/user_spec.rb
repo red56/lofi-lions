@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe User, type: :model do
-
   describe "destroy" do
     let!(:user) { create :user }
     it "works" do
@@ -9,7 +8,7 @@ describe User, type: :model do
     end
 
     context "with a project language" do
-      let!(:project_language) { create(:project_language)}
+      let!(:project_language) { create(:project_language) }
       before { user.project_languages << project_language }
       it "works" do
         expect { user.destroy }.to change { User.count }.by(-1)

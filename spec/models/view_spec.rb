@@ -6,7 +6,7 @@ describe View, type: :model do
 
   def add_reversed
     master_texts.each_with_index do |master_text, i|
-      view.key_placements.create!(master_text_id: master_text.id, position: 3-i)
+      view.key_placements.create!(master_text_id: master_text.id, position: 3 - i)
     end
   end
 
@@ -17,7 +17,7 @@ describe View, type: :model do
     it "works full" do
       add_reversed
       expect(view.keys).to eq([master_texts[2].key, master_texts[1].key,
-                  master_texts[0].key].join("\n"))
+                               master_texts[0].key].join("\n"))
     end
   end
   describe "#keys=" do
@@ -44,7 +44,7 @@ describe View, type: :model do
   end
 
   context "#name" do
-    let(:existing) {create :view, project: create(:project)}
+    let(:existing) { create :view, project: create(:project) }
     it "must be unique" do
       expect(View.new(name: existing.name, project: existing.project)).not_to be_valid
     end
@@ -52,5 +52,4 @@ describe View, type: :model do
       expect(View.new(name: existing.name, project: create(:project))).to be_valid
     end
   end
-
 end

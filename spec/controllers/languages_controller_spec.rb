@@ -1,8 +1,6 @@
 require "rails_helper"
 
-
 describe LanguagesController, type: :controller do
-
   before { login }
   let(:login) { stubbed_login_as_user }
 
@@ -42,12 +40,12 @@ describe LanguagesController, type: :controller do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved language as @language" do
-        post :create, params: { language: { name: ""  } }
+        post :create, params: { language: { name: "" } }
         expect(assigns(:language)).to be_a_new(Language)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: { language: { name: ""  } }
+        post :create, params: { language: { name: "" } }
         expect(response).to render_template("new")
       end
     end
@@ -73,7 +71,7 @@ describe LanguagesController, type: :controller do
 
     describe "with invalid params" do
       it "assigns the language as @language" do
-        put :update, params: { id: language.to_param, language: { name: ""  } }
+        put :update, params: { id: language.to_param, language: { name: "" } }
         expect(assigns(:language)).to eq(language)
       end
 
@@ -97,5 +95,4 @@ describe LanguagesController, type: :controller do
       expect(response).to redirect_to(languages_url)
     end
   end
-
 end
