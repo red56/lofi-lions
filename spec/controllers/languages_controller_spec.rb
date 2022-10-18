@@ -42,15 +42,11 @@ describe LanguagesController, type: :controller do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved language as @language" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(Language).to receive(:save).and_return(false)
         post :create, params: { language: { name: ""  } }
         expect(assigns(:language)).to be_a_new(Language)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(Language).to receive(:save).and_return(false)
         post :create, params: { language: { name: ""  } }
         expect(response).to render_template("new")
       end
@@ -60,8 +56,8 @@ describe LanguagesController, type: :controller do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested language" do
-        expect_any_instance_of(Language).to receive(:update).with({ "code" => "de" })
         put :update, params: { id: language.to_param, language: { "code" => "de" } }
+        expect(language.reload.code).to eq("de")
       end
 
       it "assigns the requested language as @language" do
@@ -76,10 +72,6 @@ describe LanguagesController, type: :controller do
     end
 
     describe "with invalid params" do
-      before do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(Language).to receive(:save).and_return(false)
-      end
       it "assigns the language as @language" do
         put :update, params: { id: language.to_param, language: { name: ""  } }
         expect(assigns(:language)).to eq(language)

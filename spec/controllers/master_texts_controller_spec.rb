@@ -44,16 +44,12 @@ describe MasterTextsController, type: :controller do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved master_text as @master_text" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
-        post :create, params: { master_text: {"key" => "invalid value"} }
+        post :create, params: { master_text: {"key" => ""} }
         expect(assigns(:master_text)).to be_a_new(MasterText)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
-        post :create, params: { master_text: {"key" => "invalid value"} }
+        post :create, params: { master_text: {"key" => ""} }
         expect(response).to render_template("new")
       end
     end
@@ -63,8 +59,8 @@ describe MasterTextsController, type: :controller do
     before { master_text }
     describe "with valid params" do
       it "updates the requested master_text" do
-        expect_any_instance_of(MasterText).to receive(:assign_attributes).with({"key" => "MyString"})
         put :update, params: { id: master_text.to_param, master_text: {"key" => "MyString"} }
+        expect(master_text.reload.key).to eq("MyString")
       end
 
       it "assigns the requested master_text as @master_text" do
@@ -79,17 +75,13 @@ describe MasterTextsController, type: :controller do
     end
 
     describe "with invalid params" do
-      before do
-        # Trigger the behavior that occurs when invalid params are submitted
-        allow_any_instance_of(MasterText).to receive(:save).and_return(false)
-      end
       it "assigns the master_text as @master_text" do
-        put :update, params: { id: master_text.to_param, master_text: {"key" => "invalid value"} }
+        put :update, params: { id: master_text.to_param, master_text: {"key" => ""} }
         expect(assigns(:master_text)).to eq(master_text)
       end
 
       it "re-renders the 'edit' template" do
-        put :update, params: { id: master_text.to_param, master_text: {"key" => "invalid value"} }
+        put :update, params: { id: master_text.to_param, master_text: {"key" => ""} }
         expect(response).to render_template("edit")
       end
     end
