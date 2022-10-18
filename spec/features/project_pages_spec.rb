@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Project Pages", type: :feature do
@@ -6,6 +8,7 @@ describe "Project Pages", type: :feature do
   let(:language) { create(:language, name: "French") }
 
   let(:do_logging_in) { stubbed_login_as_admin_user }
+
   before { do_logging_in }
 
   it "shows project name" do
@@ -65,10 +68,8 @@ describe "Project Pages", type: :feature do
       let(:do_logging_in) { stubbed_login_as_user }
 
       it "won't work" do
-        expect {visit edit_project_path(project)}.to raise_error /Not Found/
+        expect { visit edit_project_path(project) }.to raise_error /Not Found/
       end
     end
   end
-
-
 end

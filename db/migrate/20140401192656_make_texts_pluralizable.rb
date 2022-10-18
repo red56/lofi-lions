@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeTextsPluralizable < ActiveRecord::Migration
   def change
     add_column :master_texts, :pluralizable, :boolean, default: false

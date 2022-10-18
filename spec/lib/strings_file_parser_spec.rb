@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "Strings file parser" do
@@ -45,21 +47,25 @@ describe "Strings file parser" do
 
   describe "with leading comment" do
     let(:file_name) { "with_leading_comment" }
+
     include_examples "String file parsing"
   end
 
   describe "with inline comment" do
     let(:file_name) { "with_inline_comment" }
+
     include_examples "String file parsing"
   end
 
   describe "with trailing comment" do
     let(:file_name) { "with_trailing_comment" }
+
     include_examples "String file parsing"
   end
 
   describe "with no comment" do
     let(:file_name) { "with_no_comment" }
+
     include_examples "String file parsing"
   end
 
@@ -81,6 +87,7 @@ describe "Strings file parser" do
 
   describe "with missing localisations" do
     let(:file_name) { "with_missing_values" }
+
     it "can parse the file" do
       expect(parsed.keys).to eq(["Adding", "Almost done", "Done"])
       expect(parsed.values).to eq(["Adding...", "", ""])

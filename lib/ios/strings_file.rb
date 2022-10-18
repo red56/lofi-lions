@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 module IOS
-  STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8".freeze
+  STRINGS_FILE_ENCODING = "BOM|UTF-16LE:UTF-8"
 
   class StringsFile < BaseParsedFile
-
     TRAILING_QUOTE = /"\z/
     NON_ESCAPED_QUOTE = /[^\\]"/
     SLASH_STAR = Regexp.escape("/*")
@@ -10,21 +11,22 @@ module IOS
     TEXT_END = %r[(#{SLASH_STAR}|\z)]
     COMMENT_END = Regexp.new(Regexp.escape("*/"))
 
-      # initialize with an IO object - we're mostly going to be
-      # creating these from file uploads so best to just deal with the
-      # tmpfile instances this gives us
-      def initialize(file)
-        @file = reopen_with_utf16_encoding(file)
-      end
+    # initialize with an IO object - we're mostly going to be
+    # creating these from file uploads so best to just deal with the
+    # tmpfile instances this gives us
+    def initialize(file)
+      @file = reopen_with_utf16_encoding(file)
+    end
 
     def reopen_with_utf16_encoding(file)
       return File.open(file.path, "rb:#{IOS::STRINGS_FILE_ENCODING}") if file.respond_to?(:path)
+
       case file
-        when IO
-          file.set_encoding("rb:#{IOS::STRINGS_FILE_ENCODING}")
-          file
-        when StringIO
-          StringIO.new(file.string.encode(Encoding::UTF_8))
+      when IO
+        file.set_encoding("rb:#{IOS::STRINGS_FILE_ENCODING}")
+        file
+      when StringIO
+        StringIO.new(file.string.encode(Encoding::UTF_8))
       end
     end
 
@@ -39,6 +41,7 @@ module IOS
 
     def parse_line(line)
       return [nil, nil] if line.empty?
+
       scanner = StringScanner.new(line)
       scanner.skip_until(/"/)
       key = scanner.scan_until(NON_ESCAPED_QUOTE).gsub(TRAILING_QUOTE, "")
@@ -68,8 +71,8 @@ module IOS
     end
 
     UNESCAPES = {
-        "\\n" => "\n",
-        "\\\"" => '"'
+      "\\n" => "\n",
+      "\\\"" => '"'
     }
 
     def unescape(value)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :require_administrator!
   before_action :find_user, only: [:edit, :update]
@@ -33,11 +35,11 @@ class UsersController < ApplicationController
   end
 
   private
+
   def user_params
     params.require(:user).permit(
-        :email, :is_administrator, :is_developer, :edits_master_text, project_language_ids: []
+      :email, :is_administrator, :is_developer, :edits_master_text, project_language_ids: []
     )
-
   end
 
   def find_user

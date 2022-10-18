@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MasterTextsController < ApplicationController
   before_action :set_master_text, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
@@ -65,17 +67,18 @@ class MasterTextsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_master_text
-      @master_text = MasterText.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def master_text_params
-      params.require(:master_text).permit(:key, :one, :other, :text, :comment, :format, :pluralizable, :project_id, view_ids: [])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_master_text
+    @master_text = MasterText.find(params[:id])
+  end
 
-    def find_project
-      @project = Project.find(params[:project_id])
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def master_text_params
+    params.require(:master_text).permit(:key, :one, :other, :text, :comment, :format, :pluralizable, :project_id, view_ids: [])
+  end
+
+  def find_project
+    @project = Project.find(params[:project_id])
+  end
 end

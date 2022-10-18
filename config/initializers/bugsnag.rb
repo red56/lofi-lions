@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV["BUGSNAG_API_KEY"].present?
   Bugsnag.configure do |config|
     config.api_key = ENV["BUGSNAG_API_KEY"]
@@ -5,5 +7,3 @@ if ENV["BUGSNAG_API_KEY"].present?
     config.app_version = VERSION
   end
 end
-
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizedViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_languages_section
@@ -16,8 +18,8 @@ class LocalizedViewsController < ApplicationController
   end
 
   protected
+
   def find_project_language
     @project_language = ProjectLanguage.find(params[:project_language_id])
   end
-
 end

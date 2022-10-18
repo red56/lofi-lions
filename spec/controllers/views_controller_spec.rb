@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe ViewsController, type: :controller do
   before { login }
+
   let!(:project) { create :project }
-  let(:login) { stubbed_login_as_developer}
+  let(:login) { stubbed_login_as_developer }
 
   # This should return the minimal set of attributes required to create a valid
   # View. As you add validations to View, be sure to
@@ -137,5 +140,4 @@ describe ViewsController, type: :controller do
       expect(response).to redirect_to(views_url)
     end
   end
-
 end

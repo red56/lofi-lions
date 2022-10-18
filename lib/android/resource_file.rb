@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "nokogiri"
 
 module Android
   class ResourceFile < BaseParsedFile
-
     def parse_file
       localizations = []
       @doc = Nokogiri::XML(@file)
@@ -24,11 +25,11 @@ module Android
       @doc.css("plurals").each do |node|
         key = node["name"]
         values = Hash[node.css("item").collect do |item_node|
-              plural_form = item_node["quantity"].to_sym
-              value = unescape(item_node.text)
-              [plural_form, value]
-            end]
-        localizations<< Localization.new(key, values)
+                        plural_form = item_node["quantity"].to_sym
+                        value = unescape(item_node.text)
+                        [plural_form, value]
+                      end]
+        localizations << Localization.new(key, values)
       end
     end
 
@@ -43,8 +44,8 @@ module Android
     end
 
     UNESCAPES = {
-        "\\'" => "'",
-        "\\\"" => '"',
+      "\\'" => "'",
+      "\\\"" => '"',
     }
 
     def unescape(value)

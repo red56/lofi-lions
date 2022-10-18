@@ -1,5 +1,6 @@
-class MasterText < ApplicationRecord
+# frozen_string_literal: true
 
+class MasterText < ApplicationRecord
   MARKDOWN_FORMAT = "markdown"
   PLAIN_FORMAT = "plain"
 
@@ -17,18 +18,23 @@ class MasterText < ApplicationRecord
   end
 
   def text= text
-    self.other= text
+    self.other = text
   end
+
   def text
     raise Exception.new("Don't use text when pluralizable") if self.pluralizable
+
     self.other
   end
+
   def text_changed?
     return true if self.other_changed?
     return true if self.one_changed?
     return true if self.pluralizable_changed?
+
     false
   end
+
   def markdown?
     format == MARKDOWN_FORMAT
   end
@@ -45,6 +51,7 @@ class MasterText < ApplicationRecord
 
   def count_words(target_text)
     return 0 unless target_text.present?
+
     target_text.strip.split(/\s+/).length
   end
 end

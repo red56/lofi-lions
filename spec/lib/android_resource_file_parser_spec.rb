@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "Android resource file parser" do
@@ -45,11 +47,13 @@ describe "Android resource file parser" do
 
   context "simple file (no plurals or fancypants)" do
     let(:file_name) { "simple_strings" }
+
     include_examples "Resource file parsing"
   end
 
   context "file with plurals" do
     let(:file_name) { "strings_with_plurals" }
+
     it "should return keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
@@ -69,6 +73,7 @@ describe "Android resource file parser" do
 
   context "file with string arrays" do
     let(:file_name) { "strings_with_array" }
+
     it "should return keys in UTF-8" do
       expect(parsed.keys.first.encoding).to eq(Encoding::UTF_8)
     end
@@ -85,25 +90,28 @@ describe "Android resource file parser" do
 
   context "file with escaped characters" do
     let(:file_name) { "with_escaped_characters" }
+
     it "unescapes apostrophes" do
-      local = parsed.localizations.detect { |l| l.key == "apostrophe"}
+      local = parsed.localizations.detect { |l| l.key == "apostrophe" }
       expect(local.value).to eq("don't")
     end
+
     it "unescapes double quotes" do
-      local = parsed.localizations.detect { |l| l.key == "double"}
+      local = parsed.localizations.detect { |l| l.key == "double" }
       expect(local.value).to eq('"double"')
     end
+
     it "unescapes mixed escapes" do
-      local = parsed.localizations.detect { |l| l.key == "both"}
+      local = parsed.localizations.detect { |l| l.key == "both" }
       expect(local.value).to eq('"don\'t"')
     end
   end
 
   context "real world example" do
     let(:file_name) { "full_example" }
+
     it "works" do
       parsed
     end
   end
-
 end

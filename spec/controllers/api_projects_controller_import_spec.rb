@@ -1,13 +1,18 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Api::ProjectsController, type: :controller do
   let(:file_upload) { fixture_file_upload(file_path, "application/octet-stream") }
   let!(:selected_project) { create(:project) }
-  before {bypass_rescue}
-  context "without auth token" do
+
+  before { bypass_rescue }
+
+  context "without auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it "should fail with 401?"
   end
-  context "with invalid auth token" do
+
+  context "with invalid auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it "should fail with 401?"
   end
 
@@ -43,7 +48,7 @@ describe Api::ProjectsController, type: :controller do
       before do
         localizations = build_list(:localization, 3)
         expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
-        localizations.define_singleton_method(:close){}
+        localizations.define_singleton_method(:close) {}
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
@@ -73,7 +78,7 @@ describe Api::ProjectsController, type: :controller do
       before do
         localizations = build_list(:localization, 3)
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
-        localizations.define_singleton_method(:close){}
+        localizations.define_singleton_method(:close) {}
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
       end
@@ -96,13 +101,13 @@ describe Api::ProjectsController, type: :controller do
     end
 
     context "with multiple projects" do
-      let(:projects) {build_stubbed_list(:project, 2)}
-      let(:selected_project) {projects.last}
+      let(:projects) { build_stubbed_list(:project, 2) }
+      let(:selected_project) { projects.last }
 
       it "can select the last project" do
         localizations = build_list(:localization, 3)
         expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
-        localizations.define_singleton_method(:close){}
+        localizations.define_singleton_method(:close) {}
         expect(localizations).to receive(:close)
         expect(Localization).to receive(:create_master_texts).with(localizations, selected_project)
         expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ProjectsController < ApplicationController
   # FIXME: needs some auth...
   # FIXME: this should only be for the API version
@@ -22,14 +24,15 @@ class Api::ProjectsController < ApplicationController
   end
 
   protected
+
   def auto_platform
     case File.extname(params[:file].original_filename)
-      when ".strings"
-        :ios
-      when ".xml"
-        :android
-      when ".yml"
-        :yaml
+    when ".strings"
+      :ios
+    when ".xml"
+      :android
+    when ".yml"
+      :yaml
     end
   end
 
@@ -54,6 +57,7 @@ class Api::ProjectsController < ApplicationController
 
   def language_code
     return params[:code] if params[:code] && params[:code] != Language.for_master_texts.code
+
     @language = Language.for_master_texts
     nil
   end
@@ -71,5 +75,4 @@ class Api::ProjectsController < ApplicationController
   def find_project
     @project = Project.find_by_slug(params[:id]) || Project.find(params[:id])
   end
-
 end

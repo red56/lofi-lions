@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ViewsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_view, only: [:show, :edit, :update, :destroy]
@@ -65,17 +67,18 @@ class ViewsController < ApplicationController
   end
 
   private
-    def find_view
-      @view = View.find(params[:id])
-      @project = @view.project
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def view_params
-      params.require(:view).permit(:name, :comments, :keys, :project_id)
-    end
+  def find_view
+    @view = View.find(params[:id])
+    @project = @view.project
+  end
 
-    def find_project
-      @project = Project.find(params[:project_id])
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def view_params
+    params.require(:view).permit(:name, :comments, :keys, :project_id)
+  end
+
+  def find_project
+    @project = Project.find(params[:project_id])
+  end
 end

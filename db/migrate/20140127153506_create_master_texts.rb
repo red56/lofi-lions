@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMasterTexts < ActiveRecord::Migration
   def change
     create_table :master_texts do |t|

@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Home page", type: :feature do
-
-  let!(:project) {create(:project, name: "steve" )}
-  let(:project_language) {create(:project_language, language_id: language.id)}
-  let(:language) {create(:language, name: "French")}
+  let!(:project) { create(:project, name: "steve") }
+  let(:project_language) { create(:project_language, language_id: language.id) }
+  let(:language) { create(:language, name: "French") }
 
   context "when not logged in" do
     it "redirects to login page" do
@@ -23,10 +24,12 @@ describe "Home page", type: :feature do
       expect(current_path).to eq("/")
       expect(page).to have_content(@user.email)
     end
+
     it "has logout" do
       visit "/"
       click_on "Logout"
     end
+
     it "links to projects" do
       visit "/"
       expect(page).to have_content(project.name)
@@ -54,8 +57,8 @@ describe "Home page", type: :feature do
 
     it "doesn't link to projects" do
       visit "/"
-      expect(page).to_not have_content(project.name)
-      expect(page).to_not have_link_to(project_path(project))
+      expect(page).not_to have_content(project.name)
+      expect(page).not_to have_link_to(project_path(project))
     end
 
     it "links to project languages" do
@@ -67,8 +70,10 @@ describe "Home page", type: :feature do
 
   describe "workflow edit" do
     context "with none to enter/review" do
-      let!(:complete_project_language) { create(:project_language, language_id: language.id, need_entry_count: 0,
-          need_review_count: 0) }
+      let!(:complete_project_language) {
+        create(:project_language, language_id: language.id, need_entry_count: 0,
+                                  need_review_count: 0)
+      }
 
       before do
         stubbed_login_as_developer
@@ -76,14 +81,16 @@ describe "Home page", type: :feature do
 
       it "doesn't display the start button but does display review all" do
         visit "/"
-        expect(page).to_not have_link_to(next_project_language_path(complete_project_language,flow: "needing"))
-        expect(page).to have_link_to(next_project_language_path(complete_project_language,flow: "all"))
+        expect(page).not_to have_link_to(next_project_language_path(complete_project_language, flow: "needing"))
+        expect(page).to have_link_to(next_project_language_path(complete_project_language, flow: "all"))
       end
     end
 
     context "with to enter/review" do
-      let!(:project_language) { create(:project_language, language_id: language.id, need_entry_count: 1,
-          need_review_count: 3) }
+      let!(:project_language) {
+        create(:project_language, language_id: language.id, need_entry_count: 1,
+                                  need_review_count: 3)
+      }
 
       before do
         stubbed_login_as_developer
@@ -92,7 +99,7 @@ describe "Home page", type: :feature do
       it "does display the start button but not the review all" do
         visit "/"
         expect(page).to have_link_to(next_project_language_path(project_language, flow: "needing"))
-        expect(page).not_to have_link_to(next_project_language_path(project_language,flow: "all"))
+        expect(page).not_to have_link_to(next_project_language_path(project_language, flow: "all"))
       end
     end
   end

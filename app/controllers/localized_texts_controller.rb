@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizedTextsController < ApplicationController
   include NextLocalizedText
   before_action :authenticate_user!
@@ -53,6 +55,7 @@ class LocalizedTextsController < ApplicationController
 
   def next_path_after_update
     return params[:original_url] if params[:original_url]
+
     next_localized_text_or_project_language_path(@localized_text.key)
   end
 

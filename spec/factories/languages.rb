@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :language do
     name { Faker::Lorem.words(number: 4).join(" ") }
-    sequence(:code) { |n| [
-      Faker::Lorem.characters(number: 2),
-      Faker::Lorem.characters(number: 2).upcase,
-      n.to_s].join("-")
+    sequence(:code) { |n|
+      [
+        Faker::Lorem.characters(number: 2),
+        Faker::Lorem.characters(number: 2).upcase,
+        n.to_s
+      ].join("-")
     }
     pluralizable_label_other { "everything" }
 

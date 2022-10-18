@@ -1,8 +1,8 @@
-class Language < ApplicationRecord
+# frozen_string_literal: true
 
+class Language < ApplicationRecord
   PLURAL_FORMS = [:zero, :one, :two, :few, :many, :other].freeze
   PLURAL_FORMS_WITH_FIELDS = PLURAL_FORMS.map { |form| [form, "pluralizable_label_#{form}".to_sym] }.freeze
-
 
   has_many :localized_texts, through: :project_languages
   has_many :project_languages, inverse_of: :language, dependent: :destroy
@@ -26,8 +26,9 @@ class Language < ApplicationRecord
   end
 
   def plural_forms_with_fields
-    @plurals ||= Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form,
-            field| [form, self[field]] }]
+    @plurals ||= Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form, field|
+                        [form, self[field]]
+                      } ]
   end
 
   def is_master_text?
@@ -36,6 +37,7 @@ class Language < ApplicationRecord
 
   def code_for_google
     return "zh-CN" if code == "zh"
+
     code
   end
 end

@@ -21,7 +21,7 @@ class HerokuTargets
                  targets_hash.delete(DEFAULTS_KEY)
                else
                  {}
-    end
+               end
     @targets = TargetsContainer[targets_hash.collect { |name, values|
                                   heroku_target = HerokuTarget.new(defaults.merge(values), name)
                                   [heroku_target.heroku_app, heroku_target]
@@ -32,6 +32,7 @@ class HerokuTargets
   class TargetsContainer < HashWithIndifferentAccess
     def [](key)
       return super if key?(key)
+
       values.each do |value|
         return value if value.name.to_s == key.to_s
       end

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ViewsController, type: :routing do
   describe "routing" do
-
     it "routes to #index" do
       expect(get: "/projects/1/views").to route_to("views#index", project_id: "1")
     end
@@ -30,6 +31,5 @@ RSpec.describe ViewsController, type: :routing do
     it "routes to #destroy" do
       expect(delete: "/views/1").to route_to("views#destroy", id: "1")
     end
-
   end
 end

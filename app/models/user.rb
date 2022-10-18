@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "securerandom"
 
 class User < ApplicationRecord
   devise :database_authenticatable,
-      :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable
   # Other devise modules available are.
   # :confirmable, :lockable, :timeoutable and :omniauthable and :registerable
 
@@ -17,6 +19,7 @@ class User < ApplicationRecord
   def randomize_password
     self.password = self.class.random_password
   end
+
   def self.random_password
     SecureRandom.hex
   end

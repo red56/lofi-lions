@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLocalizedTexts < ActiveRecord::Migration
   def change
     create_table :localized_texts do |t|

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe MasterTextsController, type: :routing do
   describe "routing" do
-
     it "routes to #index" do
       expect(get("/projects/1/master_texts")).to route_to("master_texts#index", project_id: "1")
     end
@@ -30,6 +31,5 @@ describe MasterTextsController, type: :routing do
     it "routes to #destroy" do
       expect(delete("/master_texts/1")).to route_to("master_texts#destroy", id: "1")
     end
-
   end
 end

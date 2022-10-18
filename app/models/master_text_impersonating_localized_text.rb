@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MasterTextImpersonatingLocalizedText
   def initialize(master_text)
     @master_text = master_text

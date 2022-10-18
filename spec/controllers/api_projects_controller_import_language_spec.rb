@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Api::ProjectsController, type: :controller do
@@ -18,30 +20,31 @@ describe Api::ProjectsController, type: :controller do
     end
   end
   describe "with language specified" do
-    context "without auth token" do
-      it "should fail with 401?"
-    end
-    context "with invalid auth token" do
+    let(:localizations) { Localization::CollectionWrappingArray.new(build_list(:localization, 3)) }
+    let(:chinese) { build_stubbed(:language, :type_0_chinese, code: "zh", name: "Chinese") }
+
+    context "without auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
       it "should fail with 401?"
     end
 
-    let(:chinese) { build_stubbed(:language, :type_0_chinese, code: "zh", name: "Chinese") }
-    let(:localizations) { Localization::CollectionWrappingArray.new(build_list(:localization, 3)) }
+    context "with invalid auth token" do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      it "should fail with 401?"
+    end
 
     describe "ios" do
       let(:file_path) { "with_no_comment.strings" }
 
       context("mocked") do
-
         it "accepts a android xml upload" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(IOS::StringsFile).to receive(:parse).and_return(localizations)
-          localizations.define_singleton_method(:close){}
+          localizations.define_singleton_method(:close) {}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
 
           post :import, params: { platform: :ios, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
+
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
@@ -52,6 +55,7 @@ describe Api::ProjectsController, type: :controller do
       context("full-stack") do
         include_context "full-stack"
         let(:platform) { :ios }
+
         it "creates the expected localised texts" do
           request
           localized = LocalizedText.all.map { |mt| [mt.key, mt.other] }
@@ -66,15 +70,15 @@ describe Api::ProjectsController, type: :controller do
       let(:file_path) { "simple_strings.xml" }
 
       context("mocked") do
-
         it "accepts a android xml upload" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(Android::ResourceFile).to receive(:parse).and_return(localizations)
-          localizations.define_singleton_method(:close){}
+          localizations.define_singleton_method(:close) {}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
           post :import, params: { platform: :android, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
+
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
@@ -84,7 +88,7 @@ describe Api::ProjectsController, type: :controller do
 
       context("full-stack") do
         include_context "full-stack"
-        let(:platform) { :android}
+        let(:platform) { :android }
 
         it "creates the expected master texts" do
           request
@@ -100,15 +104,15 @@ describe Api::ProjectsController, type: :controller do
       let(:file_path) { "simple_strings.yml" }
 
       context("mocked") do
-
         it "accepts a yaml upload" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(chinese)
           expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
-          localizations.define_singleton_method(:close){}
+          localizations.define_singleton_method(:close) {}
           expect(localizations).to receive(:close)
           expect(Localization).to receive(:create_localized_texts).with(chinese, a_kind_of(Localization::Collection), selected_project.id)
           post :import, params: { platform: :yaml, file: file_upload, code: "zh", format: "json", id: selected_project.slug }
         end
+
         it "should stop if it receives unknown code" do
           expect(Language).to receive(:find_by_code).with("zh").and_return(nil)
           expect(Localization).not_to receive(:create_localized_texts)
@@ -118,8 +122,7 @@ describe Api::ProjectsController, type: :controller do
 
       context("full-stack") do
         include_context "full-stack"
-        let(:platform) { :yaml}
-
+        let(:platform) { :yaml }
 
         it "creates the expected master texts" do
           request
@@ -136,7 +139,7 @@ describe Api::ProjectsController, type: :controller do
 
         it "adds texts to the selected projects" do
           expect(RailsYamlFormat::YamlFile).to receive(:parse).and_return(localizations)
-          localizations.define_singleton_method(:close){}
+          localizations.define_singleton_method(:close) {}
           expect(localizations).to receive(:close)
           expect(Project).to receive(:find_by_slug).with(selected_project.slug).and_return(selected_project)
 
@@ -148,5 +151,3 @@ describe Api::ProjectsController, type: :controller do
     end
   end
 end
-
-

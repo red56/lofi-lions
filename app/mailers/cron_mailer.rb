@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CronMailer < ApplicationMailer
   default from: ENV["CRON_EMAIL_FROM"] || "cron@example.com"
 
