@@ -47,6 +47,7 @@ gem "easy_translate"
 gem 'rails_12factor'
 gem 'lograge'
 
+gem 'rack-cors'
 
 group :development do
   gem 'guard-rails'
