@@ -24,11 +24,11 @@ module Android
     def parse_and_append_plurals(localizations)
       @doc.css("plurals").each do |node|
         key = node["name"]
-        values = node.css("item").collect do |item_node|
+        values = node.css("item").to_h do |item_node|
           plural_form = item_node["quantity"].to_sym
           value = unescape(item_node.text)
           [plural_form, value]
-        end.to_h
+        end
         localizations << Localization.new(key, values)
       end
     end

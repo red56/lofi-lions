@@ -4,7 +4,7 @@ jobs:
   build:
     parallelism: 1
     docker:
-    - image: circleci/ruby:2.5.9-node
+    - image: cimg/ruby:2.6.10-browsers
       auth:
         username: $DOCKERHUB_USER
         password: $DOCKERHUB_TOKEN

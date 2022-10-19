@@ -39,7 +39,7 @@ describe Api::ProjectsController, type: :controller do
 
     describe "ios" do
       let(:platform) { :ios }
-      let(:body) { response.body[1..-1].encode(Encoding::UTF_8) }
+      let(:body) { response.body[1..].encode(Encoding::UTF_8) }
 
       describe "translated texts" do
         include_context "with a bunch of precreated stuff"
