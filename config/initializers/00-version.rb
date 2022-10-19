@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
 # The web app version
-VERSION = "0.6.14"
+VERSION = "0.7.0"
