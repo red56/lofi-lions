@@ -25,7 +25,7 @@ Rails.application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = ENV["CI"].present?
 
-  if ENV["CI"] && !ENV["CI_COMPILE_ASSETS"]
+  if false # ENV["CI"] && !ENV["CI_COMPILE_ASSETS"] # not yet compiling on CI # rubocop:disable Lint/LiteralAsCondition
     puts "CI configuration: using compressed and digested assets"
     # Configure public file server for tests with Cache-Control for performance.
     config.public_file_server.enabled = true
