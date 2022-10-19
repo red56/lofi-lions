@@ -69,7 +69,7 @@ class Localization
     end
 
     def to_hash
-      localizations.index_by { |l| l.key }
+      localizations.index_by(&:key)
     end
 
     def each(&block)

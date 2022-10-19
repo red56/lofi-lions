@@ -420,15 +420,6 @@ Rails/HttpStatus:
   Exclude:
     - 'app/controllers/api/projects_controller.rb'
 
-# Offense count: 3
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: Include.
-# Include: app/**/*.rb, config/**/*.rb, db/**/*.rb, lib/**/*.rb
-Rails/Output:
-  Exclude:
-    - 'app/models/project_language.rb'
-    - 'config/initializers/easy_translate.rb'
-
 # Offense count: 2
 Rails/OutputSafety:
   Exclude:

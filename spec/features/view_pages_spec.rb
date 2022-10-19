@@ -30,12 +30,12 @@ describe "View (non-localized) pages", type: :feature do
     expect(View.last.reload.master_texts.to_a).to eq([master_texts[3], master_texts[4], master_texts[2]])
   end
 
-  it "shows ok" do
-    visit view_path(view)
+  it "shows ok (smoke test)" do
+    expect { visit view_path(view) }.not_to raise_error
   end
 
   it "edits ok" do
-    visit edit_view_path(view)
+    expect { visit edit_view_path(view) }.not_to raise_error
   end
 
   context "with multiple projects" do

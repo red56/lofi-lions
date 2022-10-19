@@ -35,7 +35,7 @@ describe LocalizedText, type: :model do
     end
 
     it "can set text" do
-      localized_text.text = "something"
+      expect { localized_text.text = "something" }.not_to raise_error
     end
   end
 
@@ -49,7 +49,9 @@ describe LocalizedText, type: :model do
     end
 
     it "can set text" do
-      localized_text.text = "something"
+      expect {
+        localized_text.text = "something"
+      }.not_to raise_error
     end
   end
 

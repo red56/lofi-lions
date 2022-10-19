@@ -51,7 +51,7 @@ module IOS
     end
 
     def lines
-      file_text_without_comments.split(/(\n|\r)/).map { |l| l.strip }
+      file_text_without_comments.split(/(\n|\r)/).map(&:strip)
     end
 
     def file_text_without_comments

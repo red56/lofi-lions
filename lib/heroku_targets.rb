@@ -29,7 +29,7 @@ class HerokuTargets
     @staging_targets = TargetsContainer[@targets.select { |_name, target| target.staging? }]
   end
 
-  class TargetsContainer < HashWithIndifferentAccess
+  class TargetsContainer < ActiveSupport::HashWithIndifferentAccess
     def [](key)
       return super if key?(key)
 

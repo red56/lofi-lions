@@ -20,7 +20,7 @@ module ActionView::Helpers::JavaScriptHelper
     if javascript.empty?
       result = ""
     else
-      result = javascript.gsub(/(\\|<\/|\r\n|\342\200\250|\342\200\251|[\n\r"']|[`]|[$])/u, JS_ESCAPE_MAP)
+      result = javascript.gsub(/(\\|<\/|\r\n|\342\200\250|\342\200\251|[\n\r"']|`|[$])/u, JS_ESCAPE_MAP)
     end
     javascript.html_safe? ? result.html_safe : result
   end

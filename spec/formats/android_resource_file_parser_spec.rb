@@ -111,7 +111,7 @@ describe "Android resource file parser" do
     let(:file_name) { "full_example" }
 
     it "works" do
-      parsed
+      expect(parsed).to be_a(Android::ResourceFile)
     end
   end
 end
