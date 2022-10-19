@@ -33,7 +33,7 @@ describe Api::ProjectsController, type: :controller do
     describe "common" do
       it "returns a 404 if the language is uknown" do
         get :export, params: { platform: :android, code: "xx", id: project.slug }
-        expect(response.status).to eq(404)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
@@ -115,7 +115,7 @@ describe Api::ProjectsController, type: :controller do
 
         it "uses fallbacks to produce the english version" do
           request
-          expect(response.status).to eq(200)
+          expect(response).to have_http_status(:ok)
         end
 
         context "with texts" do

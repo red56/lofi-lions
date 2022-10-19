@@ -43,7 +43,7 @@ Metrics/AbcSize:
   # I don't think this is something we want to enforce (yet?)
 
 Metrics/BlockLength:
-  IgnoredMethods:
+  AllowedMethods:
     - "included" # concerns
     - "no_commands" # thor
     - "create_table" # migrations
@@ -84,6 +84,10 @@ Performance/TimesMap:
 # not now
 Rails/I18nLocaleTexts:
   Enabled: false
+
+Rails/Output:
+  Exclude:
+    - config/environments/* # logger not yet set up
 
 Rails/UnknownEnv:
   Environments:
@@ -143,7 +147,7 @@ Style/BlockDelimiters:
     - subject
     - watch
     - expect
-  IgnoredMethods:
+  AllowedMethods:
     # Methods that can be either procedural or functional and cannot be
     # categorised from their usage alone, e.g.
     #

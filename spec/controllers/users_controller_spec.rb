@@ -19,7 +19,7 @@ describe UsersController, type: :controller do
   context "when not logged in" do
     let(:login) { stubbed_login_as_user }
 
-    it "shows 404" do
+    it "shows 404" do # rubocop:disable RSpec/NoExpectationExample
       get :index
       fail("should have raised RoutingError") unless response.status == 404
     rescue ActionController::RoutingError
@@ -29,7 +29,7 @@ describe UsersController, type: :controller do
   describe "index" do
     it "works" do
       get :index
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 end

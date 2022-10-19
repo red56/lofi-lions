@@ -109,9 +109,9 @@ describe "User management pages", type: :feature do
 
     it "user to be admin" do
       visit edit_user_path(user)
-      find("#user_is_administrator").set(true)
-      find("#user_edits_master_text").set(true)
-      find("#user_is_developer").set(true)
+      find_by_id("user_is_administrator").set(true)
+      find_by_id("user_edits_master_text").set(true)
+      find_by_id("user_is_developer").set(true)
       click_on "Save"
       expect(current_path).to eq(users_path)
       within ("#user_#{user.id}") do

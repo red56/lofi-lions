@@ -25,7 +25,7 @@ describe "Language Pages", type: :feature do
   describe "index" do
     it "can list several" do
       langs = build_stubbed_list(:language, 3)
-      allow(Language).to receive_messages(all: langs)
+      expect(Language).to receive_messages(all: langs) # rubocop:disable RSpec/StubbedMock
       visit languages_path
     end
 
@@ -41,10 +41,6 @@ describe "Language Pages", type: :feature do
   end
 
   describe "new" do
-    it "displays" do
-      visit new_language_path
-    end
-
     it "works" do
       expect_any_instance_of(LocalizedTextEnforcer).to receive(:language_created)
       visit new_language_path
@@ -67,10 +63,6 @@ describe "Language Pages", type: :feature do
 
   describe "edit" do
     before { visit edit_language_path(language) }
-
-    it "displays" do
-      visit new_language_path
-    end
 
     it "works" do
       expect(page).to have_css("form.language")

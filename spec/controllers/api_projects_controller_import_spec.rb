@@ -44,6 +44,7 @@ describe Api::ProjectsController, type: :controller do
   describe "Android" do
     let(:file_path) { "simple_strings.xml" }
 
+    # rubocop:disable RSpec/NoExpectationExample
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
@@ -61,6 +62,7 @@ describe Api::ProjectsController, type: :controller do
         post :import, params: { platform: :android, file: file_upload, format: "json", id: selected_project.slug }
       end
     end
+    # rubocop:enable RSpec/NoExpectationExample
 
     context("full-stack") do
       it "creates the expected master texts" do
@@ -74,6 +76,7 @@ describe Api::ProjectsController, type: :controller do
   describe "Yaml" do
     let(:file_path) { "simple_strings.yml" }
 
+    # rubocop:disable RSpec/NoExpectationExample
     context("mocked") do
       before do
         localizations = build_list(:localization, 3)
@@ -91,6 +94,7 @@ describe Api::ProjectsController, type: :controller do
         post :import, params: { file: file_upload, format: "json", id: selected_project.slug }
       end
     end
+    # rubocop:enable RSpec/NoExpectationExample
 
     context("full-stack") do
       it "creates the expected master texts" do

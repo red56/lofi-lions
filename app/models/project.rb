@@ -28,9 +28,7 @@ class Project < ApplicationRecord
   end
 
   def recalculate_counts!
-    project_languages.each do |project_language|
-      project_language.recalculate_counts!
-    end
+    project_languages.each(&:recalculate_counts!)
   end
 
   def word_count

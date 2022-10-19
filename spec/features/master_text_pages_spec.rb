@@ -65,10 +65,6 @@ describe "Master Text Pages", type: :feature do
   end
 
   describe "new" do
-    it "displays" do
-      visit new_project_master_text_path(project)
-    end
-
     def fill_in_and_save
       expect(page).to have_css("form.master_text")
       fill_in "master_text_key", with: "my.key"
@@ -108,10 +104,6 @@ describe "Master Text Pages", type: :feature do
   describe "edit" do
     let(:master_text) { create(:master_text, project: project) }
     let(:login) { stubbed_login_as_developer }
-
-    it "displays" do
-      visit edit_master_text_path(master_text)
-    end
 
     context "for editor" do
       let(:login) { stubbed_login_as_user }
@@ -235,9 +227,12 @@ describe "Master Text Pages", type: :feature do
     let!(:master_text) { create :master_text }
     let!(:localized_texts) { create_list :localized_text, 3, master_text: master_text }
 
-    it "shows multiple languages (and allo" do
+    it "shows multiple languages (and allows click through)" do
       visit master_text_path(master_text)
-      all(:link, "Edit").first.click
+      expect(page).to have_selector("tr.localized_text", count: 3, text: /Edit/)
+      within(all("tr.localized_text").first) do
+        click_on "Edit"
+      end
     end
   end
 end

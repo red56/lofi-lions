@@ -27,7 +27,7 @@ describe "Home page", type: :feature do
 
     it "has logout" do
       visit "/"
-      click_on "Logout"
+      expect(page).to have_selector(:link_or_button, "Logout")
     end
 
     it "links to projects" do

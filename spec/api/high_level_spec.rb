@@ -34,7 +34,7 @@ describe "High-level API spec", type: :request do
 
     it "can export" do
       get "/api/projects/#{project.slug}/export/yaml/#{language.code}", params: {}
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(response.body).to include("voila")
     end
   end

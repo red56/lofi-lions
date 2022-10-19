@@ -12,7 +12,7 @@ class View < ApplicationRecord
   default_scope { order("name asc") }
 
   def keys
-    @keys ||= master_texts.collect { |mt| mt.key }.join("\n")
+    @keys ||= master_texts.collect(&:key).join("\n")
   end
 
   def keys= new_keys

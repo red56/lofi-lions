@@ -74,6 +74,6 @@ class ProjectLanguage < ApplicationRecord
       n = project_language.google_translate_missing
       report << ("* [%5s] #{project_language}" % [n]) if n > 0
     end
-    puts report.join("\n")
+    Rails.logger.debug report.join("\n")
   end
 end
