@@ -44,7 +44,6 @@ gem 'bugsnag'
 
 gem "easy_translate"
 
-gem 'rails_12factor'
 gem 'lograge'
 
 
