@@ -3,7 +3,13 @@
 module CronMailerHelper
   def colourize_translation_status(texts, needing)
     percent = ((needing.to_f / texts.length.to_f) * 100.0).round
-    (%(<span style="color: #{percentage_colour(percent)}">) << needing.to_s.ljust(4, " ") << " (" << percent.to_s << "%)" << %(</span>)).html_safe
+    [
+      %(<span style="color: #{percentage_colour(percent)}">),
+      needing.to_s.ljust(4, " "),
+      " (",
+      percent.to_s << "%)",
+      %(</span>)
+    ].join.html_safe
   end
 
   # https://github.com/mbostock/d3/wiki/Ordinal-Scales

@@ -12,7 +12,7 @@ class ProjectLanguage < ApplicationRecord
 
   validates_presence_of :project_id
 
-  delegate :code, :code_for_google, to: :language, prefix: true
+  delegate :code, :code_for_google, :name, to: :language, prefix: true
 
   def recalculate_counts!
     self.update!(
