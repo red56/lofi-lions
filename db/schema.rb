@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190605191227) do
+ActiveRecord::Schema.define(version: 2019_06_05_191227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "key_placements", force: :cascade do |t|
+  create_table "key_placements", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.integer "master_text_id"
     t.integer "position"
     t.datetime "updated_at"
     t.integer "view_id"
-    t.index ["master_text_id"], name: "index_key_placements_on_master_text_id", using: :btree
-    t.index ["view_id"], name: "index_key_placements_on_view_id", using: :btree
+    t.index ["master_text_id"], name: "index_key_placements_on_master_text_id"
+    t.index ["view_id"], name: "index_key_placements_on_view_id"
   end
 
-  create_table "languages", force: :cascade do |t|
+  create_table "languages", id: :serial, force: :cascade do |t|
     t.string "code", limit: 255
     t.datetime "created_at"
     t.string "name", limit: 255
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.datetime "updated_at"
   end
 
-  create_table "localized_texts", force: :cascade do |t|
+  create_table "localized_texts", id: :serial, force: :cascade do |t|
     t.text "comment", default: ""
     t.datetime "created_at"
     t.text "few", default: ""
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.text "two", default: ""
     t.datetime "updated_at"
     t.text "zero", default: ""
-    t.index ["master_text_id"], name: "index_master_text_id", using: :btree
+    t.index ["master_text_id"], name: "index_master_text_id"
   end
 
-  create_table "master_texts", force: :cascade do |t|
+  create_table "master_texts", id: :serial, force: :cascade do |t|
     t.text "comment"
     t.datetime "created_at"
     t.string "format", default: "plain"
@@ -67,10 +67,10 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.integer "project_id"
     t.datetime "updated_at"
     t.integer "word_count"
-    t.index ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true, using: :btree
+    t.index ["key", "project_id"], name: "index_master_texts_on_key_and_project_id", unique: true
   end
 
-  create_table "project_languages", force: :cascade do |t|
+  create_table "project_languages", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "language_id", null: false
     t.integer "need_entry_count"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.integer "user_id", null: false
   end
 
-  create_table "projects", force: :cascade do |t|
+  create_table "projects", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
     t.string "name"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "current_sign_in_at"
     t.string "current_sign_in_ip", limit: 255
@@ -110,16 +110,16 @@ ActiveRecord::Schema.define(version: 20190605191227) do
     t.string "reset_password_token", limit: 255
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at"
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "views", force: :cascade do |t|
+  create_table "views", id: :serial, force: :cascade do |t|
     t.text "comments"
     t.datetime "created_at"
     t.string "name", limit: 255
     t.integer "project_id"
     t.datetime "updated_at"
-    t.index ["name", "project_id"], name: "index_views_on_name_and_project_id", unique: true, using: :btree
+    t.index ["name", "project_id"], name: "index_views_on_name_and_project_id", unique: true
   end
 end
