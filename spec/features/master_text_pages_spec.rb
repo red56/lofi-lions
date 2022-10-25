@@ -229,9 +229,16 @@ describe "Master Text Pages", type: :feature do
 
     it "shows multiple languages (and allows click through)" do
       visit master_text_path(master_text)
-      expect(page).to have_selector("tr.localized_text", count: 3, text: /Edit/)
-      within(all("tr.localized_text").first) do
-        click_on "Edit"
+      aggregate_failures do
+        expect(page).to have_selector("tr.localized_text", count: 3, text: /Edit/)
+
+        expect(page).to have_link("Edit", class: "btn btn-primary", href: edit_master_text_path(master_text))
+
+        expect(page).to have_link("Back", class: "btn btn-link", href: project_master_texts_path(master_text.project, anchor: dom_id(master_text)))
+
+        within(all("tr.localized_text").first) do
+          click_on "Edit"
+        end
       end
     end
   end
