@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_191227) do
+ActiveRecord::Schema.define(version: 2022_10_25_122211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -73,10 +73,10 @@ ActiveRecord::Schema.define(version: 2019_06_05_191227) do
   create_table "project_languages", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "language_id", null: false
-    t.integer "need_entry_count"
-    t.integer "need_entry_word_count"
-    t.integer "need_review_count"
-    t.integer "need_review_word_count"
+    t.integer "need_entry_count", default: 0
+    t.integer "need_entry_word_count", default: 0
+    t.integer "need_review_count", default: 0
+    t.integer "need_review_word_count", default: 0
     t.integer "project_id", null: false
     t.datetime "updated_at", null: false
   end

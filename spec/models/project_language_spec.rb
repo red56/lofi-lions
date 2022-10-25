@@ -57,10 +57,11 @@ RSpec.describe ProjectLanguage, type: :model do
       }
 
       it "can recalculate" do
-        expect { project_language.recalculate_counts! }.to change {
-          [project_language.need_review_count, project_language.need_entry_count,
-           project_language.need_review_word_count, project_language.need_entry_word_count]
-        }.to [0, 0, 0, 0]
+        project_language.recalculate_counts!
+        expect(project_language.need_review_count).to eq(0)
+        expect(project_language.need_entry_count).to eq(0)
+        expect(project_language.need_review_word_count).to eq(0)
+        expect(project_language.need_entry_word_count).to eq(0)
       end
     end
   end
