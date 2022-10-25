@@ -199,6 +199,7 @@ describe "Project Language Pages", type: :feature do
     end
 
     describe "translations to review" do
+      let(:project_language) { create(:project_language, need_review_count: 5, need_review_word_count: 48) }
       let(:localized_text) { needs_review_localized_text }
       let(:path) { review_project_language_texts_path(project_language) }
 

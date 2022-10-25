@@ -98,6 +98,7 @@ describe "Localized Text One by One Edit Page", type: :feature do
   end
 
   describe "workflow from project language page" do
+    let(:project_language) { create(:project_language, need_entry_count: 2) }
     let(:first_localized_text) { create :localized_text, project_language: project_language }
     let(:another_localized_text) { create :localized_text, project_language: project_language }
 
