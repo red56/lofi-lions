@@ -4,8 +4,8 @@ class Language < ApplicationRecord
   PLURAL_FORMS = [:zero, :one, :two, :few, :many, :other].freeze
   PLURAL_FORMS_WITH_FIELDS = PLURAL_FORMS.map { |form| [form, "pluralizable_label_#{form}".to_sym] }.freeze
 
-  has_many :localized_texts, through: :project_languages
   has_many :project_languages, inverse_of: :language, dependent: :destroy
+  has_many :localized_texts, through: :project_languages
   has_many :users, through: :project_languages
   has_many :projects, through: :project_languages
 
