@@ -55,7 +55,7 @@ class MasterText < ApplicationRecord
   def md_to_paragraphs!(base_key: nil)
     transform_and_create(base_key: base_key) do |new_master_texts, base|
       non_blank_lines.each_with_index do |para, index|
-        new_master_text = create_transformed(new_key: "#{base}_p%02d" % (index + 1), new_text: para) do |localized_text|
+        new_master_text = create_transformed(new_key: "#{base}_P%02d" % (index + 1), new_text: para) do |localized_text|
           raise "#{key} (LocalizedText##{localized_text.id}) wrong number of non_blank_lines (expected #{non_blank_lines.length}, got #{localized_text.non_blank_lines.length})" unless non_blank_lines.length == localized_text.non_blank_lines.length
 
           localized_text.non_blank_lines[index]
@@ -69,10 +69,10 @@ class MasterText < ApplicationRecord
     transform_and_create(base_key: base_key) do |new_master_texts, base|
       heading, body = first_and_rest_of_blank_lines
 
-      new_master_texts << create_transformed(new_key: "#{base}_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
+      new_master_texts << create_transformed(new_key: "#{base}_A_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
         self.class.strip_heading_markup_and_number(localized_text.first_and_rest_of_blank_lines.first)
       end
-      new_master_texts << create_transformed(new_key: "#{base}_body", new_text: self.class.strip_bullets(body)) do |localized_text|
+      new_master_texts << create_transformed(new_key: "#{base}_Body", new_text: self.class.strip_bullets(body)) do |localized_text|
         self.class.strip_bullets(localized_text.first_and_rest_of_blank_lines.second)
       end
     end

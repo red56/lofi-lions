@@ -229,7 +229,7 @@ RSpec.describe MasterText, type: :model do
     let!(:project_language) { create(:project_language, project: project) }
     let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
     let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux \n\n Trois") }
-    let(:created_master_text_p1) { project.master_texts.where(key: "terms_c_01_p01").first }
+    let(:created_master_text_p1) { project.master_texts.where(key: "terms_c_01_P01").first }
 
     it "is renamed" do
       expect { master_text.md_to_paragraphs! }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
@@ -287,15 +287,15 @@ RSpec.describe MasterText, type: :model do
         master_text.md_to_paragraphs!
       }.to change { project.master_texts.reload.map(&:key) }
         .from(contain_exactly("terms_c_01_md"))
-        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_p01", "terms_c_01_p02", "terms_c_01_p03", "terms_c_01_p04")
+        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_P01", "terms_c_01_P02", "terms_c_01_P03", "terms_c_01_P04")
     end
 
     it "returns new master texts" do
-      expect(master_text.md_to_paragraphs!.map(&:key)).to eq(%w[terms_c_01_p01 terms_c_01_p02 terms_c_01_p03 terms_c_01_p04])
+      expect(master_text.md_to_paragraphs!.map(&:key)).to eq(%w[terms_c_01_P01 terms_c_01_P02 terms_c_01_P03 terms_c_01_P04])
     end
 
     it "can take base_key to change keys of new master texts" do
-      expect(master_text.md_to_paragraphs!(base_key: "flong").map(&:key)).to eq(%w[flong_p01 flong_p02 flong_p03 flong_p04])
+      expect(master_text.md_to_paragraphs!(base_key: "flong").map(&:key)).to eq(%w[flong_P01 flong_P02 flong_P03 flong_P04])
     end
   end
 
@@ -304,8 +304,8 @@ RSpec.describe MasterText, type: :model do
     let!(:project_language) { create(:project_language, project: project) }
     let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
     let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux \n\n Trois") }
-    let(:created_master_text_heading) { project.master_texts.where(key: "terms_c_01_heading").first }
-    let(:created_master_text_body) { project.master_texts.where(key: "terms_c_01_body").first }
+    let(:created_master_text_heading) { project.master_texts.where(key: "terms_c_01_A_heading").first }
+    let(:created_master_text_body) { project.master_texts.where(key: "terms_c_01_Body").first }
 
     it "is renamed" do
       expect { master_text.md_to_heading_and_body! }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
@@ -355,15 +355,15 @@ RSpec.describe MasterText, type: :model do
         master_text.md_to_heading_and_body!
       }.to change { project.master_texts.reload.map(&:key) }
         .from(contain_exactly("terms_c_01_md"))
-        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_heading", "terms_c_01_body")
+        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_A_heading", "terms_c_01_Body")
     end
 
     it "returns new master texts" do
-      expect(master_text.md_to_heading_and_body!.map(&:key)).to eq(%w[terms_c_01_heading terms_c_01_body])
+      expect(master_text.md_to_heading_and_body!.map(&:key)).to eq(%w[terms_c_01_A_heading terms_c_01_Body])
     end
 
     it "can take base_key to change keys of new master texts" do
-      expect(master_text.md_to_heading_and_body!(base_key: "flong").map(&:key)).to eq(%w[flong_heading flong_body])
+      expect(master_text.md_to_heading_and_body!(base_key: "flong").map(&:key)).to eq(%w[flong_A_heading flong_Body])
     end
 
     context "with heading" do
