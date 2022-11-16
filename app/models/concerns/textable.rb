@@ -25,7 +25,7 @@ module Textable
   def non_blank_lines
     raise "non_blank_lines can't deal with pluralizable" if pluralizable
 
-    self.class.non_blank_lines(text)
+    @non_blank_lines ||= self.class.non_blank_lines(text)
   end
 
   def first_and_rest_of_blank_lines
