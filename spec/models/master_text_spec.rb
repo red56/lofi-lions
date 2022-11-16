@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe MasterText, type: :model do
+RSpec.describe MasterText, type: :model do
   describe "validations" do
     let(:master_text) { build(:master_text) }
 

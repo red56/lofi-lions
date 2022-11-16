@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe LocalizedText, type: :model do
+RSpec.describe LocalizedText, type: :model do
   let(:localized_text) {
     build(:localized_text, text: "something").tap do |localized_text|
       allow(localized_text).to receive_messages(pluralizable: pluralizable, language: language)
