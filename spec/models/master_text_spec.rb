@@ -241,7 +241,7 @@ RSpec.describe MasterText, type: :model do
 
     context "with views" do
       let(:view) { create(:view, project: project) }
-      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", views: [view]) }
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "Name\nOne\nTwo\nThree", views: [view]) }
 
       it "copies them" do
         master_text.md_to_paragraphs!
@@ -250,7 +250,7 @@ RSpec.describe MasterText, type: :model do
     end
 
     context "with comment" do
-      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", comment: "whatevs") }
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "Name\nOne\nTwo\nThree", comment: "whatevs") }
 
       it "copies them" do
         master_text.md_to_paragraphs!
@@ -270,6 +270,16 @@ RSpec.describe MasterText, type: :model do
 
     it "can change localized text counts" do
       expect { master_text.md_to_paragraphs! }.to change { project.localized_texts.count }.from(1).to(1 + 4)
+    end
+
+    context "with wrong number of localized_text paras" do
+      let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux") }
+
+      it "raises" do
+        expect {
+          expect { master_text.md_to_paragraphs! }.to raise_error(/wrong/)
+        }.not_to change { project.localized_texts.count }.from(1)
+      end
     end
 
     it "names keys as expected" do
