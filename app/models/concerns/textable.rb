@@ -13,4 +13,10 @@ module Textable
 
     self.text = non_blank_lines.map { |line| line.sub(/^\s*[*] /, "") }.join("\n\n")
   end
+
+  def strip_heading_markup_and_number
+    raise "strip_heading_markup_and_number can't deal with pluralizable" if pluralizable
+
+    self.text = text.sub(/^(#+ )?(\d+[.] )?/, "")
+  end
 end

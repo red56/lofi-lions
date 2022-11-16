@@ -49,5 +49,32 @@ RSpec.configure do
         expect { textable.strip_bullets }.to change { textable.text }.to "one\n\ntwo\n\nthree"
       end
     end
+
+    describe "#strip_heading_markup_and_number" do
+      it "has a noop" do
+        textable = build(factory_name, text: "one")
+        expect { textable.strip_heading_markup_and_number }.not_to change { textable.text }
+      end
+
+      it "strips heading markup" do
+        textable = build(factory_name, text: "### one")
+        expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
+      end
+
+      it "strips heading markup and number" do
+        textable = build(factory_name, text: "### 1. one")
+        expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
+      end
+
+      it "strips different heading markup and number" do
+        textable = build(factory_name, text: "# 10. one")
+        expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
+      end
+
+      it "strips number" do
+        textable = build(factory_name, text: "10. one")
+        expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
+      end
+    end
   end
 end
