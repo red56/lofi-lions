@@ -52,7 +52,7 @@ class MasterText < ApplicationRecord
   end
 
   # transforms:
-  def md_to_paragraphs!
+  def md_to_paragraphs!(base_key: nil)
     raise "md_to_paragraphs! can't deal with pluralizable" if pluralizable?
     return if key.starts_with?("ΩΩΩ_")
 
@@ -61,7 +61,7 @@ class MasterText < ApplicationRecord
       return
     end
 
-    base_key = key.gsub(/_md$/, "")
+    base_key ||= key.gsub(/_md$/, "")
     new_master_texts = []
     transaction do
       non_blank_lines.each_with_index do |para, index|
@@ -75,7 +75,7 @@ class MasterText < ApplicationRecord
     new_master_texts
   end
 
-  def md_to_heading_and_body!
+  def md_to_heading_and_body!(base_key: nil)
     raise "md_to_heading_and_body! can't deal with pluralizable" if pluralizable?
     return if key.starts_with?("ΩΩΩ_")
 
@@ -84,7 +84,7 @@ class MasterText < ApplicationRecord
       return
     end
 
-    base_key = key.gsub(/_md$/, "")
+    base_key ||= key.gsub(/_md$/, "")
     new_master_texts = []
     transaction do
       heading, body = first_and_rest_of_blank_lines

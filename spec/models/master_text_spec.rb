@@ -283,6 +283,10 @@ RSpec.describe MasterText, type: :model do
     it "returns new master texts" do
       expect(master_text.md_to_paragraphs!.map(&:key)).to eq(%w[terms_c_01_p01 terms_c_01_p02 terms_c_01_p03 terms_c_01_p04])
     end
+
+    it "can take base_key to change keys of new master texts" do
+      expect(master_text.md_to_paragraphs!(base_key: "flong").map(&:key)).to eq(%w[flong_p01 flong_p02 flong_p03 flong_p04])
+    end
   end
 
   describe "md_to_heading_and_body" do
@@ -346,6 +350,10 @@ RSpec.describe MasterText, type: :model do
 
     it "returns new master texts" do
       expect(master_text.md_to_heading_and_body!.map(&:key)).to eq(%w[terms_c_01_heading terms_c_01_body])
+    end
+
+    it "can take base_key to change keys of new master texts" do
+      expect(master_text.md_to_heading_and_body!(base_key: "flong").map(&:key)).to eq(%w[flong_heading flong_body])
     end
 
     context "with heading" do
