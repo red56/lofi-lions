@@ -11,9 +11,14 @@ class MasterText < ApplicationRecord
   has_many :key_placements, inverse_of: :master_text
   has_many :views, through: :key_placements
 
-  # like a scope but doesn't return an association proxy
-  def self.with_matching_keys(regexp)
-    select { |mt| mt.key.match?(regexp) }
+  # like a scope but doesn't always return an association proxy
+  # Either use with one regexps or more than one string
+  def self.with_keys(*args)
+    if args.length == 1 && args.first.is_a?(Regexp)
+      select { |mt| mt.key.match?(args.first) }
+    else
+      where(key: args)
+    end
   end
 
   validates :key, presence: true

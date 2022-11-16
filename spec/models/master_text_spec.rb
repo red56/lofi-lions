@@ -206,13 +206,21 @@ describe MasterText, type: :model do
     end
   end
 
-  describe "scope with_matching_keys" do
+  describe "scope with_keys" do
     let(:project) { create :project }
     let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
-    let!(:other_master_text) { create(:master_text, project: project, key: "somethign_else") }
+    let!(:other_master_text) { create(:master_text, project: project, key: "something_else") }
 
-    it "works" do
-      expect(project.master_texts.with_matching_keys(/terms_c_\d+_md/)).to contain_exactly(master_text)
+    it "works with regexp" do
+      expect(project.master_texts.with_keys(/terms_c_\d+_md/)).to contain_exactly(master_text)
+    end
+
+    it "works with single string" do
+      expect(project.master_texts.with_keys("terms_c_01_md")).to contain_exactly(master_text)
+    end
+
+    it "works with two strings" do
+      expect(project.master_texts.with_keys("terms_c_01_md", "something_else")).to contain_exactly(master_text, other_master_text)
     end
   end
 
