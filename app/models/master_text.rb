@@ -65,10 +65,8 @@ class MasterText < ApplicationRecord
     new_master_texts = []
     transaction do
       non_blank_lines.each_with_index do |para, index|
-        new_key = "#{base_key}_p%02d" % (index + 1)
-        new_master_text = project.master_texts.create!(key: new_key, text: para, views: views, comment: comment)
-        localized_texts.each do |localized_text|
-          new_master_text.localized_texts.create!(project_language: localized_text.project_language, text: localized_text.non_blank_lines[index])
+        new_master_text = create_transformed(new_key: "#{base_key}_p%02d" % (index + 1), new_text: para) do |localized_text|
+          localized_text.non_blank_lines[index]
         end
         new_master_texts << new_master_text
       end
@@ -77,7 +75,41 @@ class MasterText < ApplicationRecord
     new_master_texts
   end
 
+  def md_to_heading_and_body!
+    raise "md_to_heading_and_body! can't deal with pluralizable" if pluralizable?
+    return if key.starts_with?("ΩΩΩ_")
+
+    if non_blank_lines.length == 1
+      logger.warn "MasterText[#{key}].md_to_heading_and_body! but has has zero paragraphs"
+      return
+    end
+
+    base_key = key.gsub(/_md$/, "")
+    new_master_texts = []
+    transaction do
+      heading, body = first_and_rest_of_blank_lines
+
+      new_master_texts << create_transformed(new_key: "#{base_key}_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
+        self.class.strip_heading_markup_and_number(localized_text.first_and_rest_of_blank_lines.first)
+      end
+      new_master_texts << create_transformed(new_key: "#{base_key}_body", new_text: self.class.strip_bullets(body)) do |localized_text|
+        self.class.strip_bullets(localized_text.first_and_rest_of_blank_lines.second)
+      end
+
+      update!(key: "ΩΩΩ_#{key}")
+    end
+    new_master_texts
+  end
+
   private
+
+  def create_transformed(new_key:, new_text:)
+    new_master_text = project.master_texts.create!(key: new_key, text: new_text, views: views, comment: comment)
+    localized_texts.each do |localized_text|
+      new_master_text.localized_texts.create!(project_language: localized_text.project_language, text: yield(localized_text))
+    end
+    new_master_text
+  end
 
   def calculate_word_count
     if pluralizable?

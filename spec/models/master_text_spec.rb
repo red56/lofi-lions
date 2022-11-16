@@ -285,6 +285,92 @@ RSpec.describe MasterText, type: :model do
     end
   end
 
+  describe "md_to_heading_and_body" do
+    let(:project) { create :project }
+    let!(:project_language) { create(:project_language, project: project) }
+    let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
+    let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux \n\n Trois") }
+    let(:created_master_text_heading) { project.master_texts.where(key: "terms_c_01_heading").first }
+    let(:created_master_text_body) { project.master_texts.where(key: "terms_c_01_body").first }
+
+    it "is renamed" do
+      expect { master_text.md_to_heading_and_body! }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
+    end
+
+    it "changes master text counts" do
+      expect { master_text.md_to_heading_and_body! }.to change { project.master_texts.count }.from(1).to(1 + 2)
+    end
+
+    context "with views" do
+      let(:view) { create(:view, project: project) }
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", views: [view]) }
+
+      it "copies them" do
+        master_text.md_to_heading_and_body!
+        expect(created_master_text_heading.views).to eq([view])
+        expect(created_master_text_body.views).to eq([view])
+      end
+    end
+
+    context "with comment" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", comment: "whatevs") }
+
+      it "copies them" do
+        master_text.md_to_heading_and_body!
+        expect(created_master_text_heading.comment).to eq("whatevs")
+        expect(created_master_text_body.comment).to eq("whatevs")
+      end
+    end
+
+    context "with only one paragraph" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One") }
+
+      it "won't change it" do
+        original_key = master_text.key
+        expect { master_text.md_to_heading_and_body! }.not_to change { project.master_texts.count }
+        expect(master_text.reload.key).to eq(original_key)
+      end
+    end
+
+    it "can change localized text counts" do
+      expect { master_text.md_to_heading_and_body! }.to change { project.localized_texts.count }.from(1).to(1 + 2)
+    end
+
+    it "names keys as expected" do
+      expect {
+        master_text.md_to_heading_and_body!
+      }.to change { project.master_texts.reload.map(&:key) }
+        .from(contain_exactly("terms_c_01_md"))
+        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_heading", "terms_c_01_body")
+    end
+
+    it "returns new master texts" do
+      expect(master_text.md_to_heading_and_body!.map(&:key)).to eq(%w[terms_c_01_heading terms_c_01_body])
+    end
+
+    context "with heading" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\ntwo") }
+      let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux \n\n Trois") }
+
+      it "strips heading / number" do
+        master_text.md_to_heading_and_body!
+        expect(created_master_text_heading.text).to eq("Name")
+        expect(created_master_text_heading.localized_texts.first.text).to eq("Nom")
+      end
+    end
+
+    context "with bullets" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "Heading\n* one\ntwo\n* three") }
+      let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\n* Un\n\nDeux \n\n* Trois") }
+
+      it "strips bullets" do
+        master_text.md_to_heading_and_body!
+        expect(created_master_text_body.text).to eq("one\n\ntwo\n\nthree")
+        expect(created_master_text_body.localized_texts.first.text).to eq("Un\n\nDeux\n\nTrois")
+      end
+    end
+  end
+
   context "as textable" do
     include_examples "behaves as textable" do
       let(:factory_name) { :master_text }
