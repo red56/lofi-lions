@@ -244,4 +244,18 @@ describe LocalizedText, type: :model do
       end
     end
   end
+
+  describe "#non_blank_lines" do
+    it "splits one" do
+      expect(build(:localized_text, text: "one").non_blank_lines).to eq(["one"])
+    end
+
+    it "strips one" do
+      expect(build(:localized_text, text: "\n\n\t one\n\n\t ").non_blank_lines).to eq(["one"])
+    end
+
+    it "splits three" do
+      expect(build(:localized_text, text: "one\ntwo\nthree\n").non_blank_lines).to eq(["one", "two", "three"])
+    end
+  end
 end

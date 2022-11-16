@@ -205,4 +205,89 @@ describe MasterText, type: :model do
       expect { master_text.update(text: "many dogs are lovely.") }.to change { master_text.reload[:word_count] }.from(1).to(4)
     end
   end
+
+  describe "scope with_matching_keys" do
+    let(:project) { create :project }
+    let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
+    let!(:other_master_text) { create(:master_text, project: project, key: "somethign_else") }
+
+    it "works" do
+      expect(project.master_texts.with_matching_keys(/terms_c_\d+_md/)).to contain_exactly(master_text)
+    end
+  end
+
+  describe "md_to_paragraphs!" do
+    let(:project) { create :project }
+    let!(:project_language) { create(:project_language, project: project) }
+    let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "### 1. Name\n\nOne  \n\n Two\n\nThree") }
+    let!(:localized_text) { create(:localized_text, master_text: master_text, project_language: project_language, text: "### 1. Nom\n\nUn\n\nDeux \n\n Trois") }
+    let(:created_master_text_p1) { project.master_texts.where(key: "terms_c_01_p01").first }
+
+    it "is renamed" do
+      expect { master_text.md_to_paragraphs! }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
+    end
+
+    it "changes master text counts" do
+      expect { master_text.md_to_paragraphs! }.to change { project.master_texts.count }.from(1).to(1 + 4)
+    end
+
+    context "with views" do
+      let(:view) { create(:view, project: project) }
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", views: [view]) }
+
+      it "copies them" do
+        master_text.md_to_paragraphs!
+        expect(created_master_text_p1.views).to eq([view])
+      end
+    end
+
+    context "with comment" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One\nTwo", comment: "whatevs") }
+
+      it "copies them" do
+        master_text.md_to_paragraphs!
+        expect(created_master_text_p1.comment).to eq("whatevs")
+      end
+    end
+
+    context "with only one paragraph" do
+      let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: "One") }
+
+      it "won't change it" do
+        original_key = master_text.key
+        expect { master_text.md_to_paragraphs! }.not_to change { project.master_texts.count }
+        expect(master_text.reload.key).to eq(original_key)
+      end
+    end
+
+    it "can change localized text counts" do
+      expect { master_text.md_to_paragraphs! }.to change { project.localized_texts.count }.from(1).to(1 + 4)
+    end
+
+    it "names keys as expected" do
+      expect {
+        master_text.md_to_paragraphs!
+      }.to change { project.master_texts.reload.map(&:key) }
+        .from(contain_exactly("terms_c_01_md"))
+        .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_p01", "terms_c_01_p02", "terms_c_01_p03", "terms_c_01_p04")
+    end
+
+    it "returns renamed keys" do
+      expect(master_text.md_to_paragraphs!).to eq(%w[terms_c_01_p01 terms_c_01_p02 terms_c_01_p03 terms_c_01_p04])
+    end
+  end
+
+  describe "#non_blank_lines" do
+    it "splits one" do
+      expect(build(:master_text, text: "one").non_blank_lines).to eq(["one"])
+    end
+
+    it "strips one" do
+      expect(build(:master_text, text: "\n\n\t one\n\n\t ").non_blank_lines).to eq(["one"])
+    end
+
+    it "splits three" do
+      expect(build(:master_text, text: "one\ntwo\nthree\n").non_blank_lines).to eq(["one", "two", "three"])
+    end
+  end
 end

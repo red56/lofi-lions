@@ -184,6 +184,9 @@ Style/FetchEnvVar:
   Enabled:
     false
 
+Style/FormatString:
+  EnforcedStyle: percent
+
 Style/HashSyntax:
   EnforcedStyle: ruby19
 
