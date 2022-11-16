@@ -272,8 +272,8 @@ describe MasterText, type: :model do
         .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_p01", "terms_c_01_p02", "terms_c_01_p03", "terms_c_01_p04")
     end
 
-    it "returns renamed keys" do
-      expect(master_text.md_to_paragraphs!).to eq(%w[terms_c_01_p01 terms_c_01_p02 terms_c_01_p03 terms_c_01_p04])
+    it "returns new master texts" do
+      expect(master_text.md_to_paragraphs!.map(&:key)).to eq(%w[terms_c_01_p01 terms_c_01_p02 terms_c_01_p03 terms_c_01_p04])
     end
   end
 

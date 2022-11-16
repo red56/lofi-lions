@@ -57,19 +57,19 @@ class MasterText < ApplicationRecord
     end
 
     base_key = key.gsub(/_md$/, "")
-    new_keys = []
+    new_master_texts = []
     transaction do
       non_blank_lines.each_with_index do |para, index|
         new_key = "#{base_key}_p%02d" % (index + 1)
-        new_keys << new_key
         new_master_text = project.master_texts.create!(key: new_key, text: para, views: views, comment: comment)
         localized_texts.each do |localized_text|
           new_master_text.localized_texts.create!(project_language: localized_text.project_language, text: localized_text.non_blank_lines[index])
         end
+        new_master_texts << new_master_text
       end
       update!(key: "ΩΩΩ_#{key}")
     end
-    new_keys
+    new_master_texts
   end
 
   private
