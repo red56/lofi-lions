@@ -53,55 +53,48 @@ class MasterText < ApplicationRecord
 
   # transforms:
   def md_to_paragraphs!(base_key: nil)
-    raise "md_to_paragraphs! can't deal with pluralizable" if pluralizable?
-    return if key.starts_with?("ΩΩΩ_")
-
-    if non_blank_lines.length == 1
-      logger.warn "MasterText[#{key}].md_to_paragraphs! but has has zero paragraphs"
-      return
-    end
-
-    base_key ||= key.gsub(/_md$/, "")
-    new_master_texts = []
-    transaction do
+    transform_and_create(base_key: base_key) do |new_master_texts, base|
       non_blank_lines.each_with_index do |para, index|
-        new_master_text = create_transformed(new_key: "#{base_key}_p%02d" % (index + 1), new_text: para) do |localized_text|
+        new_master_text = create_transformed(new_key: "#{base}_p%02d" % (index + 1), new_text: para) do |localized_text|
           localized_text.non_blank_lines[index]
         end
         new_master_texts << new_master_text
       end
-      update!(key: "ΩΩΩ_#{key}")
     end
-    new_master_texts
   end
 
   def md_to_heading_and_body!(base_key: nil)
-    raise "md_to_heading_and_body! can't deal with pluralizable" if pluralizable?
+    transform_and_create(base_key: base_key) do |new_master_texts, base|
+      heading, body = first_and_rest_of_blank_lines
+
+      new_master_texts << create_transformed(new_key: "#{base}_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
+        self.class.strip_heading_markup_and_number(localized_text.first_and_rest_of_blank_lines.first)
+      end
+      new_master_texts << create_transformed(new_key: "#{base}_body", new_text: self.class.strip_bullets(body)) do |localized_text|
+        self.class.strip_bullets(localized_text.first_and_rest_of_blank_lines.second)
+      end
+    end
+  end
+
+  private
+
+  def transform_and_create(base_key:)
+    raise "can't deal with pluralizable" if pluralizable?
     return if key.starts_with?("ΩΩΩ_")
 
     if non_blank_lines.length == 1
-      logger.warn "MasterText[#{key}].md_to_heading_and_body! but has has zero paragraphs"
+      logger.warn "can't transform - has zero paragraphs"
       return
     end
 
     base_key ||= key.gsub(/_md$/, "")
     new_master_texts = []
     transaction do
-      heading, body = first_and_rest_of_blank_lines
-
-      new_master_texts << create_transformed(new_key: "#{base_key}_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
-        self.class.strip_heading_markup_and_number(localized_text.first_and_rest_of_blank_lines.first)
-      end
-      new_master_texts << create_transformed(new_key: "#{base_key}_body", new_text: self.class.strip_bullets(body)) do |localized_text|
-        self.class.strip_bullets(localized_text.first_and_rest_of_blank_lines.second)
-      end
-
+      yield [new_master_texts, base_key]
       update!(key: "ΩΩΩ_#{key}")
     end
     new_master_texts
   end
-
-  private
 
   def create_transformed(new_key:, new_text:)
     new_master_text = project.master_texts.create!(key: new_key, text: new_text, views: views, comment: comment)
