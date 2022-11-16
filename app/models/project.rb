@@ -34,4 +34,15 @@ class Project < ApplicationRecord
   def word_count
     master_texts.sum("word_count")
   end
+
+  def find_and_replace(replacements)
+    master_texts.each do |t|
+      replacements.each { |from, to| t.text = t.text.gsub(from, to) }
+      t.save!
+    end
+    localized_texts.each do |t|
+      replacements.each { |from, to| t.text = t.text.gsub(from, to) }
+      t.save!
+    end
+  end
 end
