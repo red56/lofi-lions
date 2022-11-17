@@ -37,12 +37,12 @@ class Project < ApplicationRecord
 
   def find_and_replace(replacements)
     master_texts.each do |t|
-      replacements.each { |from, to| t.text = t.text.gsub(from, to) }
-      t.save!
+      replacements.each { |from, to| t.other = t.other.gsub(from, to) }
+      t.update_columns(other: t.other) # rubocop:disable Rails/SkipsModelValidations (deliberate)
     end
     localized_texts.each do |t|
-      replacements.each { |from, to| t.text = t.text.gsub(from, to) }
-      t.save!
+      replacements.each { |from, to| t.other = t.other.gsub(from, to) }
+      t.update_columns(other: t.text) # rubocop:disable Rails/SkipsModelValidations (deliberate)
     end
   end
 end
