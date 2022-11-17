@@ -75,6 +75,11 @@ RSpec.configure do
         textable = build(factory_name, text: "10. one")
         expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
       end
+
+      it "strips number when separated with other whitespace" do
+        textable = build(factory_name, text: "10.\tone")
+        expect { textable.strip_heading_markup_and_number }.to change { textable.text }.to "one"
+      end
     end
   end
 end

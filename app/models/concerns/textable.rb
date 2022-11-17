@@ -18,7 +18,7 @@ module Textable
     end
 
     def strip_heading_markup_and_number(text)
-      text.sub(/^(#+ )?(\d+[.] )?/, "")
+      text.sub(/^(#+\s+)?(\d+[.]\s+)?/, "")
     end
   end
 
