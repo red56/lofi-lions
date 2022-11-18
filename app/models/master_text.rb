@@ -55,8 +55,8 @@ class MasterText < ApplicationRecord
     MasterTextTransforms::SplitParagraphs.new(self, base_key: base_key).transform
   end
 
-  def md_to_heading_and_body!(base_key: nil)
-    MasterTextTransforms::SplitToHeadingAndBody.new(self, base_key: base_key).transform
+  def md_to_heading_and_text!(base_key: nil)
+    MasterTextTransforms::SplitToHeadingAndText.new(self, base_key: base_key).transform
   end
 
   def split_to_sections(base_key: nil)
