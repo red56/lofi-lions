@@ -16,7 +16,7 @@ module MasterTextTransforms
 
     private
 
-    delegate :key, :logger, :pluralizable?, :project, :non_blank_lines, :transaction,
+    delegate :key, :logger, :pluralizable?, :project, :non_blank_lines, :text, :transaction,
              to: :master_text
 
     def transform_and_create

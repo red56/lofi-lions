@@ -66,16 +66,7 @@ class MasterText < ApplicationRecord
   end
 
   def md_to_heading_and_body!(base_key: nil)
-    transform_and_create(base_key: base_key) do |new_master_texts, base|
-      heading, body = first_and_rest_of_blank_lines
-
-      new_master_texts << create_transformed(new_key: "#{base}_A_heading", new_text: self.class.strip_heading_markup_and_number(heading)) do |localized_text|
-        self.class.strip_heading_markup_and_number(localized_text.first_and_rest_of_blank_lines.first)
-      end
-      new_master_texts << create_transformed(new_key: "#{base}_Body", new_text: self.class.strip_bullets(body)) do |localized_text|
-        self.class.strip_bullets(localized_text.first_and_rest_of_blank_lines.second)
-      end
-    end
+    MasterTextTransforms::SplitToHeadingAndBody.new(self, base_key: base_key).transform
   end
 
   def split_to_sections(base_key: nil)
