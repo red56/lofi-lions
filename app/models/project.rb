@@ -27,6 +27,10 @@ class Project < ApplicationRecord
     master_texts.order(:key).map { |master_text| MasterTextImpersonatingLocalizedText.new(master_text) }
   end
 
+  def master_texts_as_xx
+    master_texts.order(:key).map { |master_text| MasterTextAsXx.new(master_text) }
+  end
+
   def recalculate_counts!
     project_languages.each(&:recalculate_counts!)
   end

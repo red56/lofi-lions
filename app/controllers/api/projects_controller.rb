@@ -55,21 +55,17 @@ class Api::ProjectsController < ApplicationController
     localizations.close if localizations
   end
 
-  def language_code
-    return params[:code] if params[:code] && params[:code] != Language.for_master_texts.code
-
-    @language = Language.for_master_texts
-    nil
-  end
-
   def find_language
-    if code = language_code
-      @language = Language.find_by_code(code)
-      if @language.nil?
-        render json: "Language #{code} not found", status: 404
-        return false
-      end
-    end
+    @language = case params[:code]
+                when nil, Language.for_master_texts.code
+                  Language.for_master_texts
+                when "xx"
+                  Language.xx_for_testing
+                else
+                  Language.find_by(code: params[:code])
+                end
+
+    render json: "Language #{params[:code].inspect} not found", status: 404 unless @language
   end
 
   def find_project

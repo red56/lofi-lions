@@ -9,6 +9,8 @@ class BaseExporter
   def body
     if @language.is_master_text?
       body_for(@project.master_texts_impersonating_localized_texts)
+    elsif @language.code == Language::XX_CODE_FOR_TESTING
+      body_for(@project.master_texts_as_xx)
     else
       project_language = ProjectLanguage.where(language_id: @language.id, project_id: @project.id).first
       raise "No ProjectLanguage" unless project_language

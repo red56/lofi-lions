@@ -25,6 +25,13 @@ class Language < ApplicationRecord
     end
   end
 
+  XX_CODE_FOR_TESTING = "xx"
+
+  def self.xx_for_testing
+    Language.new(code: XX_CODE_FOR_TESTING, name: "With xx replacements (for testing)",
+                 pluralizable_label_one: "One", pluralizable_label_other: "Other")
+  end
+
   def plural_forms_with_fields
     @plurals ||= Hash[PLURAL_FORMS_WITH_FIELDS.reject { |form, field| self[field].blank? }.map { |form, field|
                         [form, self[field]]
