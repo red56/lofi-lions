@@ -30,7 +30,7 @@ module MasterTextTransforms
 
       new_master_texts = []
       transaction do
-        yield [new_master_texts, base_key]
+        yield new_master_texts
         master_text.update!(key: "ΩΩΩ_#{key}")
       end
       new_master_texts

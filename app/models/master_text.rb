@@ -51,18 +51,8 @@ class MasterText < ApplicationRecord
     format == MARKDOWN_FORMAT
   end
 
-  # transforms:
   def md_to_paragraphs!(base_key: nil)
-    transform_and_create(base_key: base_key) do |new_master_texts, base|
-      non_blank_lines.each_with_index do |para, index|
-        new_master_text = create_transformed(new_key: "#{base}_P%02d" % (index + 1), new_text: para) do |localized_text|
-          raise "#{key} (LocalizedText##{localized_text.id}) wrong number of non_blank_lines (expected #{non_blank_lines.length}, got #{localized_text.non_blank_lines.length})" unless non_blank_lines.length == localized_text.non_blank_lines.length
-
-          localized_text.non_blank_lines[index]
-        end
-        new_master_texts << new_master_text
-      end
-    end
+    MasterTextTransforms::SplitParagraphs.new(self, base_key: base_key).transform
   end
 
   def md_to_heading_and_body!(base_key: nil)
@@ -74,32 +64,6 @@ class MasterText < ApplicationRecord
   end
 
   private
-
-  def transform_and_create(base_key:)
-    raise "can't deal with pluralizable" if pluralizable?
-    return if key.starts_with?("ΩΩΩ_")
-
-    if non_blank_lines.length == 1
-      logger.warn "can't transform - has zero paragraphs"
-      return
-    end
-
-    base_key ||= key.gsub(/_md$/, "")
-    new_master_texts = []
-    transaction do
-      yield [new_master_texts, base_key]
-      update!(key: "ΩΩΩ_#{key}")
-    end
-    new_master_texts
-  end
-
-  def create_transformed(new_key:, new_text:)
-    new_master_text = project.master_texts.create!(key: new_key, text: new_text, views: views, comment: comment)
-    localized_texts.each do |localized_text|
-      new_master_text.localized_texts.create!(project_language: localized_text.project_language, text: yield(localized_text))
-    end
-    new_master_text
-  end
 
   def calculate_word_count
     if pluralizable?
