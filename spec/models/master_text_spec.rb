@@ -389,7 +389,7 @@ RSpec.describe MasterText, type: :model do
     end
   end
 
-  describe "split_to_sections_with_heading_and_paras!" do
+  describe "split_to_sections" do
     let(:project) { create :project }
     let!(:project_language) { create(:project_language, project: project) }
     let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: en_text) }
@@ -421,11 +421,11 @@ RSpec.describe MasterText, type: :model do
     let(:created_master_text_s2_p1) { project.master_texts.find_by(key: "terms_c_01_s2_p1") }
 
     it "is renamed" do
-      expect { master_text.split_to_sections_with_heading_and_paras! }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
+      expect { master_text.split_to_sections }.to change { master_text.reload.key }.to("ΩΩΩ_terms_c_01_md")
     end
 
     it "changes master text counts" do
-      expect { master_text.split_to_sections_with_heading_and_paras! }.to change { project.master_texts.count }.from(1).to(1 + 7)
+      expect { master_text.split_to_sections }.to change { project.master_texts.count }.from(1).to(1 + 7)
     end
 
     context "with views" do
@@ -433,7 +433,7 @@ RSpec.describe MasterText, type: :model do
       let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: en_text, views: [view]) }
 
       it "copies them" do
-        master_text.split_to_sections_with_heading_and_paras!
+        master_text.split_to_sections
         expect(created_master_text_s2_p1.views).to eq([view])
       end
     end
@@ -442,7 +442,7 @@ RSpec.describe MasterText, type: :model do
       let!(:master_text) { create(:master_text, project: project, key: "terms_c_01_md", text: en_text, comment: "whatevs") }
 
       it "copies them" do
-        master_text.split_to_sections_with_heading_and_paras!
+        master_text.split_to_sections
         expect(created_master_text_s2_p1.comment).to eq("whatevs")
       end
     end
@@ -452,13 +452,13 @@ RSpec.describe MasterText, type: :model do
 
       it "won't change it" do
         original_key = master_text.key
-        expect { master_text.split_to_sections_with_heading_and_paras! }.not_to change { project.master_texts.count }
+        expect { master_text.split_to_sections }.not_to change { project.master_texts.count }
         expect(master_text.reload.key).to eq(original_key)
       end
     end
 
     it "can change localized text counts" do
-      expect { master_text.split_to_sections_with_heading_and_paras! }.to change { project.localized_texts.count }.from(1).to(1 + 7)
+      expect { master_text.split_to_sections }.to change { project.localized_texts.count }.from(1).to(1 + 7)
     end
 
     context "with wrong number of localized_text paras" do
@@ -466,25 +466,25 @@ RSpec.describe MasterText, type: :model do
 
       it "raises" do
         expect {
-          expect { master_text.split_to_sections_with_heading_and_paras! }.to raise_error(/wrong/)
+          expect { master_text.split_to_sections }.to raise_error(/wrong/)
         }.not_to change { project.localized_texts.count }.from(1)
       end
     end
 
     it "names keys as expected" do
       expect {
-        master_text.split_to_sections_with_heading_and_paras!
+        master_text.split_to_sections
       }.to change { project.master_texts.reload.map(&:key) }
         .from(contain_exactly("terms_c_01_md"))
         .to contain_exactly("ΩΩΩ_terms_c_01_md", "terms_c_01_s1_p1", "terms_c_01_s2_heading", "terms_c_01_s2_p1", "terms_c_01_s3_heading", "terms_c_01_s3_p1", "terms_c_01_s3_p2", "terms_c_01_s4_heading")
     end
 
     it "returns new master texts" do
-      expect(master_text.split_to_sections_with_heading_and_paras!.map(&:key)).to eq(%w[terms_c_01_s1_p1 terms_c_01_s2_heading terms_c_01_s2_p1 terms_c_01_s3_heading terms_c_01_s3_p1 terms_c_01_s3_p2 terms_c_01_s4_heading])
+      expect(master_text.split_to_sections.map(&:key)).to eq(%w[terms_c_01_s1_p1 terms_c_01_s2_heading terms_c_01_s2_p1 terms_c_01_s3_heading terms_c_01_s3_p1 terms_c_01_s3_p2 terms_c_01_s4_heading])
     end
 
     it "can take base_key to change keys of new master texts" do
-      expect(master_text.split_to_sections_with_heading_and_paras!(base_key: "flong").map(&:key)).to eq(%w[flong_s1_p1 flong_s2_heading flong_s2_p1 flong_s3_heading flong_s3_p1 flong_s3_p2 flong_s4_heading])
+      expect(master_text.split_to_sections(base_key: "flong").map(&:key)).to eq(%w[flong_s1_p1 flong_s2_heading flong_s2_p1 flong_s3_heading flong_s3_p1 flong_s3_p2 flong_s4_heading])
     end
   end
 
