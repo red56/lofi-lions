@@ -1,15 +1,15 @@
 %ul.nav.nav-tabs.projects
   %li.title
-    = link_to project_path(@project) do
-      = @project.name
+    = link_to project_path(project) do
+      = project.name
       Project
-  %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_path(@project)
+  %li{class: @active_tab == :overview ? 'active':''}= link_to "Overview", project_path(project)
   %li{class: @active_tab == :master_text ? 'active':''}
-    = link_to project_master_texts_path(@project) do
-      = @project.master_texts.count
+    = link_to project_master_texts_path(project) do
+      = project.master_texts.count
       Master Texts
   %li{class: @active_tab == :view ? 'active':''}
-    = link_to project_views_path(@project) do
-      = @project.views.count
+    = link_to project_views_path(project) do
+      = project.views.count
       Views
-  %li{class: @active_tab == :edit ? 'active':''}= link_to "Edit", edit_project_path(@project)
+  %li{class: @active_tab == :edit ? 'active':''}= link_to "Edit", edit_project_path(project)
