@@ -1,2 +1,7 @@
-%h1 Editing master_text
+= render "projects/tabs", project: @master_text.project
+
+%h1
+  Editing
+  master text
+  %code= @master_text.key
 = render 'form'
