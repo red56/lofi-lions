@@ -26,6 +26,13 @@ RSpec.describe MasterText, type: :model do
       expect(new_master_text).not_to be_valid
     end
 
+    it "strips spaces from key and text" do
+      master_text = build(:master_text, key: " is_something ", text: " is something else ")
+      expect(master_text).to be_valid
+      expect(master_text.key).to eq("is_something")
+      expect(master_text.text).to eq("is something else")
+    end
+
     it "requires text" do
       master_text.text = nil
       expect(master_text).not_to be_valid

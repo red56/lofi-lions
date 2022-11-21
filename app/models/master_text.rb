@@ -25,6 +25,11 @@ class MasterText < ApplicationRecord
   validates_uniqueness_of :key, scope: :project_id
   validates :other, presence: true
 
+  before_validation do
+    self.key = key&.strip
+    self.other = other&.strip
+    self.one = one&.strip
+  end
   before_save do
     self.word_count = calculate_word_count
   end
