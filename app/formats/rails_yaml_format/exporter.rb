@@ -12,11 +12,9 @@ module RailsYamlFormat
 
     def body_for(localized_texts)
       top_level_hash = {}
-      # lower_level_hash = Hash[localized_texts.map {|text|[text.key, text.other_export] }]
       lower_level_hash = {}
       localized_texts.each do |text|
-        add_to_hash(lower_level_hash, keys: text.key.split("/"), value: text.other_export)
-        # lower_level_hash[text.key] = text.other_export
+        add_to_hash(lower_level_hash, keys: text.key.split(%r{[/.]}), value: text.other_export)
       end
 
       top_level_hash[@language.code_for_top_level_rails_hash] = lower_level_hash

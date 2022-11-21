@@ -68,6 +68,10 @@ class MasterText < ApplicationRecord
     MasterTextTransforms::SplitToSections.new(self, base_key: base_key).transform
   end
 
+  def normalize_key!
+    update!(key: key.tr("/", "."))
+  end
+
   private
 
   def calculate_word_count
