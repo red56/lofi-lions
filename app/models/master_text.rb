@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MasterText < ApplicationRecord
+  include Textable
+
   MARKDOWN_FORMAT = "markdown"
   PLAIN_FORMAT = "plain"
 
@@ -9,10 +11,25 @@ class MasterText < ApplicationRecord
   has_many :key_placements, inverse_of: :master_text
   has_many :views, through: :key_placements
 
+  # like a scope but doesn't always return an association proxy
+  # Either use with one regexps or more than one string
+  def self.with_keys(*args)
+    if args.length == 1 && args.first.is_a?(Regexp)
+      select { |mt| mt.key.match?(args.first) }
+    else
+      where(key: args)
+    end
+  end
+
   validates :key, presence: true
   validates_uniqueness_of :key, scope: :project_id
   validates :other, presence: true
 
+  before_validation do
+    self.key = key&.strip
+    self.other = other&.strip
+    self.one = one&.strip
+  end
   before_save do
     self.word_count = calculate_word_count
   end
@@ -37,6 +54,18 @@ class MasterText < ApplicationRecord
 
   def markdown?
     format == MARKDOWN_FORMAT
+  end
+
+  def md_to_paragraphs!(base_key: nil)
+    MasterTextTransforms::SplitParagraphs.new(self, base_key: base_key).transform
+  end
+
+  def md_to_heading_and_text!(base_key: nil)
+    MasterTextTransforms::SplitToHeadingAndText.new(self, base_key: base_key).transform
+  end
+
+  def split_to_sections(base_key: nil)
+    MasterTextTransforms::SplitToSections.new(self, base_key: base_key).transform
   end
 
   private

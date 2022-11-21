@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LocalizedText < ApplicationRecord
+  include Textable
+
   belongs_to :master_text, inverse_of: :localized_texts, optional: false
   belongs_to :project_language, inverse_of: :localized_texts, optional: false
   has_many :views, through: :master_text

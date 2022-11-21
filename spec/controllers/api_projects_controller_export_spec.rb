@@ -32,7 +32,7 @@ describe Api::ProjectsController, type: :controller do
 
     describe "common" do
       it "returns a 404 if the language is uknown" do
-        get :export, params: { platform: :android, code: "xx", id: project.slug }
+        get :export, params: { platform: :android, code: "xz", id: project.slug }
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -337,13 +337,14 @@ describe Api::ProjectsController, type: :controller do
     end
 
     describe "yaml" do
-      let(:platform) { :yaml }
-
-      before do
+      subject(:the_request) do
         get :export, params: { platform: platform, code: language_code, id: project.slug }
       end
 
+      let(:platform) { :yaml }
+
       it "should return a yaml file" do
+        the_request
         expect(response.content_type).to start_with("text/yaml")
         # ; charset=utf-8 ?
       end
@@ -360,20 +361,46 @@ describe Api::ProjectsController, type: :controller do
         include_context "with a bunch of precreated stuff"
 
         it "should include keys from selected project" do
-          request
-          expect(response.body).to include(keys.first)
+          the_request
+          keys.each do |key|
+            expect(response.body).to include(key)
+          end
         end
 
         it "shouldn't include text from other project" do
-          request
+          the_request
           expect(response.body).not_to include(other_projects_master_text.key)
         end
       end
 
       it "should order the keys alphabetically" do
+        the_request
         keys = YAML.load(response.body).values.first.keys
         sorted = keys.dup.sort
         expect(keys).to eq(sorted)
+      end
+
+      context "with language_code xx" do
+        include_context "with a bunch of precreated stuff"
+        let(:language_code) { "xx" }
+
+        let(:body) {
+          the_request
+          YAML.load(response.body)
+        }
+
+        it "is successful" do
+          the_request
+          expect(response.code).to eq("200")
+        end
+
+        it "should create a an english language file" do
+          expect(body.keys).to contain_exactly("en")
+        end
+
+        it "has xx texts" do
+          expect(body.values.flat_map(&:values)).to eq(["Xxxxxxxx", "Xxxxx", "Xxxxxxx"])
+        end
       end
     end
   end

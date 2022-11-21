@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe LocalizedText, type: :model do
+RSpec.describe LocalizedText, type: :model do
   let(:localized_text) {
     build(:localized_text, text: "something").tap do |localized_text|
       allow(localized_text).to receive_messages(pluralizable: pluralizable, language: language)
@@ -242,6 +242,12 @@ describe LocalizedText, type: :model do
         expect { subject }.to change { localized_text.comment }.to include("Machine translated with Google ")
         expect(localized_text.comment).to start_with("Important point...\n")
       end
+    end
+  end
+
+  context "as textable" do
+    include_examples "behaves as textable" do
+      let(:factory_name) { :localized_text }
     end
   end
 end
