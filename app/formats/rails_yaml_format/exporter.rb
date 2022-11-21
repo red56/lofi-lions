@@ -19,7 +19,7 @@ module RailsYamlFormat
         # lower_level_hash[text.key] = text.other_export
       end
 
-      top_level_hash[@language.code] = lower_level_hash
+      top_level_hash[@language.code_for_top_level_rails_hash] = lower_level_hash
       top_level_hash.to_yaml
     end
 

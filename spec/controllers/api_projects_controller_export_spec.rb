@@ -394,8 +394,8 @@ describe Api::ProjectsController, type: :controller do
           expect(response.code).to eq("200")
         end
 
-        it "should create a fictional language xx like english" do
-          expect(body.keys).to contain_exactly("xx")
+        it "should create a an english language file" do
+          expect(body.keys).to contain_exactly("en")
         end
 
         it "has xx texts" do

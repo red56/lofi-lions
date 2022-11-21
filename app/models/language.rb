@@ -47,4 +47,10 @@ class Language < ApplicationRecord
 
     code
   end
+
+  def code_for_top_level_rails_hash
+    return "en" if code == XX_CODE_FOR_TESTING
+
+    code
+  end
 end
