@@ -16,11 +16,17 @@ module MasterTextTransforms
 
     private
 
+    def check_lengths!(localized_text)
+      return if non_blank_lines.length == localized_text.non_blank_lines.length
+
+      exit_with_error "#{key} (LocalizedText##{localized_text.id}) wrong number of non_blank_lines (expected #{non_blank_lines.length}, got #{localized_text.non_blank_lines.length})"
+    end
+
     delegate :key, :logger, :pluralizable?, :project, :non_blank_lines, :text, :transaction,
              to: :master_text
 
     def transform_and_create
-      raise "can't deal with pluralizable" if pluralizable?
+      exit_with_error "can't deal with pluralizable" if pluralizable?
       return if key.starts_with?("ΩΩΩ_")
 
       if non_blank_lines.length == 1
@@ -42,6 +48,11 @@ module MasterTextTransforms
         new_master_text.localized_texts.create!(project_language: localized_text.project_language, text: yield(localized_text))
       end
       new_master_text
+    end
+
+    def exit_with_error(error_message)
+      $stderr.write("TRANSFORM-ERROR: #{error_message}\n") # rubocop:disable Rails/Output
+      raise error_message
     end
   end
 end

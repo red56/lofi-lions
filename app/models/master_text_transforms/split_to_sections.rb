@@ -53,18 +53,22 @@ module MasterTextTransforms
     end
 
     def transform_localized_text(localized_text, index:, is_heading:)
-      raise "#{key} (LocalizedText##{localized_text.id}) wrong number of non_blank_lines (expected #{non_blank_lines.length}, got #{localized_text.non_blank_lines.length})" unless non_blank_lines.length == localized_text.non_blank_lines.length
+      check_lengths!(localized_text)
 
-      l_text = localized_text.non_blank_lines[index]
-      l_stripped = self.class.strip_heading_markup_and_number(l_text)
-      if is_heading
-        raise "#{key} (LocalizedText##{localized_text.id}) (expected heading, got #{l_text})" if l_text == l_stripped
+      text_line = localized_text.non_blank_lines[index]
+      text_line_stripped_of_heading = self.class.strip_heading_markup_and_number(text_line)
+      transform_text_line(text_line, text_line_stripped_of_heading, should_be_heading: is_heading, localized_text: localized_text)
+    end
 
-        l_stripped
+    def transform_text_line(text_line, text_line_stripped_of_heading, should_be_heading:, localized_text:)
+      if should_be_heading && text_line == text_line_stripped_of_heading
+        exit_with_error "#{key} (LocalizedText##{localized_text.id}) (expected heading, got #{text_line})"
+      elsif should_be_heading
+        text_line_stripped_of_heading
+      elsif !should_be_heading && text_line != text_line_stripped_of_heading
+        exit_with_error "#{key} (LocalizedText##{localized_text.id}) (expected non-heading, got #{text_line})" if text_line != text_line_stripped_of_heading
       else
-        raise "#{key} (LocalizedText##{localized_text.id}) (expected non-heading, got #{l_text})" if l_text != l_stripped
-
-        l_text
+        text_line
       end
     end
   end
