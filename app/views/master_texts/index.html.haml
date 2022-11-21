@@ -1,4 +1,4 @@
-= render :partial => 'projects/tabs'
+= render "projects/tabs", project: @project
 
 = render :partial => 'master_texts_table', locals: {master_texts: @master_texts}
 %br/
