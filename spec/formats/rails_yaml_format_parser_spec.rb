@@ -38,7 +38,7 @@ describe "Yaml file parser" do
     let(:file_path) { File.expand_path("../fixtures/strings_with_nested.yml", __dir__) }
 
     it "converts them" do
-      expect(yaml_file.keys).to contain_exactly("activerecord/attributes/user/email", "activerecord/attributes/user/password")
+      expect(yaml_file.keys).to contain_exactly("activerecord.attributes.user.email", "activerecord.attributes.user.password")
     end
   end
 end

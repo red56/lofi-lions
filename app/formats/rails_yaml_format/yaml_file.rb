@@ -31,7 +31,7 @@ module RailsYamlFormat
         if value.respond_to?(:each_pair)
           add_hash_to_localizations(value, localizations: localizations, keys: keys + [key])
         else
-          localizations << Localization.new((keys + [key]).join("/"), value)
+          localizations << Localization.new((keys + [key]).join("."), value)
         end
       end
     end

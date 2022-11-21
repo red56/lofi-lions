@@ -134,7 +134,7 @@ describe "Exporters" do
 
       let(:master_text1) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/user/email") }
       let(:master_text2) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/user/password") }
-      let(:master_text3) { build_stubbed(:master_text, project: project, key: "activerecord/attributes/project/name") }
+      let(:master_text3) { build_stubbed(:master_text, project: project, key: "activerecord.attributes.project.name") }
       let(:master_texts) { [master_text1, master_text2, master_text3] }
       let(:localized_texts) {
         master_texts.map { |mt|

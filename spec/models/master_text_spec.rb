@@ -495,6 +495,14 @@ RSpec.describe MasterText, type: :model do
     end
   end
 
+  describe "normalize_key!" do
+    let(:master_text) { create(:master_text, key: "one/two/three") }
+
+    it "normalizes it" do
+      expect { master_text.normalize_key! }.to change { master_text.reload.key }.from("one/two/three").to("one.two.three")
+    end
+  end
+
   context "as textable" do
     include_examples "behaves as textable" do
       let(:factory_name) { :master_text }
