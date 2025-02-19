@@ -64,7 +64,10 @@ e.g. fix up french punctuation:
   french.project_languages.flat_map(&:localized_texts).each do |lt|
     transformed = lt.other.gsub(/[ #{nbsp}]?([:;!?»])[ #{nbsp}]?/, "#{nbsp}\\1 ")
     transformed = transformed.gsub(/[ #{nbsp}]?([«])[ #{nbsp}]?/, " \\1#{nbsp}").strip
-    transformed = transformed.gsub(%r<#{nbsp}:#{nbsp}//>, "://")
+    transformed = transformed.gsub(%r<(http|https|mailto)#{nbsp}: >, "\\1:") # fix improperly changed urls
+    transformed = transformed.gsub(/»#{nbsp})/, "»)")
+    transformed = transformed.gsub(/\(#{nbsp}«/, "(«")
+    transformed = transformed.gsub(/’#{nbsp}«/, "’«")
     transformed.chop! if transformed.ends_with?(nbsp)
     lt.update(other: transformed) unless transformed == lt.other
   end; nil
